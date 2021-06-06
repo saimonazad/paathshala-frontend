@@ -4,17 +4,32 @@ import { red } from "@material-ui/core/colors";
 // Create a theme instance.
 const theme = createMuiTheme({
   palette: {
+    type: "light",
     primary: {
-      main: "#556cd6",
+      main: "#af5698",
     },
     secondary: {
-      main: "#19857b",
+      main: "#5d1049",
+      light: "#fbdef3",
+    },
+    other: {
+      grey: "#DADADA",
+      DoveGray: "#707070",
     },
     error: {
       main: red.A400,
     },
     background: {
       default: "#fff",
+    },
+    text: {
+      primary: "#5d1049",
+      secondary: "#000000",
+      gray: "#91959D",
+    },
+    background: {
+      default: "#e8ecef",
+      box: "#fff",
     },
   },
 });
