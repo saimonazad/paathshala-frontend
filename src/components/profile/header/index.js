@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 // import { Link as RouterLink } from "react-router-dom";
-import { Redirect } from "react-router-dom";
-
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
@@ -14,7 +12,10 @@ import {
   Snackbar,
   Tooltip,
   colors,
-  Divider,Tabs,Tab
+  Divider,
+  Box,
+  Tabs,
+  Tab,
 } from "@material-ui/core";
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
@@ -25,7 +26,12 @@ const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
     border: `2px solid ${theme.palette.secondary.main}`,
+    "&  > *": {
+      margin: theme.spacing(0),
+      padding: theme.spacing(0),
+    },
   },
+
   cover: {
     position: "relative",
     height: 275,
@@ -92,6 +98,23 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     marginTop: 60,
   },
+  details__name: {
+    fontSize: 30,
+    fontWeight: 500,
+    color: theme.palette.text.mineShaft,
+  },
+  details__bio: {
+    textTransform: "none",
+    fontSize: 15,
+    lineHeight: 1.2,
+    color: theme.palette.text.mineShaftLight,
+  },
+  details__work: {
+    textTransform: "none",
+    fontSize: 15,
+    lineHeight: 1.2,
+    color: theme.palette.other.DoveGray,
+  },
   actions: {
     position: "absolute",
     right: 10,
@@ -101,6 +124,10 @@ const useStyles = makeStyles((theme) => ({
     },
     "& > * + *": {
       marginLeft: theme.spacing(1),
+    },
+    "& button": {
+      fontWeight: "normal",
+      textTransform: "none",
     },
   },
   pendingButton: {
@@ -116,17 +143,42 @@ const useStyles = makeStyles((theme) => ({
   mailIcon: {
     marginRight: theme.spacing(1),
   },
+  tabRoot: {
+    padding: 0,
+    margin: 0,
+    minWidth: 0,
+    padding: theme.spacing(0, 1),
+    textTransform: "none",
+    "&.Mui-selected": {
+      color: theme.palette.secondary.main,
+    },
+  },
+  tabText: {
+    color: theme.palette.other.DoveGray,
+  },
+
+  profileLinks: {
+    padding: theme.spacing(0, 1),
+  },
+  profileLinks__right: {
+    alignSelf: "center",
+    "& button": {
+      marginLeft: theme.spacing(1),
+      fontWeight: "normal",
+      textTransform: "none",
+    },
+  },
 }));
 
 const Header = (props) => {
   const { className, ...rest } = props;
-  const { match, history } = props;
 
   const classes = useStyles();
 
   const user = {
-    name: "Shen Zhi",
-    bio: "Web Developer",
+    name: "Ashiqur Rahman",
+    bio: "Lecturer | Bangla",
+    work: "Dhaka Commerce College",
     avatar:
       "https://img.favpng.com/18/18/18/computer-icons-icon-design-avatar-png-favpng-X29r5WhWMXVYvNsYXkR4iBgwf.jpg",
     cover:
@@ -152,28 +204,11 @@ const Header = (props) => {
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
+  const [value, setValue] = React.useState("one");
 
-  //tabs
-//   const { id, tab } = match.params;
-const tab ="timeline"
-  const handleTabsChange = (event, value) => {
-    history.push(value);
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
   };
-
-  const tabs = [
-    { value: "timeline", label: "Timeline" },
-    { value: "connections", label: "Connections" },
-    { value: "projects", label: "Projects" },
-    { value: "reviews", label: "Reviews" },
-  ];
-
-//   if (!tab) {
-//     return <Redirect to={`/profile/${id}/timeline`} />;
-//   }
-
-//   if (!tabs.find((t) => t.value === tab)) {
-//     return <Redirect to="/errors/error-404" />;
-//   }
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
@@ -189,14 +224,29 @@ const tab ="timeline"
       <div className={classes.container}>
         <Avatar alt="Person" className={classes.avatar} src={user.avatar} />
         <div className={classes.details}>
-          <Typography component="h1" variant="h4">
+          <Typography
+            component="h1"
+            variant="h4"
+            className={classes.details__name}
+            gutterBottom
+          >
             {user.name}
           </Typography>
-          <Typography component="h2" gutterBottom variant="overline">
+          <Typography
+            component="h2"
+            gutterBottom
+            variant="overline"
+            className={classes.details__bio}
+          >
             {user.bio}
           </Typography>
-          <Typography component="h2" gutterBottom variant="overline">
-            {user.bio}
+          <Typography
+            component="h2"
+            gutterBottom
+            variant="overline"
+            className={classes.details__work}
+          >
+            {user.work}
           </Typography>
         </div>
         <Hidden smDown>
@@ -208,7 +258,7 @@ const tab ="timeline"
                 variant="contained"
               >
                 <PersonAddIcon className={classes.personAddIcon} />
-                Add connection
+                Share Profile
               </Button>
             )}
             {connectedStatus === "pending" && (
@@ -224,26 +274,33 @@ const tab ="timeline"
           </div>
         </Hidden>
       </div>
-      <div>
-        <div className={classes.inner}>
+      <div className={classes.profileLinks}>
+        <Divider />
+        <Box display="flex" justifyContent="space-between">
           <Tabs
-            onChange={handleTabsChange}
-            scrollButtons="auto"
-            value={tab}
-            variant="scrollable"
+            variant="standard"
+            value={value}
+            onChange={handleChange}
+            indicatorColor="secondary"
+            aria-label="secondary tabs example"
+            className={classes.tabText}
           >
-            {tabs.map((tab) => (
-              <Tab key={tab.value} label={tab.label} value={tab.value} />
-            ))}
+            <Tab className={classes.tabRoot} value="one" label="Post"></Tab>
+            <Tab className={classes.tabRoot} value="two" label="Classes" />
+            <Tab className={classes.tabRoot} value="three" label="About" />
+            <Tab className={classes.tabRoot} value="four" label="Followers" />
+            <Tab className={classes.tabRoot} value="five" label="Following" />
+            <Tab className={classes.tabRoot} value="six" label="Enrolled In" />
           </Tabs>
-          <Divider className={classes.divider} />
-          <div className={classes.content}>
-            {tab === "timeline" &&" <Timeline />"}
-            {tab === "connections" && "<Connections />"}
-            {tab === "projects" && "<Projects />"}
-            {tab === "reviews" && "<Reviews />"}
+          <div className={classes.profileLinks__right}>
+            <Button color="primary" variant="contained">
+              Send Message
+            </Button>
+            <Button color="primary" variant="contained">
+              Follow
+            </Button>
           </div>
-        </div>
+        </Box>
       </div>
 
       <Snackbar
