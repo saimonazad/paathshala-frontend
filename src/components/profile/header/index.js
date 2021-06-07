@@ -19,8 +19,8 @@ import {
 } from "@material-ui/core";
 import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
-import ChatIcon from "@material-ui/icons/ChatOutlined";
-import MoreIcon from "@material-ui/icons/MoreVert";
+//components
+import ProfileTab from "../profileTab";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -143,30 +143,9 @@ const useStyles = makeStyles((theme) => ({
   mailIcon: {
     marginRight: theme.spacing(1),
   },
-  tabRoot: {
-    padding: 0,
-    margin: 0,
-    minWidth: 0,
-    padding: theme.spacing(0, 1),
-    textTransform: "none",
-    "&.Mui-selected": {
-      color: theme.palette.secondary.main,
-    },
-  },
-  tabText: {
-    color: theme.palette.other.DoveGray,
-  },
 
   profileLinks: {
     padding: theme.spacing(0, 1),
-  },
-  profileLinks__right: {
-    alignSelf: "center",
-    "& button": {
-      marginLeft: theme.spacing(1),
-      fontWeight: "normal",
-      textTransform: "none",
-    },
   },
 }));
 
@@ -204,11 +183,7 @@ const Header = (props) => {
   const handleSnackbarClose = () => {
     setOpenSnackbar(false);
   };
-  const [value, setValue] = React.useState("one");
 
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
 
   return (
     <div {...rest} className={clsx(classes.root, className)}>
@@ -276,31 +251,7 @@ const Header = (props) => {
       </div>
       <div className={classes.profileLinks}>
         <Divider />
-        <Box display="flex" justifyContent="space-between">
-          <Tabs
-            variant="standard"
-            value={value}
-            onChange={handleChange}
-            indicatorColor="secondary"
-            aria-label="secondary tabs example"
-            className={classes.tabText}
-          >
-            <Tab className={classes.tabRoot} value="one" label="Post"></Tab>
-            <Tab className={classes.tabRoot} value="two" label="Classes" />
-            <Tab className={classes.tabRoot} value="three" label="About" />
-            <Tab className={classes.tabRoot} value="four" label="Followers" />
-            <Tab className={classes.tabRoot} value="five" label="Following" />
-            <Tab className={classes.tabRoot} value="six" label="Enrolled In" />
-          </Tabs>
-          <div className={classes.profileLinks__right}>
-            <Button color="primary" variant="contained">
-              Send Message
-            </Button>
-            <Button color="primary" variant="contained">
-              Follow
-            </Button>
-          </div>
-        </Box>
+        <ProfileTab />
       </div>
 
       <Snackbar
