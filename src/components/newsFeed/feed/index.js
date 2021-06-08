@@ -111,6 +111,7 @@ const Feed = (props) => {
         physics teacher for HSC? Any suggestions? Who's the best physics teacher
         for HSC? Any suggestions?
       </Typography>
+      
       <Divider className={classes.divider} />
       <Box
         display="flex"
@@ -165,6 +166,7 @@ const Feed = (props) => {
         justifyContent="space-around"
         ml={1}
         mr={1}
+        mt={1}
       >
         <Button
           size="small"

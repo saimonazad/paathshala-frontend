@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
   viewMoreComments: {
     fontWeight: 500,
-    fontSize: 18,
+    fontSize: 16,
     marginTop: theme.spacing(2)
   },
 }));

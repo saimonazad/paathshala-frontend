@@ -3,11 +3,9 @@ import Navbar from "./Navbar";
 import { Container, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    // "& > * > *": {
-    //   margin: theme.spacing(2, 0),
-    //   padding: theme.spacing(2),
-    // },
+  container__width: {
+    maxWidth: 1100,
+
   },
 }));
 
@@ -16,7 +14,7 @@ const Layout = ({ children }) => {
   return (
     <div>
       <Navbar />
-      <Container maxWidth="md">
+      <Container className={classes.container__width}>
         <div className={classes.root}>{children}</div>
       </Container>
     </div>
