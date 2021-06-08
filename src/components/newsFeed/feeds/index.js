@@ -4,8 +4,9 @@ import Feed from '../feed'
 const Feeds = () => {
     return (
       <>
-        <Feed />
+        <Feed personal />
         <Feed group />
+        <Feed enroll />
       </>
     );
 }

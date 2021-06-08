@@ -86,6 +86,14 @@ const Feed = (props) => {
                   Bangla Tution
                 </>
               )}
+              {props.enroll && (
+                <>
+                  <span style={{ fontWeight: 400, margin: "0 7px" }}>
+                    enrolled in
+                  </span>
+                  Bangla Tution
+                </>
+              )}
             </Typography>
             <Typography component="h3" className={classes.post__time}>
               4 hour ago
@@ -190,14 +198,18 @@ const Feed = (props) => {
         </Button>
       </Box>
 
-      <Divider className={classes.divider} />
-      <Box p={1}>
-        <Post />
-      </Box>
-      <Divider className={classes.divider} />
-      <Box p={1}>
-        <Comments />
-      </Box>
+      {props.personal && (
+        <>
+          <Divider className={classes.divider} />
+          <Box p={1}>
+            <Post />
+          </Box>
+          <Divider className={classes.divider} />
+          <Box p={1}>
+            <Comments />
+          </Box>
+        </>
+      )}
     </Box>
   );
 };
