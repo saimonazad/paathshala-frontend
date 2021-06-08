@@ -20,12 +20,7 @@ import { faShare } from "@fortawesome/free-solid-svg-icons";
 
 
 const useStyles = makeStyles((theme) => ({
-  appbar_rightIcon: {
-    backgroundColor: theme.palette.secondary.light,
-    borderRadius: theme.spacing(0.5),
-    padding: theme.spacing(0.5),
-    marginRight: theme.spacing(1),
-  },
+  
   profile__name: {
     fontWeight: 600,
     fontSize: theme.spacing(2),
@@ -56,7 +51,7 @@ const Feed = () => {
   const classes = useStyles();
 
   return (
-    <Box bgcolor="background.box" boxShadow={2} borderRadius={4}>
+    <Box bgcolor="background.box" boxShadow={2} borderRadius={4} >
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" alignItems="center">
           <Box>

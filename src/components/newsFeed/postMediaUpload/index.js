@@ -1,16 +1,8 @@
 import {
   Button,
-  Paper,
-  Typography,
   makeStyles,
-  Container,
-  Box,
-  Chip,
   Grid,
-  Avatar,
-  TextField,
-  Divider,
-  IconButton,
+ 
 } from "@material-ui/core";
 import ImageIcon from "@material-ui/icons/Image";
 import React from "react";
@@ -26,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     margin: theme.spacing(2, 0, 1, 0),
   },
+  label:{
+    textTransform: 'none',
+    fontWeight: 400
+  }
 }));
 
 const PostMediaUpload = () => {
@@ -36,7 +32,7 @@ const PostMediaUpload = () => {
       <Grid item>
         <Button
           size="small"
-          color="primary"
+          color="secondary"
           classes={{ root: classes.button, label: classes.label }}
           startIcon={<ImageIcon />}
         >
@@ -46,7 +42,7 @@ const PostMediaUpload = () => {
       <Grid item>
         <Button
           size="small"
-          color="primary"
+          color="secondary"
           classes={{ root: classes.button, label: classes.label }}
           startIcon={<ImageIcon />}
         >

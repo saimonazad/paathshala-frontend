@@ -3,12 +3,10 @@ import {
   Paper,
   Typography,
   makeStyles,
-  Container,
+
   Box,
   Chip,
-  Grid,
-  Avatar,
-  TextField,
+ 
   Divider,
   IconButton,
 } from "@material-ui/core";
@@ -18,6 +16,9 @@ import Post from "../post";
 import PostMediaUpload from "../postMediaUpload";
 
 const useStyles = makeStyles((theme) => ({
+  root: {
+    padding: theme.spacing(2),
+  },
   postInput: {
     height: 38,
   },
@@ -33,7 +34,12 @@ const PostCard = () => {
   const classes = useStyles();
 
   return (
-    <Box boxShadow={2} borderRadius={4} bgcolor="background.box">
+    <Box
+      boxShadow={2}
+      borderRadius={4}
+      bgcolor="background.box"
+      className={classes.root}
+    >
       <Post />
       <Divider variant="fullwidth" className={classes.divider} />
       <PostMediaUpload />
