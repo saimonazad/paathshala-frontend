@@ -17,6 +17,7 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import Post from "../post";
 import Comments from "../comments";
 const useStyles = makeStyles((theme) => ({
@@ -58,9 +59,10 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0.5),
     marginRight: theme.spacing(1),
   },
+  iconMiddle: { verticalAlign: "top" },
 }));
 
-const Feed = () => {
+const Feed = (props) => {
   const classes = useStyles();
 
   return (
@@ -78,6 +80,12 @@ const Feed = () => {
           <Box>
             <Typography component="h2" className={classes.profile__name}>
               Majharul Islam
+              {props.group && (
+                <>
+                  <PlayArrowIcon className={classes.iconMiddle} />
+                  Bangla Tution
+                </>
+              )}
             </Typography>
             <Typography component="h3" className={classes.post__time}>
               4 hour ago
