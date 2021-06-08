@@ -17,10 +17,12 @@ import ThumbUpIcon from "@material-ui/icons/ThumbUp";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShare } from "@fortawesome/free-solid-svg-icons";
-
-
+import Post from "../post";
+import Comments from "../comments";
 const useStyles = makeStyles((theme) => ({
-  
+  root: {
+    padding: theme.spacing(2),
+  },
   profile__name: {
     fontWeight: 600,
     fontSize: theme.spacing(2),
@@ -38,12 +40,23 @@ const useStyles = makeStyles((theme) => ({
   btn__like: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
-    height: theme.spacing(3.75),
-    width: theme.spacing(3.75),
+    height: theme.spacing(3.5),
+    width: theme.spacing(3.5),
     marginRight: theme.spacing(1.2),
   },
   btn__group: {
     marginRight: theme.spacing(2),
+  },
+  divider: {},
+  status: {
+    margin: theme.spacing(2, 0),
+    color: theme.palette.text.mineShaft,
+  },
+  appbar_rightIcon: {
+    backgroundColor: theme.palette.secondary.light,
+    borderRadius: theme.spacing(0.5),
+    padding: theme.spacing(0.5),
+    marginRight: theme.spacing(1),
   },
 }));
 
@@ -51,7 +64,12 @@ const Feed = () => {
   const classes = useStyles();
 
   return (
-    <Box bgcolor="background.box" boxShadow={2} borderRadius={4} >
+    <Box
+      bgcolor="background.box"
+      boxShadow={2}
+      borderRadius={4}
+      className={classes.root}
+    >
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" alignItems="center">
           <Box>
@@ -72,8 +90,20 @@ const Feed = () => {
           </IconButton>
         </Box>
       </Box>
-      <Divider />
-      <Box display="flex" alignItems="center" justifyContent="space-between">
+      <Typography className={classes.status}>
+        Who's the best physics teacher for HSC? Any suggestions? Who's the best
+        physics teacher for HSC? Any suggestions? Who's the best physics teacher
+        for HSC? Any suggestions?
+      </Typography>
+      <Divider className={classes.divider} />
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        ml={1}
+        mr={1}
+        p={1}
+      >
         <Box>
           <label htmlFor="icon-button-file" className={classes.btn__group}>
             <IconButton
@@ -99,15 +129,66 @@ const Feed = () => {
           </label>
         </Box>
         <Box>
-          <IconButton
-            className={classes.btn__like}
-            color="primary"
-            aria-label="upload picture"
-            component="span"
-          >
-            <FontAwesomeIcon icon={faShare} style={{ fontSize: "18px" }} />
-          </IconButton>
+          <label htmlFor="icon-button-file">
+            <IconButton
+              className={classes.btn__like}
+              color="primary"
+              aria-label="upload picture"
+              component="span"
+            >
+              <FontAwesomeIcon icon={faShare} style={{ fontSize: "18px" }} />
+            </IconButton>
+            2 Shares
+          </label>
         </Box>
+      </Box>
+      <Divider className={classes.divider} />
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-around"
+        ml={1}
+        mr={1}
+      >
+        <Button
+          size="small"
+          color="secondary"
+          classes={{ root: classes.button, label: classes.label }}
+          startIcon={
+            <ThumbUpIcon
+              style={{ fontSize: "27px", verticalAlign: "middle" }}
+            />
+          }
+        >
+          Like
+        </Button>
+        <Button
+          size="small"
+          color="secondary"
+          classes={{ root: classes.button, label: classes.label }}
+          startIcon={<ChatBubbleIcon style={{ fontSize: "27px" }} />}
+        >
+          Comment
+        </Button>
+        <Button
+          size="small"
+          color="secondary"
+          classes={{ root: classes.button, label: classes.label }}
+          startIcon={
+            <FontAwesomeIcon icon={faShare} style={{ fontSize: "27px" }} />
+          }
+        >
+          Share
+        </Button>
+      </Box>
+
+      <Divider className={classes.divider} />
+      <Box p={1}>
+        <Post />
+      </Box>
+      <Divider className={classes.divider} />
+      <Box p={1}>
+        <Comments />
       </Box>
     </Box>
   );

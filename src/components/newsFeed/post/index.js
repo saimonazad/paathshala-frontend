@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     margin: theme.spacing(2, 0, 1, 0),
   },
+  
 }));
 
 const Post = () => {

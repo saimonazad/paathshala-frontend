@@ -24,6 +24,7 @@ const theme = createMuiTheme({
     other: {
       grey: "#DADADA",
       DoveGray: "#707070",
+      gallery: "#EEEEEE",
     },
     error: {
       main: red.A400,
