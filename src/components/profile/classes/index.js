@@ -11,7 +11,7 @@ import StarIcon from "@material-ui/icons/Star";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
-    boxShadow: "0px 3px 6px #00000029"
+    boxShadow: "0px 3px 6px #00000029",
   },
   header: {
     backgroundColor: theme.palette.other.jacaranda,
@@ -33,10 +33,10 @@ const useStyles = makeStyles((theme) => ({
   startIcon: {
     color: theme.palette.other.star,
     verticalAlign: "bottom",
-    fontSize: 28
+    fontSize: 28,
   },
   class__list: {
-    padding: theme.spacing(2, 2,1),
+    padding: theme.spacing(2, 2, 1),
     "& > *": {
       marginBottom: theme.spacing(1.5),
     },
