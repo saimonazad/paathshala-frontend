@@ -26,6 +26,7 @@ const theme = createMuiTheme({
       DoveGray: "#707070",
       gallery: "#EEEEEE",
       jacaranda: "#220219",
+      star: "#ffb400",
     },
     error: {
       main: red.A400,

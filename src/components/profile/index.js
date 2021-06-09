@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import Header from "./header";
 import Posts from "./posts";
+import Classes from "./classes";
+
 const Profile = () => {
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -11,6 +13,7 @@ const Profile = () => {
     <>
       <Header changeTab={handleTabChange} />
       {activeTab == "posts" && <Posts />}
+      {activeTab == "classes" && <Classes />}
     </>
   );
 };
