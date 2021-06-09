@@ -1,7 +1,8 @@
 import React from "react";
-import { Container, makeStyles,Grid } from "@material-ui/core";
-import Info from "../info";
-import Feeds from "../../newsFeed/feeds"
+import { makeStyles, Grid } from "@material-ui/core";
+import Info from "./info";
+import Feeds from "../../newsFeed/feeds";
+import Following from "./following";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > * > *": {
@@ -21,7 +22,8 @@ const Posts = () => {
         <Info />
       </Grid>
       <Grid item xs={8}>
-        <Feeds/>
+        <Following/>
+        <Feeds />
       </Grid>
     </Grid>
   );
