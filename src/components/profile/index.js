@@ -1,12 +1,16 @@
-import { Grid } from "@material-ui/core";
-import React from "react";
+import React, { useState } from "react";
 import Header from "./header";
 import Posts from "./posts";
 const Profile = () => {
+  const [activeTab, setActiveTab] = useState("posts");
+
+  function handleTabChange(newValue) {
+    setActiveTab(newValue);
+  }
   return (
     <>
-      <Header />
-      <Posts />
+      <Header changeTab={handleTabChange} />
+      {activeTab == "posts" && <Posts />}
     </>
   );
 };

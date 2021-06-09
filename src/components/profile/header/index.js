@@ -251,7 +251,7 @@ const Header = (props) => {
       </div>
       <div className={classes.profileLinks}>
         <Divider />
-        <ProfileTab />
+        <ProfileTab setTabValue={props.changeTab} />
       </div>
 
       <Snackbar

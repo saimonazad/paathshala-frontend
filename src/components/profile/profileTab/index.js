@@ -26,12 +26,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTab = () => {
+const ProfileTab = (props) => {
   const classes = useStyles();
-  const [value, setValue] = useState("one");
+  const [value, setValue] = useState("posts");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    props.setTabValue(newValue);
   };
   return (
     <Box display="flex" justifyContent="space-between">
@@ -43,12 +44,12 @@ const ProfileTab = () => {
         aria-label="secondary tabs example"
         className={classes.tabText}
       >
-        <Tab className={classes.tabRoot} value="one" label="Post" />
-        <Tab className={classes.tabRoot} value="two" label="Classes" />
-        <Tab className={classes.tabRoot} value="three" label="About" />
-        <Tab className={classes.tabRoot} value="four" label="Followers" />
-        <Tab className={classes.tabRoot} value="five" label="Following" />
-        <Tab className={classes.tabRoot} value="six" label="Enrolled In" />
+        <Tab className={classes.tabRoot} value="posts" label="Post" />
+        <Tab className={classes.tabRoot} value="classes" label="Classes" />
+        <Tab className={classes.tabRoot} value="about" label="About" />
+        <Tab className={classes.tabRoot} value="followers" label="Followers" />
+        <Tab className={classes.tabRoot} value="following" label="Following" />
+        <Tab className={classes.tabRoot} value="enrolled" label="Enrolled In" />
       </Tabs>
       <div className={classes.profileLinks__right}>
         <Button color="primary" variant="contained">
