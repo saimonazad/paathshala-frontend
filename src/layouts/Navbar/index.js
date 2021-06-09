@@ -4,7 +4,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
 import Typography from "@material-ui/core/Typography";
 import InputBase from "@material-ui/core/InputBase";
-import {  makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import Box from "@material-ui/core/Box";
@@ -119,101 +119,99 @@ export default function SearchAppBar() {
   const classes = useStyles();
 
   return (
-    <div>
-      <AppBar position="static" className={classes.root}>
-        <Toolbar className={classes.toolbar}>
-          <div
-            style={{
-              display: "flex",
-              flex: 1,
-              minWidth: "-webkit-min-content",
-            }}
-          >
-            <Typography className={classes.title} variant="h6" noWrap>
-              Paathshala
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
+    <AppBar position="static" className={classes.root} component="nav">
+      <Toolbar className={classes.toolbar}>
+        <div
+          style={{
+            display: "flex",
+            flex: 1,
+            minWidth: "-webkit-min-content",
+          }}
+        >
+          <Typography className={classes.title} variant="h6" noWrap>
+            Paathshala
+          </Typography>
+          <div className={classes.search}>
+            <div className={classes.searchIcon}>
+              <SearchIcon />
             </div>
-          </div>
-          <Box style={{}}>
-            <Button
-              size="small"
-              classes={{ root: classes.button, label: classes.label }}
-            >
-              <HomeIcon />
-              Home
-              <div className={classes.test}></div>
-            </Button>
-            <Button
-              size="small"
-              classes={{ root: classes.button, label: classes.label }}
-            >
-              <NotificationsIcon />
-              Notifications
-            </Button>
-            <Button
-              size="small"
-              classes={{ root: classes.button, label: classes.label }}
-            >
-              <ChatIcon />
-              Inbox
-            </Button>
-            <Button
-              size="small"
-              classes={{ root: classes.button, label: classes.label }}
-            >
-              <ExploreIcon />
-              Explore
-            </Button>
-          </Box>
-
-          <Box
-            style={{
-              flex: 1,
-              minWidth: "-webkit-min-content",
-              justifyContent: "flex-end",
-            }}
-            className={classes.nav__right}
-          >
-            <IconButton color="secondary" className={classes.appbar_rightIcon}>
-              <AddIcon />
-            </IconButton>
-            <IconButton color="secondary" className={classes.appbar_rightIcon}>
-              <ShoppingCartIcon />
-            </IconButton>
-            <IconButton color="secondary" className={classes.appbar_rightIcon}>
-              <MenuIcon />
-            </IconButton>
-
-            <Divider
-              orientation="vertical"
-              flexItem
-              className={classes.divider}
+            <InputBase
+              placeholder="Search…"
+              classes={{
+                root: classes.inputRoot,
+                input: classes.inputInput,
+              }}
+              inputProps={{ "aria-label": "search" }}
             />
-            <Avatar
-              className={classes.avatar}
-              alt="Remy Sharp"
-              src="https://avatars.githubusercontent.com/u/13957098?v=4"
-            ></Avatar>
-            <Typography
-              style={{ fontWeight: 500, color: theme.palette.common.black }}
-            >
-              Khalid
-            </Typography>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </div>
+          </div>
+        </div>
+        <Box style={{}}>
+          <Button
+            size="small"
+            classes={{ root: classes.button, label: classes.label }}
+          >
+            <HomeIcon />
+            Home
+            <div className={classes.test}></div>
+          </Button>
+          <Button
+            size="small"
+            classes={{ root: classes.button, label: classes.label }}
+          >
+            <NotificationsIcon />
+            Notifications
+          </Button>
+          <Button
+            size="small"
+            classes={{ root: classes.button, label: classes.label }}
+          >
+            <ChatIcon />
+            Inbox
+          </Button>
+          <Button
+            size="small"
+            classes={{ root: classes.button, label: classes.label }}
+          >
+            <ExploreIcon />
+            Explore
+          </Button>
+        </Box>
+
+        <Box
+          style={{
+            flex: 1,
+            minWidth: "-webkit-min-content",
+            justifyContent: "flex-end",
+          }}
+          className={classes.nav__right}
+        >
+          <IconButton color="secondary" className={classes.appbar_rightIcon}>
+            <AddIcon />
+          </IconButton>
+          <IconButton color="secondary" className={classes.appbar_rightIcon}>
+            <ShoppingCartIcon />
+          </IconButton>
+          <IconButton color="secondary" className={classes.appbar_rightIcon}>
+            <MenuIcon />
+          </IconButton>
+
+          <Divider
+            orientation="vertical"
+            flexItem
+            className={classes.divider}
+          />
+          <Avatar
+            className={classes.avatar}
+            alt="Remy Sharp"
+            src="https://avatars.githubusercontent.com/u/13957098?v=4"
+          ></Avatar>
+          <Typography
+            style={{ fontWeight: 500, color: theme.palette.common.black }}
+          >
+            Khalid
+          </Typography>
+        </Box>
+      </Toolbar>
+    </AppBar>
   );
 }

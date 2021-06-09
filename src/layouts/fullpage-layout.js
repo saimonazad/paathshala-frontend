@@ -5,15 +5,13 @@ import { Container, makeStyles } from "@material-ui/core";
 const useStyles = makeStyles((theme) => ({
   container__width: {
     maxWidth: 1100,
-
   },
 }));
 
-const Layout1 = ({ children }) => {
+const Layout2 = ({ children }) => {
   const classes = useStyles();
   return (
     <div>
-      <Navbar />
       <Container className={classes.container__width}>
         <div className={classes.root}>{children}</div>
       </Container>
@@ -21,4 +19,4 @@ const Layout1 = ({ children }) => {
   );
 };
 
-export default Layout1;
+export default Layout2;
