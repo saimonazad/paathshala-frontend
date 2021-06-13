@@ -27,6 +27,7 @@ const theme = createMuiTheme({
       gallery: "#EEEEEE",
       jacaranda: "#220219",
       star: "#ffb400",
+      silverChalice: "#AFAFAF",
     },
     error: {
       main: red.A400,

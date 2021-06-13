@@ -4,8 +4,7 @@ import { Container, makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   container__width: {
-    maxWidth: 1100,
-
+    maxWidth: 900,
   },
 }));
 

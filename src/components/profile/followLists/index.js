@@ -7,7 +7,6 @@ import {
   makeStyles,
   Typography,
 } from "@material-ui/core";
-import StarIcon from "@material-ui/icons/Star";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
