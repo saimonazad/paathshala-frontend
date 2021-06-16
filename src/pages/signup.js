@@ -8,7 +8,6 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Link from "@material-ui/core/Link";
 
-
 import Typography from "@material-ui/core/Typography";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
@@ -27,15 +26,40 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     backgroundRepeat: "no-repeat",
     backgroundSize: "cover",
-    background: `linear-gradient(180deg, #5D1049 0, #5D1049D6 100%)`,
+    background: `url("/classroom.jpg")`,
+    "&::before ,&::after": {
+      background: `linear-gradient(180deg, #5D1049 0, #5D1049D6 100%)`,
+      position: "fixed",
+      left: 0,
+      top: 0,
+      width: "100%",
+      height: "100%",
+      content: '""',
+      display: "block",
+      zIndex: 1,
+      opacity: 0.8,
+    },
+  },
+  wrapper: {
+    zIndex: 2,
+    padding: theme.spacing(4, 2),
   },
   container: {
-    padding: theme.spacing(2.2,1),
+    padding: theme.spacing(0, 1, 5),
     alignItems: "center",
     borderRadius: theme.spacing(1),
     boxShadow:
       "0 2px 2px 0 rgba(0,0,0,0.14), 0 3px 1px -2px rgba(0,0,0,0.12), 0 1px 5px 0 rgba(0,0,0,0.20)",
     backgroundColor: theme.palette.common.white,
+    [theme.breakpoints.up("sm")]: {
+      padding: theme.spacing(2, 1),
+    },
+    [theme.breakpoints.up("md")]: {
+      padding: theme.spacing(2.2, 1),
+    },
+    [theme.breakpoints.up("lg")]: {
+      padding: theme.spacing(2.2, 1),
+    },
   },
   paper: {
     display: "flex",
@@ -49,20 +73,25 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(3),
-    padding: theme.spacing(0, 3),
+    padding: theme.spacing(0, 0.5),
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
-    padding: theme.spacing(2,4),
-    textTransform: 'none',
-    fontWeight: 400
+    margin: theme.spacing(1.5, 0, 1),
+    padding: theme.spacing(1.5, 3),
+    textTransform: "none",
+    fontWeight: 400,
   },
   divider: {
-    margin: theme.spacing(2, 0),
+    margin: theme.spacing(1, 0),
     width: "10%",
   },
   textField: {
-    marginTop: theme.spacing(1),
+    marginTop: theme.spacing(0.5),
+    "& .MuiOutlinedInput-input": {
+      padding: theme.spacing(1.5, 1.5),
+      backgroundColor: theme.palette.other.bonJour,
+      color: theme.palette.other.DoveGray,
+    },
     "& label.Mui-focused": {
       color: theme.palette.common.black,
     },
@@ -77,26 +106,38 @@ const useStyles = makeStyles((theme) => ({
         borderColor: theme.palette.secondary.main,
       },
       "&.Mui-focused fieldset": {
-        borderColor: theme.palette.secondary.main,
+        borderColor: theme.palette.common.black,
       },
+    },
+  },
+  label: {
+    fontSize: 12,
+    [theme.breakpoints.up("sm")]: {
+      fontSize: 15,
+    },
+    [theme.breakpoints.up("md")]: {
+      fontSize: 16,
+    },
+    [theme.breakpoints.up("lg")]: {
+      fontSize: 16,
     },
   },
   title: {
     color: theme.palette.common.white,
     textAlign: "center",
-    fontSize: 30,
-    marginBottom: 28,
+    fontSize: 14,
+    marginBottom: 20,
   },
   logo__text: {
     backgroundColor: theme.palette.common.white,
     color: theme.palette.secondary.main,
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 500,
     display: "table",
     margin: "0 auto",
-    padding: theme.spacing(1.8, 7),
+    padding: theme.spacing(1.2, 7),
     borderRadius: 34,
-    marginBottom: 28,
+    marginBottom: 20,
   },
   logo: {
     backgroundColor: theme.palette.common.white,
@@ -108,7 +149,7 @@ export default function SignUp() {
 
   return (
     <div className={classes.root}>
-      <Container maxWidth="md">
+      <Container maxWidth="md" className={classes.wrapper}>
         <Typography className={classes.logo__text} component="h2" variant="h5">
           Paathshala
         </Typography>
@@ -120,8 +161,8 @@ export default function SignUp() {
           <>
             <Box className={classes.paper}>
               <form className={classes.form} noValidate>
-                <Grid container spacing={3}>
-                  <Grid item xs={12} sm={6}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Full Name
                     </FormLabel>
@@ -139,7 +180,7 @@ export default function SignUp() {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={12}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Email Address
                     </FormLabel>
@@ -155,7 +196,7 @@ export default function SignUp() {
                       autoComplete="email"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Phone
                     </FormLabel>
@@ -172,7 +213,24 @@ export default function SignUp() {
                       autoComplete="phone"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
+                    <FormLabel htmlFor="input" className={classes.label}>
+                      Gender
+                    </FormLabel>
+                    <TextField
+                      className={classes.textField}
+                      color="secondary"
+                      placeholder="Type here..."
+                      autoComplete="gender"
+                      name="gender"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="gender"
+                      autoFocus
+                    />
+                  </Grid>
+                  <Grid item xs={6}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Password
                     </FormLabel>
@@ -190,24 +248,7 @@ export default function SignUp() {
                     />
                   </Grid>
 
-                  <Grid item xs={12} sm={6}>
-                    <FormLabel htmlFor="input" className={classes.label}>
-                      Gender
-                    </FormLabel>
-                    <TextField
-                      className={classes.textField}
-                      color="secondary"
-                      placeholder="Type here..."
-                      autoComplete="gender"
-                      name="gender"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="gender"
-                      autoFocus
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Confirm Password
                     </FormLabel>
@@ -224,7 +265,7 @@ export default function SignUp() {
                       autoComplete="current-password"
                     />
                   </Grid>
-                  <Grid item xs={12} sm={6}>
+                  <Grid item xs={6}>
                     <FormLabel htmlFor="input" className={classes.label}>
                       Referral Code
                     </FormLabel>
@@ -263,7 +304,10 @@ export default function SignUp() {
               </form>
               <Divider className={classes.divider} />
               <Typography variant="body2" color="black">
-                Already have an account? <Link href="#" color="secondary" style={{fontWeight: 500}}>Sign In</Link>
+                Already have an account?{" "}
+                <Link href="#" color="secondary" style={{ fontWeight: 500 }}>
+                  Sign In
+                </Link>
               </Typography>
             </Box>
           </>
