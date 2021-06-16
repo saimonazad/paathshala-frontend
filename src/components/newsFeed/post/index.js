@@ -18,9 +18,9 @@ import React from "react";
 const useStyles = makeStyles((theme) => ({
   postInput: {
     height: 36,
-    
-    textTransform: 'none',
-    fontWeight: 400
+
+    textTransform: "none",
+    fontWeight: 400,
   },
   avatar: {
     alignSelf: "center",
@@ -47,7 +47,6 @@ const Post = (props) => {
             required
             fullWidth
             id="fullName"
-            autoFocus
             InputProps={{
               className: classes.postInput,
             }}
