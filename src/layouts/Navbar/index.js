@@ -16,7 +16,7 @@ import ExploreIcon from "@material-ui/icons/Explore";
 import AddIcon from "@material-ui/icons/Add";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 import Divider from "@material-ui/core/Divider";
-import { ClassRounded, VerticalAlignCenter } from "@material-ui/icons";
+import Hidden from "@material-ui/core/Hidden";
 import Avatar from "@material-ui/core/Avatar";
 import theme from "../../utils/theme";
 
@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(2),
   },
   title: {
-    display: "none",
     [theme.breakpoints.up("sm")]: {
       display: "block",
     },
@@ -121,7 +120,7 @@ export default function SearchAppBar() {
   return (
     <AppBar position="static" className={classes.root} component="nav">
       <Toolbar className={classes.toolbar}>
-        <div
+        <Box
           style={{
             display: "flex",
             flex: 1,
@@ -131,52 +130,55 @@ export default function SearchAppBar() {
           <Typography className={classes.title} variant="h6" noWrap>
             Paathshala
           </Typography>
-          <div className={classes.search}>
-            <div className={classes.searchIcon}>
-              <SearchIcon />
+          <Hidden xsDown>
+            <div className={classes.search}>
+              <div className={classes.searchIcon}>
+                <SearchIcon />
+              </div>
+              <InputBase
+                placeholder="Search…"
+                classes={{
+                  root: classes.inputRoot,
+                  input: classes.inputInput,
+                }}
+                inputProps={{ "aria-label": "search" }}
+              />
             </div>
-            <InputBase
-              placeholder="Search…"
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
-              inputProps={{ "aria-label": "search" }}
-            />
-          </div>
-        </div>
-        <Box style={{}}>
-          <Button
-            size="small"
-            classes={{ root: classes.button, label: classes.label }}
-          >
-            <HomeIcon />
-            Home
-            <div className={classes.test}></div>
-          </Button>
-          <Button
-            size="small"
-            classes={{ root: classes.button, label: classes.label }}
-          >
-            <NotificationsIcon />
-            Notifications
-          </Button>
-          <Button
-            size="small"
-            classes={{ root: classes.button, label: classes.label }}
-          >
-            <ChatIcon />
-            Inbox
-          </Button>
-          <Button
-            size="small"
-            classes={{ root: classes.button, label: classes.label }}
-          >
-            <ExploreIcon />
-            Explore
-          </Button>
+          </Hidden>
         </Box>
-
+        <Hidden smDown>
+          <Box style={{}}>
+            <Button
+              size="small"
+              classes={{ root: classes.button, label: classes.label }}
+            >
+              <HomeIcon />
+              Home
+              <div className={classes.test}></div>
+            </Button>
+            <Button
+              size="small"
+              classes={{ root: classes.button, label: classes.label }}
+            >
+              <NotificationsIcon />
+              Notifications
+            </Button>
+            <Button
+              size="small"
+              classes={{ root: classes.button, label: classes.label }}
+            >
+              <ChatIcon />
+              Inbox
+            </Button>
+            <Button
+              size="small"
+              classes={{ root: classes.button, label: classes.label }}
+            >
+              <ExploreIcon />
+              Explore
+            </Button>
+          </Box>
+        </Hidden>
         <Box
           style={{
             flex: 1,
@@ -186,14 +188,19 @@ export default function SearchAppBar() {
           className={classes.nav__right}
         >
           <IconButton color="secondary" className={classes.appbar_rightIcon}>
+            <SearchIcon/>
+          </IconButton>
+          <IconButton color="secondary" className={classes.appbar_rightIcon}>
             <AddIcon />
           </IconButton>
-          <IconButton color="secondary" className={classes.appbar_rightIcon}>
-            <ShoppingCartIcon />
-          </IconButton>
-          <IconButton color="secondary" className={classes.appbar_rightIcon}>
-            <MenuIcon />
-          </IconButton>
+          <Hidden xsDown>
+            <IconButton color="secondary" className={classes.appbar_rightIcon}>
+              <ShoppingCartIcon />
+            </IconButton>
+            <IconButton color="secondary" className={classes.appbar_rightIcon}>
+              <MenuIcon />
+            </IconButton>
+          </Hidden>
 
           <Divider
             orientation="vertical"
@@ -205,11 +212,13 @@ export default function SearchAppBar() {
             alt="Remy Sharp"
             src="https://avatars.githubusercontent.com/u/13957098?v=4"
           ></Avatar>
-          <Typography
-            style={{ fontWeight: 500, color: theme.palette.common.black }}
-          >
-            Khalid
-          </Typography>
+          <Hidden smDown>
+            <Typography
+              style={{ fontWeight: 500, color: theme.palette.common.black }}
+            >
+              Khalid
+            </Typography>
+          </Hidden>
         </Box>
       </Toolbar>
     </AppBar>
