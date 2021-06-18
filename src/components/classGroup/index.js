@@ -1,11 +1,11 @@
-import React from 'react'
-
+import React from "react";
+import Header from "./header";
 const ClassGroup = () => {
-    return (
-        <div>
-            test
-        </div>
-    )
-}
+  return (
+    <>
+      <Header />
+    </>
+  );
+};
 
 export default ClassGroup;
