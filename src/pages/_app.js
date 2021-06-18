@@ -5,7 +5,9 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../utils/theme";
 import Layout from "../layouts/app-layout";
-export default function MyApp(props) {
+//redux store
+import { wrapper } from "../redux/store";
+function MyApp(props) {
   const { Component, pageProps, router } = props;
 
   React.useEffect(() => {
@@ -58,3 +60,5 @@ MyApp.propTypes = {
   Component: PropTypes.elementType.isRequired,
   pageProps: PropTypes.object.isRequired,
 };
+
+export default wrapper.withRedux(MyApp);
