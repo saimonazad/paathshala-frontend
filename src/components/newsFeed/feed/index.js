@@ -75,7 +75,7 @@ const Feed = (props) => {
       <Box display="flex" alignItems="center" justifyContent="space-between">
         <Box display="flex" alignItems="center">
           <Box>
-            <Avatar src="" inline className={classes.profile__img} />
+            <Avatar src="" className={classes.profile__img} />
           </Box>
           <Box>
             <Typography component="h2" className={classes.profile__name}>

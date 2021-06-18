@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   viewMoreComments: {
     fontWeight: 500,
     fontSize: 16,
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
 }));
 const Comments = () => {
@@ -49,7 +49,7 @@ const Comments = () => {
       <Box display="flex" justifyContent="space-between">
         <Box display="flex">
           <Box>
-            <Avatar src="" inline className={classes.profile__img} />
+            <Avatar src="" className={classes.profile__img} />
           </Box>
           <Box className={classes.bg}>
             <Typography component="h2" className={classes.profile__name}>

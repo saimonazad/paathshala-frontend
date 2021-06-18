@@ -14,7 +14,7 @@ const Profile = () => {
   }
   return (
     <>
-      <Header changeTab={handleTabChange} />
+      <Header tabvalue={activeTab} changetab={handleTabChange} />
       {activeTab == "posts" && <Posts />}
       {activeTab == "classes" && <Classes />}
       {activeTab == "about" && <About />}

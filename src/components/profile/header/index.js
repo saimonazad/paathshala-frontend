@@ -34,7 +34,8 @@ const useStyles = makeStyles((theme) => ({
 
   cover: {
     position: "relative",
-    height: 275,
+    height: 200,
+    [theme.breakpoints.up("sm")]: { height: 275 },
     backgroundSize: "cover",
     backgroundRepeat: "no-repeat",
     backgroundPosition: "center",
@@ -87,33 +88,47 @@ const useStyles = makeStyles((theme) => ({
     border: `1px solid ${theme.palette.other.DoveGray}`,
     backgroundColor: "white",
     padding: "7px",
-    height: 175,
-    width: 175,
-    top: -16.5,
+    height: 142,
+    width: 142,
+    top: -14.5,
     left: "50%",
     position: "absolute",
     transform: "translate(-50%,-50%)",
+    [theme.breakpoints.up("sm")]: {
+      height: 175,
+      width: 175,
+      top: -16.5,
+    },
   },
   details: {
     textAlign: "center",
     marginTop: 60,
   },
   details__name: {
-    fontSize: 30,
+    fontSize: 18,
     fontWeight: 500,
     color: theme.palette.text.mineShaft,
+    [theme.breakpoints.up("sm")]: {
+      fontSize: 30,
+    },
   },
   details__bio: {
     textTransform: "none",
-    fontSize: 15,
+    fontSize: 12,
     lineHeight: 1.2,
     color: theme.palette.text.mineShaftLight,
+    [theme.breakpoints.up("sm")]: {
+      fontSize: 15,
+    },
   },
   details__work: {
     textTransform: "none",
-    fontSize: 15,
+    fontSize: 12,
     lineHeight: 1.2,
     color: theme.palette.other.DoveGray,
+    [theme.breakpoints.up("sm")]: {
+      fontSize: 15,
+    },
   },
   actions: {
     position: "absolute",
@@ -121,6 +136,10 @@ const useStyles = makeStyles((theme) => ({
     bottom: 10,
     [theme.breakpoints.down("sm")]: {
       marginTop: theme.spacing(1),
+      position: "relative",
+      textAlign: "center",
+      right: 0,
+      bottom: 0,
     },
     "& > * + *": {
       marginLeft: theme.spacing(1),
@@ -128,6 +147,9 @@ const useStyles = makeStyles((theme) => ({
     "& button": {
       fontWeight: "normal",
       textTransform: "none",
+      [theme.breakpoints.down("sm")]: {
+        fontSize: 12,
+      },
     },
   },
   pendingButton: {
@@ -184,7 +206,6 @@ const Header = (props) => {
     setOpenSnackbar(false);
   };
 
-
   return (
     <div {...rest} className={clsx(classes.root, className)}>
       <div
@@ -224,34 +245,32 @@ const Header = (props) => {
             {user.work}
           </Typography>
         </div>
-        <Hidden smDown>
-          <div className={classes.actions}>
-            {connectedStatus === "not_connected" && (
-              <Button
-                color="primary"
-                onClick={handleConnectToggle}
-                variant="contained"
-              >
-                <PersonAddIcon className={classes.personAddIcon} />
-                Share Profile
-              </Button>
-            )}
-            {connectedStatus === "pending" && (
-              <Button
-                className={classes.pendingButton}
-                onClick={handleConnectToggle}
-                variant="contained"
-              >
-                <PersonAddIcon className={classes.personAddIcon} />
-                Pending connection
-              </Button>
-            )}
-          </div>
-        </Hidden>
+        <div className={classes.actions}>
+          {connectedStatus === "not_connected" && (
+            <Button
+              color="primary"
+              onClick={handleConnectToggle}
+              variant="contained"
+            >
+              <PersonAddIcon className={classes.personAddIcon} />
+              Share Profile
+            </Button>
+          )}
+          {connectedStatus === "pending" && (
+            <Button
+              className={classes.pendingButton}
+              onClick={handleConnectToggle}
+              variant="contained"
+            >
+              <PersonAddIcon className={classes.personAddIcon} />
+              Pending connection
+            </Button>
+          )}
+        </div>
       </div>
       <div className={classes.profileLinks}>
         <Divider />
-        <ProfileTab setTabValue={props.changeTab} />
+        <ProfileTab tabvalue={props.tabvalue} setTabValue={props.changetab} />
       </div>
 
       <Snackbar

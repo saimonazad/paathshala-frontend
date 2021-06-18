@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(2, 0),
     },
   },
+  posts: {
+    [theme.breakpoints.down("sm")]: { marginTop: theme.spacing(-4) },
+  },
 }));
 
 const Posts = () => {
@@ -16,13 +19,13 @@ const Posts = () => {
 
   return (
     <Grid container className={classes.root} spacing={2}>
-      <Grid item xs={4}>
+      <Grid item xs={12} sm={4}>
         <Info />
         <Info />
         <Info />
       </Grid>
-      <Grid item xs={8}>
-        <Following/>
+      <Grid item xs={12} sm={8} className={classes.posts}>
+        <Following />
         <Feeds />
       </Grid>
     </Grid>

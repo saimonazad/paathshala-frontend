@@ -3,10 +3,8 @@ import {
   Paper,
   Typography,
   makeStyles,
-
   Box,
   Chip,
- 
   Divider,
   IconButton,
 } from "@material-ui/core";
@@ -41,7 +39,7 @@ const PostCard = () => {
       className={classes.root}
     >
       <Post />
-      <Divider variant="fullwidth" className={classes.divider} />
+      <Divider className={classes.divider} />
       <PostMediaUpload />
     </Box>
   );
