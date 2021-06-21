@@ -48,8 +48,8 @@ const useStyles = makeStyles((theme) => ({
     },
     marginRight: theme.spacing(4),
     color: theme.palette.text.primary,
-    textTransform: 'none',
-    textDecoration: 'none'
+    textTransform: "none",
+    textDecoration: "none",
   },
   search: {
     position: "relative",
@@ -250,7 +250,9 @@ export default function SearchAppBar() {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <Link href="/profile">
+              <MenuItem>Profile</MenuItem>
+            </Link>
             <MenuItem onClick={handleClose}>My account</MenuItem>
             <MenuItem onClick={() => signOut()}>Logout</MenuItem>
           </Menu>
