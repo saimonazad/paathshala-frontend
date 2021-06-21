@@ -21,6 +21,7 @@ import AddPhotoIcon from "@material-ui/icons/AddPhotoAlternate";
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 //components
 import ProfileTab from "../profileTab";
+import { useSession } from "next-auth/client";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -173,7 +174,7 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const { className, ...rest } = props;
-
+  const [session] = useSession();
   const classes = useStyles();
 
   const user = {
@@ -226,7 +227,7 @@ const Header = (props) => {
             className={classes.details__name}
             gutterBottom
           >
-            {user.name}
+            {session ? session.user.name : ""}
           </Typography>
           <Typography
             component="h2"
