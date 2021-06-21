@@ -1,12 +1,31 @@
-import React from 'react'
-import Profile from '../components/profile'
+import React from "react";
+import Profile from "../components/profile";
+import { getSession, session, signIn, useSession } from "next-auth/client";
 
 const profile = () => {
-    return (
-        <>
-            <Profile />
-        </>
-    )
-}
+  return (
+    <>
+      <Profile />
+    </>
+  );
+};
+export async function getServerSideProps(context) {
+  try {
+    const session = await getSession(context);
+    if (!session) throw new Error("unauthorized");
 
-export default profile
+    return {
+      props: {
+        session,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/signin",
+      },
+    };
+  }
+}
+export default profile;
