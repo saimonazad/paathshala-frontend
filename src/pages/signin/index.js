@@ -291,7 +291,7 @@ export default function SignIn({ csrfToken, providers }) {
                     color="secondary"
                     className={classes.submit}
                   >
-                    Create Profile
+                    Sign In
                   </Button>
                 </Grid>
               </Grid>
