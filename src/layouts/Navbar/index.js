@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import Box from "@material-ui/core/Box";
-import { Button } from "@material-ui/core";
+import { Button, Link, Menu, MenuItem } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -19,6 +19,7 @@ import Divider from "@material-ui/core/Divider";
 import Hidden from "@material-ui/core/Hidden";
 import Avatar from "@material-ui/core/Avatar";
 import theme from "../../utils/theme";
+import { signIn, signOut, useSession } from "next-auth/client";
 
 const useStyles = makeStyles((theme) => ({
   test: {
@@ -46,6 +47,9 @@ const useStyles = makeStyles((theme) => ({
       display: "block",
     },
     marginRight: theme.spacing(4),
+    color: theme.palette.text.primary,
+    textTransform: 'none',
+    textDecoration: 'none'
   },
   search: {
     position: "relative",
@@ -116,6 +120,17 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SearchAppBar() {
   const classes = useStyles();
+  const [session, loading] = useSession();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <AppBar position="static" className={classes.root} component="nav">
@@ -127,9 +142,11 @@ export default function SearchAppBar() {
             minWidth: "-webkit-min-content",
           }}
         >
-          <Typography className={classes.title} variant="h6" noWrap>
-            Paathshala
-          </Typography>
+          <Link href="/" className={classes.title}>
+            <Typography variant="h6" noWrap>
+              Paathshala
+            </Typography>
+          </Link>
           <Hidden xsDown>
             <div className={classes.search}>
               <div className={classes.searchIcon}>
@@ -188,7 +205,7 @@ export default function SearchAppBar() {
           className={classes.nav__right}
         >
           <IconButton color="secondary" className={classes.appbar_rightIcon}>
-            <SearchIcon/>
+            <SearchIcon />
           </IconButton>
           <IconButton color="secondary" className={classes.appbar_rightIcon}>
             <AddIcon />
@@ -207,18 +224,36 @@ export default function SearchAppBar() {
             flexItem
             className={classes.divider}
           />
-          <Avatar
-            className={classes.avatar}
-            alt="Remy Sharp"
-            src="https://avatars.githubusercontent.com/u/13957098?v=4"
-          ></Avatar>
-          <Hidden smDown>
-            <Typography
-              style={{ fontWeight: 500, color: theme.palette.common.black }}
-            >
-              Khalid
-            </Typography>
-          </Hidden>
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+            style={{ textTransform: "none" }}
+          >
+            <Avatar
+              className={classes.avatar}
+              alt="Remy Sharp"
+              src="https://avatars.githubusercontent.com/u/13957098?v=4"
+            ></Avatar>
+            <Hidden smDown>
+              <Typography
+                style={{ fontWeight: 500, color: theme.palette.common.black }}
+              >
+                {session ? session.user.name : ""}
+              </Typography>
+            </Hidden>
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={handleClose}
+          >
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>My account</MenuItem>
+            <MenuItem onClick={() => signOut()}>Logout</MenuItem>
+          </Menu>
         </Box>
       </Toolbar>
     </AppBar>

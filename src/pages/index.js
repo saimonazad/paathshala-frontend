@@ -1,12 +1,33 @@
-import Head from 'next/head'
-import Typography from "@material-ui/core/Typography";
+import React from "react";
+import NewsFeed from "../components/newsFeed";
+import { getSession, session, signIn, useSession } from "next-auth/client";
 
-export default function Home() {
+const Home = (props) => {
   return (
     <div>
-      <Typography variant="h4" component="h1" gutterBottom>
-        Next.js example
-      </Typography>
+      <NewsFeed />
     </div>
   );
+};
+
+export async function getServerSideProps(context) {
+  try {
+    const session = await getSession(context);
+    if (!session) throw new Error("unauthorized");
+
+    return {
+      props: {
+        session,
+      },
+    };
+  } catch (err) {
+    return {
+      redirect: {
+        permanent: false,
+        destination: "/signin",
+      },
+    };
+  }
 }
+
+export default Home;

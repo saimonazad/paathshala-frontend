@@ -12,6 +12,7 @@ import {
   label,
   Link,
 } from "@material-ui/core/";
+import moment from "moment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(2),
   },
 }));
-const Comments = () => {
+const Comments = ({ comment }) => {
   const classes = useStyles();
   const preventDefault = (event) => event.preventDefault();
 
@@ -53,16 +54,16 @@ const Comments = () => {
           </Box>
           <Box className={classes.bg}>
             <Typography component="h2" className={classes.profile__name}>
-              Majharul Islam
+              {comment.user}
             </Typography>
             <Typography component="h3" className={classes.post__time}>
-              Bishub Sir, is good for Physics
+              {comment.comment_text}
             </Typography>
           </Box>
         </Box>
         <Box>
           <Typography component="h3" className={classes.post__time}>
-            4 hour ago
+            {moment(comment.timestamp).fromNow()}
           </Typography>
         </Box>
       </Box>

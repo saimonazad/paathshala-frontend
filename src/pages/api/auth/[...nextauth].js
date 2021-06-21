@@ -9,7 +9,7 @@ const options = {
       name: "Credentials",
       authorize: async (credentials) => {
         const checkLogin = await axios.post(
-          "http://127.0.0.1:8000/users/get-token/",
+          "https://paathshala.staging.baeinnovations.com/users/get-token/",
           {
             username: credentials.username,
             password: credentials.password,
@@ -22,14 +22,14 @@ const options = {
           }
         );
 
-        if (checkLogin.status == 200) {
+        if (checkLogin) {
           let user = {
             name: credentials.username,
             token: checkLogin.data.token,
           };
           return Promise.resolve(user);
         } else {
-          return Promise.resolve(new Error("error message"));
+          return Promise.reject(new Error("error message"));
         }
       },
     }),

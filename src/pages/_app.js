@@ -6,9 +6,13 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../utils/theme";
 import Layout from "../layouts/app-layout";
 //redux store
+import withRedux from "next-redux-wrapper";
+import { Provider, useStore } from "react-redux";
+
 import { wrapper } from "../redux/store";
 function MyApp(props) {
   const { Component, pageProps, router } = props;
+  const store = useStore(pageProps.initialReduxState);
 
   React.useEffect(() => {
     // Remove the server-side injected CSS.
@@ -18,11 +22,14 @@ function MyApp(props) {
     }
   }, []);
 
-  if (router.pathname.startsWith("/signup")) {
+  if (
+    router.pathname.startsWith("/signup") ||
+    router.pathname.startsWith("/signin")
+  ) {
     return (
       <React.Fragment>
         <Head>
-          <title>My page</title>
+          <title>Welcome to Paathshala!</title>
           <meta
             name="viewport"
             content="minimum-scale=1, initial-scale=1, width=device-width"
@@ -49,7 +56,9 @@ function MyApp(props) {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Layout>
-          <Component {...pageProps} />
+          <Provider store={store}>
+            <Component {...pageProps} />
+          </Provider>
         </Layout>
       </ThemeProvider>
     </React.Fragment>
