@@ -230,11 +230,7 @@ export default function SearchAppBar() {
             onClick={handleClick}
             style={{ textTransform: "none" }}
           >
-            <Avatar
-              className={classes.avatar}
-              alt="Remy Sharp"
-              src="https://avatars.githubusercontent.com/u/13957098?v=4"
-            ></Avatar>
+            <Avatar className={classes.avatar} alt="Remy Sharp" src=""></Avatar>
             <Hidden smDown>
               <Typography
                 style={{ fontWeight: 500, color: theme.palette.common.black }}
@@ -243,19 +239,20 @@ export default function SearchAppBar() {
               </Typography>
             </Hidden>
           </Button>
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorEl}
-            keepMounted
-            open={Boolean(anchorEl)}
-            onClose={handleClose}
-          >
-            <Link href="/profile">
-              <MenuItem>Profile</MenuItem>
-            </Link>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={() => signOut()}>Logout</MenuItem>
-          </Menu>
+          {session && (
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+            >
+              <Link href={"/u/" + session.user.name}>
+                <MenuItem>Profile</MenuItem>
+              </Link>
+              <MenuItem onClick={() => signOut()}>Logout</MenuItem>
+            </Menu>
+          )}
         </Box>
       </Toolbar>
     </AppBar>
