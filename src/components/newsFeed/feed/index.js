@@ -113,7 +113,7 @@ const Feed = ({ group, enroll, personal }) => {
   const classes = useStyles();
   console.log(feeds);
   return (
-    <Box className={classes.root} display="flex" flexDirection="column-reverse">
+    <Box className={classes.root}>
       {!feeds
         ? "No Feed! Post and Share!"
         : feeds?.map((feed) => (
