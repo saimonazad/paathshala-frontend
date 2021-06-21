@@ -116,6 +116,11 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(0.5),
     marginRight: theme.spacing(1),
   },
+  menu: {
+   "& .MuiMenu-paper": {
+     top: "60px!important"
+   }
+  }
 }));
 
 export default function SearchAppBar() {
@@ -241,6 +246,7 @@ export default function SearchAppBar() {
           </Button>
           {session && (
             <Menu
+            className={classes.menu}
               id="simple-menu"
               anchorEl={anchorEl}
               keepMounted
