@@ -5,6 +5,7 @@ import {
   workInfoReducer,
   academicInfoReducer,
 } from "./profileReducer";
+import { createCommentReducer } from "./commentRedcer";
 
 //combine reducers
 const reducer = combineReducers({
@@ -13,6 +14,7 @@ const reducer = combineReducers({
   basic: basicInfoReducer,
   work: workInfoReducer,
   academic: academicInfoReducer,
+  createComment: createCommentReducer,
 });
 
 export default reducer;

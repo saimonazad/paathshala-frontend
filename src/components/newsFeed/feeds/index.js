@@ -20,7 +20,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     store.dispatch(getAllFeeds(req));
   }
 );
-
+ 
 const mapDispatchToProps = (dispatch) => {
   return {
     feeds: dispatch(getAllFeeds()),

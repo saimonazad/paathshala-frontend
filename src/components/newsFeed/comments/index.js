@@ -47,7 +47,7 @@ const Comments = ({ comment }) => {
 
   return (
     <>
-      <Box display="flex" justifyContent="space-between">
+      <Box display="flex" justifyContent="space-between" m={1}>
         <Box display="flex">
           <Box>
             <Avatar src="" className={classes.profile__img} />
@@ -67,7 +67,7 @@ const Comments = ({ comment }) => {
           </Typography>
         </Box>
       </Box>
-      <Typography className={classes.viewMoreComments}>
+      {/* <Typography className={classes.viewMoreComments}>
         <Link
           href="#"
           onClick={preventDefault}
@@ -77,7 +77,7 @@ const Comments = ({ comment }) => {
           View more comments
         </Link>
         (56)
-      </Typography>
+      </Typography> */}
     </>
   );
 };

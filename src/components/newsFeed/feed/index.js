@@ -69,12 +69,23 @@ const useStyles = makeStyles((theme) => ({
   },
   iconMiddle: { verticalAlign: "top" },
 }));
-import { useSelector } from "react-redux";
+import { useSelector, connect, useDispatch } from "react-redux";
 import axios from "axios";
 import Grow from "@material-ui/core/Grow";
 import { getSession } from "next-auth/client";
+//redux
+
+import {
+  createComment,
+  clearErrors,
+} from "../../../redux/actions/CommentActions";
+import { wrapper } from "../../../redux/store";
+import { CREATE_COMMENT_SUCCESS } from "../../../redux/constants/allComments";
+import { useRouter } from "next/router";
 
 const Feed = ({ group, enroll, personal }) => {
+  const router = useRouter();
+
   const [commentActive, setCommentActive] = useState(false);
   const [activePost, setActivePost] = useState(0);
   const [allComments, setAllComments] = useState([]);
@@ -84,30 +95,64 @@ const Feed = ({ group, enroll, personal }) => {
     setActivePost(id);
   };
 
+  //create comment
+  const refreshData = () => {
+    router.reload(window.location.pathname);
+  };
+  //post state
+  const [postText, setPostText] = useState("");
+  //handler to setPostText
+  const postTextHandler = (value) => {
+    setPostText(value);
+  };
+  //redux action dispatch
+  const dispatch = useDispatch();
+  //redux state
+  const { error, success } = useSelector((state) => state.createComment);
+  //useeffect
   useEffect(() => {
-    async function fetchComments() {
-      const session = await getSession();
-
-      await axios
-        .get(
-          `https://paathshala.staging.baeinnovations.com/newsfeed/comments/?post_id=${activePost}`,
-          {
-            headers: {
-              Authorization: `token ${session.user.token}`,
-            },
-          }
-        )
-        .then((res) => {
-          console.log(res.data);
-          setAllComments(res.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+    if (error) {
+      dispatch(clearErrors());
     }
-    fetchComments();
+    if (success) {
+      dispatch({ type: CREATE_COMMENT_SUCCESS });
+    }
     return () => {};
-  }, [activePost]);
+  }, [dispatch, error, success]);
+  //newsfeed post handler
+  const submitHandler = (e) => {
+    e.preventDefault();
+    //feed data to post
+    const commentData = {
+      comment_text: postText,
+    };
+    dispatch(createComment(commentData, activePost));
+    fetchComments();
+    setPostText("");
+  };
+  async function fetchComments() {
+    const session = await getSession();
+
+    await axios
+      .get(
+        `https://paathshala.staging.baeinnovations.com/newsfeed/comments/?post_id=${activePost}`,
+        {
+          headers: {
+            Authorization: `token ${session.user.token}`,
+          },
+        }
+      )
+      .then((res) => {
+        console.log(res.data);
+        setAllComments(res.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+  useEffect(() => {
+    fetchComments();
+  }, [activePost,allComments]);
 
   const { feeds } = useSelector((state) => state.allFeeds);
   const classes = useStyles();
@@ -267,7 +312,11 @@ const Feed = ({ group, enroll, personal }) => {
                   <Collapse in={true}>
                     <Divider className={classes.divider} />
                     <Box p={1}>
-                      <Post />
+                      <Post
+                        submit={submitHandler}
+                        setText={postTextHandler}
+                        post={postText}
+                      />
                     </Box>
                     <Divider className={classes.divider} />
 
@@ -289,4 +338,10 @@ const Feed = ({ group, enroll, personal }) => {
   );
 };
 
-export default Feed;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    createComment: dispatch(createComment()),
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Feed);
