@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useForm } from "react-hook-form";
+
 //import material ui components
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -12,11 +14,17 @@ import Typography from "@material-ui/core/Typography";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
+import { providers, signIn, getSession, csrfToken } from "next-auth/client";
+import { useRouter } from "next/router";
+import axios from "axios";
 //css
 const useStyles = makeStyles((theme) => ({
   root: {
     [theme.breakpoints.up("sm")]: {
       height: "100%",
+    },
+    "& p": {
+      margin: 0,
     },
 
     display: "flex",
@@ -171,9 +179,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //main func
-export default function SignUp() {
+export default function SignUp({ csrfToken, providers }) {
   const classes = useStyles();
-
+  //use react hook flowFrom:
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    signIn("signup", data);
+  };
+  console.log(errors);
+  const password = useRef({});
+  password.current = watch("password", "");
   return (
     <div className={classes.root}>
       <Container className={classes.wrapper}>
@@ -186,27 +206,64 @@ export default function SignUp() {
         </Typography>
         <Container component="main" className={classes.container}>
           <Box className={classes.paper}>
-            <form className={classes.form} noValidate>
+            <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>
+              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
               <Grid container className={classes.grid}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
-                    Full Name
+                    First Name
                   </FormLabel>
                   <TextField
                     className={classes.textField}
                     color="secondary"
                     placeholder="Type here..."
-                    autoComplete="fname"
-                    name="fullName"
+                    autoComplete="first_name"
                     variant="outlined"
-                    required
                     fullWidth
-                    id="fullName"
                     autoFocus
+                    error={errors.first_name ? true : false}
+                    {...register("first_name", {
+                      required: true,
+                      maxLength: 30,
+                    })}
                   />
+                  {errors.first_name &&
+                    errors.first_name.type === "required" && (
+                      <p>First Name is required</p>
+                    )}
+                  {errors.first_name &&
+                    errors.first_name.type === "maxLength" && (
+                      <p>Max Length is 30</p>
+                    )}
+                </Grid>
+                <Grid item xs={6}>
+                  <FormLabel htmlFor="input" className={classes.label}>
+                    Last Name
+                  </FormLabel>
+                  <TextField
+                    className={classes.textField}
+                    color="secondary"
+                    placeholder="Type here..."
+                    autoComplete="last_name"
+                    variant="outlined"
+                    fullWidth
+                    id="last_name"
+                    error={errors.last_name ? true : false}
+                    {...register("last_name", {
+                      required: true,
+                      maxLength: 30,
+                    })}
+                  />
+                  {errors.last_name && errors.last_name.type === "required" && (
+                    <p>Last Name is required</p>
+                  )}
+                  {errors.last_name &&
+                    errors.last_name.type === "maxLength" && (
+                      <p>Max Length is 30</p>
+                    )}
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Email Address
                   </FormLabel>
@@ -215,12 +272,42 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     variant="outlined"
-                    required
                     fullWidth
+                    type="email"
                     id="email"
-                    name="email"
                     autoComplete="email"
+                    error={errors.email ? true : false}
+                    {...register("email", {
+                      required: true,
+                      pattern: /^\S+@\S+$/i,
+                    })}
                   />
+                  {errors.email && errors.email.type === "required" && (
+                    <p>Email is required</p>
+                  )}
+                </Grid>
+                <Grid item xs={6}>
+                  <FormLabel htmlFor="input" className={classes.label}>
+                    Username
+                  </FormLabel>
+                  <TextField
+                    className={classes.textField}
+                    color="secondary"
+                    placeholder="Type here..."
+                    autoComplete="fname"
+                    variant="outlined"
+                    fullWidth
+                    id="username"
+                    autoFocus
+                    error={errors.username ? true : false}
+                    {...register("username", {
+                      required: true,
+                      maxLength: 30,
+                    })}
+                  />
+                  {errors.username && errors.username.type === "required" && (
+                    <p>Username is required</p>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
@@ -231,13 +318,28 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     variant="outlined"
-                    required
                     fullWidth
-                    id="phone"
+                    id="phoneNo"
                     type="phone"
-                    name="phone"
-                    autoComplete="phone"
+                    autoComplete="phoneNo"
+                    error={errors.phoneNo ? true : false}
+                    {...register("phoneNo", {
+                      required: "Phone number is required",
+                      minLength: {
+                        value: 11,
+                        message: "Phone number must have 11 digits",
+                      },
+                      maxLength: {
+                        value: 11,
+                        message: "Phone number can't exceed 11 digits",
+                      },
+                      pattern: {
+                        value: /[0-9]/,
+                        message: "Invalid phone number",
+                      },
+                    })}
                   />
+                  {errors.phoneNo && <p>{errors.phoneNo.message}</p>}
                 </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
@@ -248,13 +350,19 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     autoComplete="gender"
-                    name="gender"
                     variant="outlined"
-                    required
                     fullWidth
                     id="gender"
                     autoFocus
+                    error={errors.gender ? true : false}
+                    {...register("gender", {
+                      required: true,
+                      maxLength: 30,
+                    })}
                   />
+                  {errors.gender && errors.gender.type === "required" && (
+                    <p>Gender is required</p>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
@@ -265,13 +373,21 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     variant="outlined"
-                    required
                     fullWidth
-                    name="password"
                     type="password"
                     id="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
+                    error={errors.password ? true : false}
+                    {...register("password", {
+                      required: "Password is required",
+                      pattern: {
+                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                        message:
+                          "Password needs minimum 8 characters with at least 1 word and 1 number",
+                      },
+                    })}
                   />
+                  {errors.password && <p>{errors.password.message}</p>}
                 </Grid>
 
                 <Grid item xs={6}>
@@ -283,13 +399,20 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     variant="outlined"
-                    required
                     fullWidth
-                    name="password"
                     type="password"
                     id="password"
-                    autoComplete="current-password"
+                    autoComplete="password"
+                    error={errors.password_repeat ? true : false}
+                    {...register("password_repeat", {
+                      required: "Please type again the password",
+                      validate: (value) =>
+                        value === password.current || "Passwords do not match",
+                    })}
                   />
+                  {errors.password_repeat && (
+                    <p>{errors.password_repeat.message}</p>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
@@ -300,19 +423,38 @@ export default function SignUp() {
                     color="secondary"
                     placeholder="Type here..."
                     autoComplete="code"
-                    name="refCode"
                     variant="outlined"
-                    required
                     fullWidth
-                    id="refCode"
+                    id="referral_code"
                     autoFocus
+                    error={errors.referral_code ? true : false}
+                    {...register("referral_code", {
+                      required: true,
+                      maxLength: 30,
+                    })}
                   />
+                  {errors.referral_code &&
+                    errors.referral_code.type === "required" && (
+                      <p>Ref. code is required</p>
+                    )}
                 </Grid>
                 <Grid item xs={12} className={classes.tos}>
                   <FormControlLabel
-                    control={<Checkbox value="toss" color="primary" />}
+                    control={
+                      <Checkbox
+                        value="toss"
+                        color="primary"
+                        {...register("toss", {
+                          required: true,
+                          maxLength: 30,
+                        })}
+                      />
+                    }
                     label="Terms & Policy of the company"
                   />
+                  {errors.toss && errors.toss.type === "required" && (
+                    <p>Please accept tos!</p>
+                  )}
                 </Grid>
               </Grid>
               <Grid container justify="center">
@@ -341,3 +483,23 @@ export default function SignUp() {
     </div>
   );
 }
+
+SignUp.getInitialProps = async (context) => {
+  const { req, res } = context;
+  const session = await getSession({ req });
+
+  if (session) {
+    res.writeHead(302, {
+      Location: "/",
+    });
+    res.end();
+    return;
+  } else {
+  }
+
+  return {
+    session: undefined,
+    providers: await providers(context),
+    csrfToken: await csrfToken(context),
+  };
+};

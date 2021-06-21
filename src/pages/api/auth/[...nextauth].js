@@ -6,6 +6,7 @@ const options = {
   // Configure one or more authentication providers
   providers: [
     Providers.Credentials({
+      id: "signin",
       name: "Credentials",
       authorize: async (credentials) => {
         const checkLogin = await axios.post(
@@ -30,6 +31,48 @@ const options = {
           return Promise.resolve(user);
         } else {
           return Promise.reject(new Error("error message"));
+        }
+      },
+    }),
+    Providers.Credentials({
+      id: "signup",
+      name: "signup",
+      authorize: async (credentials) => {
+        const signUp = await axios.post(
+          "https://paathshala.staging.baeinnovations.com/users/register/",
+          {
+            first_name: credentials.first_name,
+            last_name: credentials.last_name,
+            username: credentials.username,
+            email: credentials.email,
+            gender: credentials.gender,
+            phoneNo: credentials.phoneNo,
+            referral_code: credentials.referral_code,
+            password: credentials.password,
+          }
+        );
+
+        if (signUp) {
+          const checkLogin = await axios.post(
+            "https://paathshala.staging.baeinnovations.com/users/get-token/",
+            {
+              username: credentials.username,
+              password: credentials.password,
+            },
+            {
+              headers: {
+                accept: "*/*",
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          let user = {
+            name: credentials.username,
+            token: checkLogin.data.token,
+          };
+          return Promise.resolve(user);
+        } else {
+          return Promise.reject(new Error(signup.data));
         }
       },
     }),

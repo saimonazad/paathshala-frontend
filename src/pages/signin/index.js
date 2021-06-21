@@ -237,7 +237,7 @@ export default function SignIn({ csrfToken, providers }) {
             <form
               className={classes.form}
               method="post"
-              action="/api/auth/callback/credentials"
+              action="/api/auth/callback/signin"
             >
               <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
 
@@ -299,7 +299,11 @@ export default function SignIn({ csrfToken, providers }) {
             <Divider className={classes.divider} />
             <Typography variant="body2" color="black">
               Don't have an account?
-              <Link href="#" color="secondary" style={{ fontWeight: 500 }}>
+              <Link
+                href="/signup"
+                color="secondary"
+                style={{ fontWeight: 500 }}
+              >
                 Sign Up
               </Link>
             </Typography>
