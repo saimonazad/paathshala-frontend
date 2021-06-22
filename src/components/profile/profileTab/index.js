@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTab = ({ tabvalue, setTabValue, user }) => {
+const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const [session] = useSession();
   const classes = useStyles();
 
@@ -63,7 +63,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user }) => {
   };
   return (
     <Box display="flex" justifyContent="space-between">
-      {user.user == "saimonazad" && (
+      {user.user == session.user.name && (
         <>
           <Hidden xsDown>
             <Tabs
@@ -113,14 +113,20 @@ const ProfileTab = ({ tabvalue, setTabValue, user }) => {
           </Hidden>
         </>
       )}
-      <div className={classes.profileLinks__right}>
-        <Button color="primary" variant="contained">
-          Send Message
-        </Button>
-        <Button color="primary" variant="contained">
-          Follow
-        </Button>
-      </div>
+      {user.user != session.user.name && (
+        <div className={classes.profileLinks__right}>
+          <Button color="primary" variant="contained">
+            Send Message
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            onClick={() => follow(user.user)}
+          >
+            Follow
+          </Button>
+        </div>
+      )}
     </Box>
   );
 };

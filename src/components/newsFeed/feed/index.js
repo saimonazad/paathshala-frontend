@@ -208,7 +208,7 @@ const Feed = ({ group, enroll, personal }) => {
                 </Typography>
 
                 <Divider className={classes.divider} />
-                <Box
+                {/* <Box
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
@@ -260,7 +260,7 @@ const Feed = ({ group, enroll, personal }) => {
                     </label>
                   </Box>
                 </Box>
-                <Divider className={classes.divider} />
+                <Divider className={classes.divider} /> */}
                 <Box
                   display="flex"
                   alignItems="center"

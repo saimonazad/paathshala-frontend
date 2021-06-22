@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   content: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
   },
 }));
 
@@ -38,11 +38,11 @@ const Following = ({ type, lists }) => {
         <Typography component="h1">{type}</Typography>
       </Box>
       <Box className={classes.content}>
-        <Grid container>
+        <Grid container spacing={5}>
           {lists.length > 0 ? (
             lists.map((user) => {
               return (
-                <Grid item xs={6} spacing={2}>
+                <Grid item xs={6}>
                   <Grid container spacing={2}>
                     <Grid item>
                       <Avatar />

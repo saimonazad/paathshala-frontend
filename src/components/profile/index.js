@@ -9,7 +9,6 @@ import Enrolled from "./enrolled";
 import { getSession, useSession } from "next-auth/client";
 import axios from "axios";
 const Profile = (props) => {
-  console.log(props.userDetails);
   const [session] = useSession();
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -24,7 +23,7 @@ const Profile = (props) => {
     const session = await getSession();
     await axios
       .get(
-        `https://paathshala.staging.baeinnovations.com/users/follower_info/?follow_type=followed`,
+        `https://paathshala.staging.baeinnovations.com/users/follow/?user=${session.user.name}`,
         {
           headers: {
             Authorization: `token ${session.user.token}`,
@@ -42,14 +41,11 @@ const Profile = (props) => {
   async function fetchFollowersLists() {
     const session = await getSession();
     await axios
-      .get(
-        `https://paathshala.staging.baeinnovations.com/users/follower_info/?follow_type=follower`,
-        {
-          headers: {
-            Authorization: `token ${session.user.token}`,
-          },
-        }
-      )
+      .get(`https://paathshala.staging.baeinnovations.com/users/follow/`, {
+        headers: {
+          Authorization: `token ${session.user.token}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         setFollowersList(res.data);
@@ -62,10 +58,10 @@ const Profile = (props) => {
   async function followUserHandler(username) {
     const session = await getSession();
     await axios
-      .get(
-        `https://paathshala.staging.baeinnovations.com/users/follower_info/`,
+      .post(
+        "https://paathshala.staging.baeinnovations.com/users/follow/",
         {
-          follow_to_username: username,
+          followed: username,
         },
         {
           headers: {
@@ -75,7 +71,6 @@ const Profile = (props) => {
       )
       .then((res) => {
         console.log(res.data);
-        setFollowersList(res.data);
       })
       .catch((error) => {
         console.log(error);
@@ -87,6 +82,7 @@ const Profile = (props) => {
       fetchFollowersLists();
     }
   }, [session]);
+
   return (
     <>
       <Header
@@ -102,7 +98,7 @@ const Profile = (props) => {
           {activeTab == "classes" && <Classes />}
           {activeTab == "about" && <About />}
           {activeTab == "followers" && (
-            <Followers type="Following" lists={followerslist} />
+            <Followers type="Followers" lists={followerslist} />
           )}
           {activeTab == "following" && (
             <Following type="Following" lists={followlist} />
