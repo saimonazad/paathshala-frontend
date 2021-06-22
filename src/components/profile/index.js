@@ -8,7 +8,8 @@ import Followers from "./followers";
 import Enrolled from "./enrolled";
 import { getSession, useSession } from "next-auth/client";
 import axios from "axios";
-const Profile = () => {
+const Profile = (props) => {
+  console.log(props.userDetails);
   const [session] = useSession();
   const [activeTab, setActiveTab] = useState("posts");
 
@@ -92,9 +93,10 @@ const Profile = () => {
         tabvalue={activeTab}
         changetab={handleTabChange}
         followHandler={followUserHandler}
+        user={props.userDetails}
       />
 
-      {session && (
+      {session.user.name == props.userDetails.user && (
         <>
           {activeTab == "posts" && <Posts />}
           {activeTab == "classes" && <Classes />}

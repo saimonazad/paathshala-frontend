@@ -227,7 +227,7 @@ const Header = (props) => {
             className={classes.details__name}
             gutterBottom
           >
-            {session ? session.user.name : ""}
+            {props.user.user}
           </Typography>
           <Typography
             component="h2"
@@ -275,6 +275,7 @@ const Header = (props) => {
           tabvalue={props.tabvalue}
           setTabValue={props.changetab}
           follow={props.followHandler}
+          user={props.user}
         />
       </div>
 

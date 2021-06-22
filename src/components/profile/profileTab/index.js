@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTab = ({ tabvalue, setTabValue }) => {
+const ProfileTab = ({ tabvalue, setTabValue, user }) => {
   const [session] = useSession();
   const classes = useStyles();
 
@@ -63,7 +63,7 @@ const ProfileTab = ({ tabvalue, setTabValue }) => {
   };
   return (
     <Box display="flex" justifyContent="space-between">
-      {session && (
+      {user.user == "saimonazad" && (
         <>
           <Hidden xsDown>
             <Tabs
