@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Comments = ({ comment }) => {
   const classes = useStyles();
-  const preventDefault = (event) => event.preventDefault();
 
   return (
     <>
