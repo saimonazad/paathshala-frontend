@@ -152,7 +152,7 @@ const Feed = ({ group, enroll, personal }) => {
   }
   useEffect(() => {
     fetchComments();
-  }, [activePost,allComments]);
+  }, [activePost, allComments]);
 
   const { feeds } = useSelector((state) => state.allFeeds);
   const classes = useStyles();
@@ -163,6 +163,7 @@ const Feed = ({ group, enroll, personal }) => {
         ? "No Feed! Post and Share!"
         : feeds?.map((feed) => (
             <Grow
+              key={feed.id}
               in={true}
               style={{ transformOrigin: "0 0 0" }}
               {...(true ? { timeout: 1000 } : {})}

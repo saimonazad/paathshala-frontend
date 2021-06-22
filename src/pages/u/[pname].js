@@ -12,9 +12,9 @@ const profile = () => {
   const [session] = useSession();
   const [userProfileInfo, setUserProfileInfo] = useState([]);
 
-  function profileCheck() {
+  async function profileCheck() {
 
-     axios
+     await axios
       .get(
         `https://paathshala.staging.baeinnovations.com/users/profile_info/?username=${pname}`,
         {

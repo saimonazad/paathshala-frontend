@@ -4,6 +4,7 @@ const axios = require("axios");
 
 const options = {
   // Configure one or more authentication providers
+  site: process.env.NEXTAUTH_URL,
   providers: [
     Providers.Credentials({
       id: "signin",
