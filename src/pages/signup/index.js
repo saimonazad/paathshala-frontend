@@ -381,9 +381,10 @@ export default function SignUp({ csrfToken, providers }) {
                     {...register("password", {
                       required: "Password is required",
                       pattern: {
-                        value: /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/,
+                        value:
+                          /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
                         message:
-                          "Password needs minimum 8 characters with at least 1 word and 1 number",
+                          "Password needs minimum 8 characters with at least 1 uppercase letter, 1 lowerclass letter and 1 number",
                       },
                     })}
                   />
