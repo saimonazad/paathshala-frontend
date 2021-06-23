@@ -22,14 +22,11 @@ const Profile = (props) => {
   async function fetchFollowingLists() {
     const session = await getSession();
     await axios
-      .get(
-        `https://paathshala.staging.baeinnovations.com/users/follow/?user=${session.user.name}`,
-        {
-          headers: {
-            Authorization: `token ${session.user.token}`,
-          },
-        }
-      )
+      .get(`https://paathshala.staging.baeinnovations.com/users/follow/`, {
+        headers: {
+          Authorization: `token ${session.user.token}`,
+        },
+      })
       .then((res) => {
         console.log(res.data);
         setFollowList(res.data);
@@ -41,11 +38,14 @@ const Profile = (props) => {
   async function fetchFollowersLists() {
     const session = await getSession();
     await axios
-      .get(`https://paathshala.staging.baeinnovations.com/users/follow/`, {
-        headers: {
-          Authorization: `token ${session.user.token}`,
-        },
-      })
+      .get(
+        `https://paathshala.staging.baeinnovations.com/users/follow/?user=${session.user.name}`,
+        {
+          headers: {
+            Authorization: `token ${session.user.token}`,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
         setFollowersList(res.data);
