@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Box, Grid, makeStyles, Typography } from "@material-ui/core";
-import PersonIcon from "@material-ui/icons/Person";
 import PlaceIcon from "@material-ui/icons/Place";
-import PeopleIcon from "@material-ui/icons/People";
-import EmailIcon from "@material-ui/icons/Email";
-import PhoneIcon from "@material-ui/icons/Phone";
 import clsx from "clsx";
+import { useSelector } from "react-redux";
+import moment from "moment";
+import SchoolIcon from "@material-ui/icons/School";
+import DateRangeIcon from "@material-ui/icons/DateRange";
+import WorkIcon from "@material-ui/icons/Work";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -25,6 +26,7 @@ const useStyles = makeStyles((theme) => ({
   },
   content: {
     padding: theme.spacing(2),
+    minHeight: 270,
   },
   btn: {
     color: theme.palette.secondary.main,
@@ -66,6 +68,12 @@ const About = () => {
     setActiveBtn(newValue);
     console.log(newValue);
   };
+  //redux data
+  const { basicInfo } = useSelector((state) => state.basic);
+  const { workInfo } = useSelector((state) => state.work);
+  const { academicInfo } = useSelector((state) => state.academic);
+
+  console.log(academicInfo);
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box alignItems="center" className={classes.header}>
@@ -73,7 +81,11 @@ const About = () => {
       </Box>
       <Box className={classes.content}>
         <Grid container>
-          <Grid item xs={3}>
+          <Grid
+            item
+            xs={3}
+            style={{ borderRight: "3px solid", minHeight: 250 }}
+          >
             <Box display="flex" flexDirection="column">
               <Typography
                 value="basic"
@@ -105,53 +117,238 @@ const About = () => {
             </Box>
           </Grid>
           <Grid item xs={9} className={classes.info}>
-            <Box pl={6} borderLeft={3} borderColor="secondary.main">
-              <Box pb={3} display="flex" alignItems="center">
-                <PersonIcon className={classes.icon} />
-                <Box fontSize={16}>
-                  User ID:
-                  <Box pl={0.5} component="span" fontWeight={500}>
-                    576452
+            {activeBtn == "basic" && (
+              <Box pl={6} borderColor="secondary.main">
+                <Box pb={3} display="flex" alignItems="center">
+                  <PlaceIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Lives in:
+                    <Box pl={0.5} component="span" fontWeight={500}>
+                      {basicInfo[0].lives_in_char}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
-              <Box pb={3} display="flex" alignItems="center">
-                <PlaceIcon className={classes.icon} />
-                <Box fontSize={16}>
-                  Lives in:
-                  <Box pl={0.5} component="span" fontWeight={500}>
-                    Mirpur, Dhaka
+            )}
+            {activeBtn == "work" &&
+              workInfo.map((work) => {
+                return (
+                  <Box pl={6} borderColor="secondary.main">
+                    <Box pb={3} display="flex" alignItems="center">
+                      <WorkIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Position:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {work.position}
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box pb={3} display="flex" alignItems="center">
+                      <SchoolIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Dept.:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {work.dept}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <WorkIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Company:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {work.company}
+                        </Box>
+                      </Box>
+                    </Box>
+
+                    <Box pb={3} display="flex" alignItems="center">
+                      <DateRangeIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Starting Date:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {moment(work.starting_date).format("MMM Do YYYY")}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <DateRangeIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Ending Date:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {moment(work.ending_date).format("MMM Do YYYY")}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <PlaceIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Address:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {work.address}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+            {activeBtn == "work" && workInfo.length === 0 && (
+              <Box pl={6} borderColor="secondary.main">
+                <Box pb={3} display="flex" alignItems="center">
+                  <WorkIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Position:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+
+                <Box pb={3} display="flex" alignItems="center">
+                  <SchoolIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Dept.:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <WorkIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Company:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+
+                <Box pb={3} display="flex" alignItems="center">
+                  <DateRangeIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Starting Date:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <DateRangeIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Ending Date:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <PlaceIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Address:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
                   </Box>
                 </Box>
               </Box>
-              <Box pb={3} display="flex" alignItems="center">
-                <PeopleIcon className={classes.icon} />
-                <Box fontSize={16}>
-                  Followed by:
-                  <Box pl={0.5} component="span" fontWeight={500}>
-                    1,982 people
+            )}
+            {activeBtn == "academic" &&
+              academicInfo.map((level) => {
+                return (
+                  <Box pl={6} borderColor="secondary.main">
+                    <Box pb={3} display="flex" alignItems="center">
+                      <SchoolIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Dept.:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {level.dept}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <SchoolIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Degree:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {level.degree}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <SchoolIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Result:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {level.result}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <DateRangeIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Starting Date:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {moment(level.starting_date).format("MMM Do YYYY")}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <DateRangeIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Ending Date:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {moment(level.ending_date).format("MMM Do YYYY")}
+                        </Box>
+                      </Box>
+                    </Box>
+                    <Box pb={3} display="flex" alignItems="center">
+                      <SchoolIcon className={classes.icon} />
+                      <Box fontSize={16}>
+                        Institution:
+                        <Box pl={0.5} component="span" fontWeight={500}>
+                          {level.institution}
+                        </Box>
+                      </Box>
+                    </Box>
+                  </Box>
+                );
+              })}
+
+            {activeBtn == "academic" && academicInfo.length === 0 && (
+              <Box pl={6} borderColor="secondary.main">
+                <Box pb={3} display="flex" alignItems="center">
+                  <SchoolIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Dept.:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <SchoolIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Degree:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <SchoolIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Result:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <DateRangeIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Starting Date:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <DateRangeIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Ending Date:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
+                  </Box>
+                </Box>
+                <Box pb={3} display="flex" alignItems="center">
+                  <SchoolIcon className={classes.icon} />
+                  <Box fontSize={16}>
+                    Institution:
+                    <Box pl={0.5} component="span" fontWeight={500}></Box>
                   </Box>
                 </Box>
               </Box>
-              <Box pb={3} display="flex" alignItems="center">
-                <EmailIcon className={classes.icon} />
-                <Box fontSize={16}>
-                  Email address:
-                  <Box pl={0.5} component="span" fontWeight={500}>
-                    hanzohashashi@walla.com
-                  </Box>
-                </Box>
-              </Box>
-              <Box pb={3} display="flex" alignItems="center">
-                <PhoneIcon className={classes.icon} />
-                <Box fontSize={16}>
-                  Phone number:
-                  <Box pl={0.5} component="span" fontWeight={500}>
-                    01511155511
-                  </Box>
-                </Box>
-              </Box>
-            </Box>
+            )}
           </Grid>
         </Grid>
       </Box>

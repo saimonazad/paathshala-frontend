@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Box,
@@ -61,6 +61,10 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const handleChangeMobile = (event, newValue) => {
     setTabValue(event.target.value);
   };
+  // const [isFollowed, setIsFollowed] = useState(false);
+  // function follow() {}
+  // useEffect(() => {}, [isFollowed]);
+
   return (
     <Box display="flex" justifyContent="space-between">
       {user.username == session.user.name && (
