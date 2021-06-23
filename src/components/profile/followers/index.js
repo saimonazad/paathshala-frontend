@@ -25,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   content: {
-    padding: theme.spacing(2),
+    padding: theme.spacing(4),
   },
 }));
 
-const Followers = ({ type, lists }) => {
+const Following = ({ type, lists }) => {
   const classes = useStyles();
   console.log(lists);
   return (
@@ -38,17 +38,17 @@ const Followers = ({ type, lists }) => {
         <Typography component="h1">{type}</Typography>
       </Box>
       <Box className={classes.content}>
-        <Grid container>
+        <Grid container spacing={5}>
           {lists.length > 0 ? (
             lists.map((user) => {
               return (
-                <Grid item xs={6} spacing={2}>
+                <Grid item xs={6}>
                   <Grid container spacing={2}>
                     <Grid item>
                       <Avatar />
                     </Grid>
                     <Grid item>
-                      <Typography variant="h6">{user.followed}</Typography>
+                      <Typography variant="h6">{user.follower}</Typography>
                       <Typography variant="subtitle2">
                         Bangla Teacher
                       </Typography>
@@ -68,7 +68,7 @@ const Followers = ({ type, lists }) => {
               );
             })
           ) : (
-            <Typography variant="h6">You have no followers!</Typography>
+            <Typography variant="h6">You are not following anyone!</Typography>
           )}
         </Grid>
       </Box>
@@ -76,4 +76,4 @@ const Followers = ({ type, lists }) => {
   );
 };
 
-export default Followers;
+export default Following;
