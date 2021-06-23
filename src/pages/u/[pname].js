@@ -36,7 +36,7 @@ const profile = () => {
   }, [session]);
   return (
     <>
-      {userProfileInfo ? (
+      {userProfileInfo.username ? (
         <Profile userDetails={userProfileInfo} />
       ) : (
         "NO profile found"
