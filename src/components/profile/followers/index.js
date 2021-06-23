@@ -60,7 +60,7 @@ const Following = ({ type, lists }) => {
                         variant="contained"
                         color="secondary"
                       >
-                        Unfollow
+                        Follow
                       </Button>
                     </Grid>
                   </Grid>

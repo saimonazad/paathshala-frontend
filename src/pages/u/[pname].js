@@ -10,13 +10,12 @@ const profile = () => {
   const router = useRouter();
   const { pname } = router.query;
   const [session] = useSession();
-  const [userProfileInfo, setUserProfileInfo] = useState([]);
+  const [userProfileInfo, setUserProfileInfo] = useState({});
 
   async function profileCheck() {
-
-     await axios
+    await axios
       .get(
-        `https://paathshala.staging.baeinnovations.com/users/profile_info/?username=${pname}`,
+        `https://paathshala.staging.baeinnovations.com/users/userinfo/${pname}`,
         {
           headers: {
             Authorization: `token ${session.user.token}`,
@@ -37,8 +36,8 @@ const profile = () => {
   }, [session]);
   return (
     <>
-      {userProfileInfo && userProfileInfo.length > 0 ? (
-        <Profile userDetails={userProfileInfo[0]} />
+      {userProfileInfo ? (
+        <Profile userDetails={userProfileInfo} />
       ) : (
         "NO profile found"
       )}

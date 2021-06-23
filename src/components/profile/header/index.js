@@ -227,7 +227,8 @@ const Header = (props) => {
             className={classes.details__name}
             gutterBottom
           >
-            {props.user.user}
+            <span style={{ marginRight: "6px" }}>{props.user.first_name}</span>
+            <span>{props.user.last_name}</span>
           </Typography>
           <Typography
             component="h2"
