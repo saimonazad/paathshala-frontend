@@ -83,6 +83,11 @@ const options = {
     error: "/signin",
   },
   callbacks: {
+    redirect: async (url, baseUrl) => {
+        return url.startsWith(baseUrl)
+            ? Promise.resolve(url)
+            : Promise.resolve(baseUrl)
+    },
     jwt: async (token, user, account, profile, isNewUser) => {
       //  "user" parameter is the object received from "authorize"
       //  "token" is being send below to "session" callback...
