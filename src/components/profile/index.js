@@ -92,7 +92,7 @@ const Profile = (props) => {
         user={props.userDetails}
       />
 
-      {session.user.name == props.userDetails.user && (
+      {session.user.name == props.userDetails.username && (
         <>
           {activeTab == "posts" && <Posts />}
           {activeTab == "classes" && <Classes />}

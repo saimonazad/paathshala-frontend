@@ -63,7 +63,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   };
   return (
     <Box display="flex" justifyContent="space-between">
-      {user.user == session.user.name && (
+      {user.username == session.user.name && (
         <>
           <Hidden xsDown>
             <Tabs
