@@ -54,28 +54,7 @@ const Profile = (props) => {
         console.log(error);
       });
   }
-  //follow a user
-  async function followUserHandler(username) {
-    const session = await getSession();
-    await axios
-      .post(
-        "https://paathshala.staging.baeinnovations.com/users/follow/",
-        {
-          followed: username,
-        },
-        {
-          headers: {
-            Authorization: `token ${session.user.token}`,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
+
   useEffect(() => {
     if (session) {
       fetchFollowingLists();
@@ -88,7 +67,6 @@ const Profile = (props) => {
       <Header
         tabvalue={activeTab}
         changetab={handleTabChange}
-        followHandler={followUserHandler}
         user={props.userDetails}
       />
 

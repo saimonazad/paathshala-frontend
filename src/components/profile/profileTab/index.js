@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import useSWR, { mutate, trigger } from "swr";
 
 import {
   Box,
@@ -12,7 +13,8 @@ import {
 import { Hidden } from "@material-ui/core";
 import { NativeSelect } from "@material-ui/core";
 import { useSession } from "next-auth/client";
-
+import { useRouter } from "next/router";
+import axios from "axios";
 const useStyles = makeStyles((theme) => ({
   tabRoot: {
     padding: 0,
@@ -61,9 +63,55 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const handleChangeMobile = (event, newValue) => {
     setTabValue(event.target.value);
   };
-  // const [isFollowed, setIsFollowed] = useState(false);
-  // function follow() {}
-  // useEffect(() => {}, [isFollowed]);
+
+  //useswr
+  const router = useRouter();
+  const { pname } = router.query;
+
+  const fetcher = (url) =>
+    axios
+      .get(url, {
+        headers: {
+          Authorization: `token ${session.user.token}`,
+        },
+      })
+      .then((res) => res.data);
+
+  const followCheckUrl = `https://paathshala.staging.baeinnovations.com/users/follow_check/?username=${pname}`;
+  const { data, error } = useSWR(followCheckUrl, fetcher);
+  console.log(data);
+
+  //follow a user
+  async function followHandler(values) {
+    mutate(followCheckUrl, values, false);
+    await axios
+      .post(
+        "https://paathshala.staging.baeinnovations.com/users/follow/",
+        {
+          followed: `${pname}`,
+        },
+        {
+          headers: {
+            Authorization: `token ${session.user.token}`,
+          },
+        }
+      )
+      .then((res) => res.data);
+    trigger(followCheckUrl);
+  }
+  //delete follw
+  async function unfollowHandler(values) {
+    const deletefollowUrl = `https://paathshala.staging.baeinnovations.com/users/follow/${values.id}`;
+    mutate(followCheckUrl, values, false);
+    await axios
+      .delete(deletefollowUrl, {
+        headers: {
+          Authorization: `token ${session.user.token}`,
+        },
+      })
+      .then((res) => res.data);
+    trigger(followCheckUrl);
+  }
 
   return (
     <Box display="flex" justifyContent="space-between">
@@ -117,18 +165,28 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
           </Hidden>
         </>
       )}
-      {user.user != session.user.name && (
+      {user.username != session.user.name && (
         <div className={classes.profileLinks__right}>
           <Button color="primary" variant="contained">
             Send Message
           </Button>
-          <Button
-            color="primary"
-            variant="contained"
-            onClick={() => follow(user.user)}
-          >
-            Follow
-          </Button>
+          {data?.follow == true ? (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => unfollowHandler({ follow: false, id: data.id })}
+            >
+              Unfollow
+            </Button>
+          ) : (
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => followHandler({ follow: true, id: data?.id })}
+            >
+              Follow
+            </Button>
+          )}
         </div>
       )}
     </Box>
