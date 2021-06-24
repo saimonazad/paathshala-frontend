@@ -1,9 +1,9 @@
 import React from "react";
 import { makeStyles, Grid } from "@material-ui/core";
 import Info from "./info";
-import Feeds from "../../newsFeed/feeds";
+import Feeds from "../../shared/feeds";
 import Following from "./following";
-
+import PostCard from "../../shared/postCard"
 import { useSelector, connect } from "react-redux";
 
 //feed action -redux
@@ -41,6 +41,7 @@ const Posts = () => {
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>
         <Following />
+        <PostCard/>
         <Feeds />
       </Grid>
     </Grid>

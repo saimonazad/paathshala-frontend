@@ -6,8 +6,11 @@ import {
   CLEAR_ERRORS,
   CREATE_FEED_FAIL,
   CREATE_FEED_SUCCESS,
+  ALL_PERSONAL_FEEDS_FAIL,
+  ALL_PERSONAL_FEEDS_SUCCESS,
 } from "../constants/allFeeds";
 //get session
+
 //Get all feeds
 
 export const getAllFeeds = (req) => async (dispatch) => {
@@ -66,6 +69,33 @@ export const createFeed = (feedData) => async (dispatch) => {
     dispatch({
       type: CREATE_FEED_FAIL,
       payload: error.message,
+    });
+  }
+};
+
+//Get all personal feeds
+
+export const getAllPersonalFeeds = (req) => async (dispatch) => {
+  try {
+    const session = await getSession();
+
+    const { data } = await axios.get(
+      `https://paathshala.staging.baeinnovations.com/newsfeed/post/?username=${session.user.name}`,
+      {
+        headers: {
+          Authorization: `token ${session.user.token}`,
+        },
+      }
+    );
+
+    await dispatch({
+      type: ALL_PERSONAL_FEEDS_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: ALL_PERSONAL_FEEDS_FAIL,
+      payload: error.data,
     });
   }
 };
