@@ -14,6 +14,7 @@ import Typography from "@material-ui/core/Typography";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
+import { FormControl, NativeSelect, Select } from "@material-ui/core";
 import { providers, signIn, getSession, csrfToken } from "next-auth/client";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -176,6 +177,28 @@ const useStyles = makeStyles((theme) => ({
   },
   tos: {
     marginTop: theme.spacing(-1.8),
+  },
+  formControl: {
+    width: "100%",
+    backgroundColor: theme.palette.other.bonJour,
+  },
+  select: {
+    alignSelf: "center",
+    "& .MuiInputBase-input": {
+      padding: "12px",
+      border: `1px solid ${theme.palette.secondary.main}`,
+      borderRadius: 4,
+      color: theme.palette.other.DoveGray,
+    },
+    "& .MuiInput-underline:before": {
+      borderBottom: 0,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottom: 0,
+    },
+    "& .MuiInput-underline:hover": {
+      borderBottom: 0,
+    },
   },
 }));
 //main func
@@ -341,8 +364,32 @@ export default function SignUp({ csrfToken, providers }) {
                   />
                   {errors.phoneNo && <p>{errors.phoneNo.message}</p>}
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={6} className={classes.select}>
                   <FormLabel htmlFor="input" className={classes.label}>
+                    Gender
+                  </FormLabel>
+                  <FormControl
+                    variant="filled"
+                    className={classes.formControl}
+                    error={errors.gender ? true : false}
+                  >
+                    <NativeSelect
+                      className={classes.selectEmpty}
+                      name="gender"
+                      {...register("gender", {
+                        required: true,
+                        maxLength: 30,
+                      })}
+                    >
+                      <option value="">Select Gender</option>
+                      <option value="male">Male</option>
+                      <option value="female">Female</option>
+                    </NativeSelect>
+                  </FormControl>
+                  {errors.gender && errors.gender.type === "required" && (
+                    <p>Gender is required</p>
+                  )}
+                  {/* <FormLabel htmlFor="input" className={classes.label}>
                     Gender
                   </FormLabel>
                   <TextField
@@ -362,7 +409,7 @@ export default function SignUp({ csrfToken, providers }) {
                   />
                   {errors.gender && errors.gender.type === "required" && (
                     <p>Gender is required</p>
-                  )}
+                  )} */}
                 </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
