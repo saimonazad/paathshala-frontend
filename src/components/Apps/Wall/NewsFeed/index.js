@@ -1,11 +1,11 @@
-import React, { useContext, useEffect } from 'react';
-import Box from '@material-ui/core/Box';
-import CreatePost from './CreatePost';
-import PostsList from './PostsList';
-import { useDispatch } from 'react-redux';
-import { getFeedPosts } from '../../../../redux/actions/WallApp';
-import { getWallHeight } from '../../../../../@jumbo/constants/AppConstants';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import React, { useContext, useEffect } from "react";
+import Box from "@material-ui/core/Box";
+import CreatePost from "./CreatePost";
+import PostsList from "./PostsList";
+import { useDispatch } from "react-redux";
+import { getFeedPosts } from "../../../../redux/actions/WallApp";
+import { getWallHeight } from "../../../../../@jumbo/constants/AppConstants";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles(() => ({
   perfectScrollbarNewsFeed: {

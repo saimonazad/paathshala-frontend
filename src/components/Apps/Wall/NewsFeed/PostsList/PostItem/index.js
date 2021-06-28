@@ -16,25 +16,16 @@ const useStyles = makeStyles(() => ({}));
 
 const PostItem = ({ item }) => {
   const classes = useStyles();
-  const { owner, date, content, attachments, comments, id } = item;
+  const { post_text, user, timestamp, comments, id } = item;
   return (
     <CmtCard>
-      <CmtCardHeader title={<UserInfo user={owner} date={date} />} />
+      <CmtCardHeader title={<UserInfo user={user} date={timestamp} />} />
       <CmtCardContent>
         <Box>
           <Box mb={2} component="p">
-            {content}
+            {post_text}
           </Box>
-          {attachments.length > 0 && <Attachments attachments={attachments} />}
-          <PostStats item={item} />
-          {comments.length > 0 && (
-            <CmtList
-              data={comments}
-              renderRow={(item, index) => (
-                <CommentItem key={index} item={item} classes={classes} />
-              )}
-            />
-          )}
+          
           <AddComment postId={id} />
         </Box>
       </CmtCardContent>

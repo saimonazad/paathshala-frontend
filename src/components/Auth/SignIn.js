@@ -1,47 +1,4 @@
-// import { providers, signIn, getSession, csrfToken } from "next-auth/client";
-// import { useRouter } from "next/router";
-
-// import SignInError from "./signinError";
-
-// export default function SignIn({ csrfToken, providers }) {
-//   const { error } = useRouter().query;
-
-//   return (
-//     <form method="post" action="/api/auth/callback/credentials">
-//       <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-//       <label>
-//         name
-//         <input type="text" id="name" name="username" />
-//         password
-//         <input type="text" id="pass" name="password" />
-//       </label>
-//       <button type="submit">Sign in with Email</button>
-//       {/* Error message */}
-//       {error && <SignInError error={error} />}
-//     </form>
-//   );
-// }
-
-// SignIn.getInitialProps = async (context) => {
-//   const { req, res } = context;
-//   const session = await getSession({ req });
-
-//   if (session) {
-//     res.writeHead(302, {
-//       Location: "/",
-//     });
-//     res.end();
-//     return;
-//   } else {
-//   }
-
-//   return {
-//     session: undefined,
-//     providers: await providers(context),
-//     csrfToken: await csrfToken(context),
-//   };
-// };
-import React from "react";
+import React, { useState } from "react";
 //import material ui components
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -55,10 +12,8 @@ import Typography from "@material-ui/core/Typography";
 import FormLabel from "@material-ui/core/FormLabel";
 import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
-import { providers, signIn, getSession, csrfToken } from "next-auth/client";
-import { useRouter } from "next/router";
-
-import SignInError from "./signinError";
+import { useAuth } from "../../../authentication";
+import { NotificationLoader } from "../../../@jumbo/components/ContentLoader";
 //css
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -218,9 +173,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 //main func
-export default function SignIn({ csrfToken, providers }) {
-  const { error } = useRouter().query;
+const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
   const classes = useStyles();
+  const { isLoading, error, userLogin } = useAuth();
+  const [username, setUsername] = useState("saimonazad");
+  const [password, setPassword] = useState("Therap12#");
+
+  const onSubmit = () => {
+    userLogin({ username, password });
+  };
 
   return (
     <div className={classes.root}>
@@ -234,13 +195,7 @@ export default function SignIn({ csrfToken, providers }) {
         </Typography>
         <Container component="main" className={classes.container}>
           <Box className={classes.paper}>
-            <form
-              className={classes.form}
-              method="post"
-              action="/api/auth/callback/signin"
-            >
-              <input name="csrfToken" type="hidden" defaultValue={csrfToken} />
-
+            <form className={classes.form}>
               <Grid container className={classes.grid}>
                 <Grid item xs={12}>
                   <FormLabel htmlFor="input" className={classes.label}>
@@ -256,6 +211,8 @@ export default function SignIn({ csrfToken, providers }) {
                     id="email"
                     name="username"
                     autoComplete="email"
+                    onChange={(event) => setUsername(event.target.value)}
+                    defaultValue={username}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -272,10 +229,10 @@ export default function SignIn({ csrfToken, providers }) {
                     name="password"
                     type="password"
                     id="password"
+                    onChange={(event) => setPassword(event.target.value)}
+                    defaultValue={password}
                   />
                 </Grid>
-                {/* Error message */}
-                {error && <SignInError error={error} />}
                 <Grid item xs={12} className={classes.tos}>
                   <FormControlLabel
                     control={<Checkbox value="toss" color="primary" />}
@@ -286,7 +243,7 @@ export default function SignIn({ csrfToken, providers }) {
               <Grid container justify="center">
                 <Grid item>
                   <Button
-                    type="submit"
+                    onClick={onSubmit}
                     variant="contained"
                     color="secondary"
                     className={classes.submit}
@@ -309,26 +266,10 @@ export default function SignIn({ csrfToken, providers }) {
             </Typography>
           </Box>
         </Container>
+        <NotificationLoader loading={isLoading} error={error} />
       </Container>
     </div>
   );
-}
-SignIn.getInitialProps = async (context) => {
-  const { req, res } = context;
-  const session = await getSession({ req });
-
-  if (session) {
-    res.writeHead(302, {
-      Location: "/",
-    });
-    res.end();
-    return;
-  } else {
-  }
-
-  return {
-    session: undefined,
-    providers: await providers(context),
-    csrfToken: await csrfToken(context),
-  };
 };
+
+export default SignIn;

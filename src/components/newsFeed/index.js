@@ -1,8 +1,10 @@
-import React from 'react'
-import Announcement from './announcement'
-import PostCard from './postCard'
-import Feeds from './feeds'
-
+import React, { useEffect } from "react";
+import Announcement from "./announcement";
+import PostCard from "./postCard";
+import Feeds from "./feeds";
+//feed action -redux
+import { useDispatch } from "react-redux";
+import { getFeedPosts } from "../../redux/actions/WallApp";
 import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -14,15 +16,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NewsFeed = () => {
-      const classes = useStyles();
+  const classes = useStyles();
+  const dispatch = useDispatch();
 
-    return (
-        <div className={classes.root}>
-        <Announcement/>
-        <PostCard/>
-        <Feeds/>
-        </div>
-    )
-}
+  useEffect(() => {
+    dispatch(getFeedPosts());
+  }, [dispatch]);
 
-export default NewsFeed
+  return (
+    <div className={classes.root}>
+      <Announcement />
+      <PostCard />
+      <Feeds />
+    </div>
+  );
+};
+
+export default NewsFeed;

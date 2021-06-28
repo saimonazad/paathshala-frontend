@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Snackbar from '@material-ui/core/Snackbar';
-import { fetchError } from '../../../redux/actions';
+import { fetchError } from '../../../src/redux/actions';
 import PageLoader from '../PageComponents/PageLoader';
 
 export const NotificationLoader = ({ loading, error, message }) => {

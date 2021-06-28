@@ -14,8 +14,8 @@ import Post from "../post";
 import PostMediaUpload from "../postMediaUpload";
 //import redux
 import { useDispatch, useSelector } from "react-redux";
-import { clearErrors, createFeed } from "../../../redux/actions/feedActions";
-import { CREATE_FEED_RESET } from "../../../redux/constants/allFeeds";
+
+import { createPost } from "../../../redux/actions/WallApp";
 
 import { useRouter } from "next/router";
 
@@ -36,12 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = () => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const refreshData = () => {
-    router.reload(window.location.pathname);
-    setIsRefreshing(true);
-  };
   const classes = useStyles();
   //post state
   const [postText, setPostText] = useState("");
@@ -50,22 +46,7 @@ const PostCard = () => {
     setPostText(value);
   };
   //redux action dispatch
-  const dispatch = useDispatch();
-  //redux state
-  const { loading, error, success } = useSelector((state) => state.createFeed);
-  //useeffect
-  useEffect(() => {
-    setIsRefreshing(false);
-    if (error) {
-      dispatch(clearErrors());
-    }
-    if (success) {
-      console.log("success");
-      router.push("/");
-      dispatch({ type: CREATE_FEED_RESET });
-    }
-    return () => {};
-  }, [dispatch, error, success]);
+
   //newsfeed post handler
   const submitHandler = (e) => {
     e.preventDefault();
@@ -75,8 +56,7 @@ const PostCard = () => {
       posted_on: "dashboard",
       post_type: "testPost",
     };
-    dispatch(createFeed(feedData));
-    refreshData();
+    dispatch(createPost(feedData));
     setPostText("");
   };
   return (

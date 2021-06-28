@@ -5,9 +5,9 @@ import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import theme from "../utils/theme";
 import Layout from "../layouts/app-layout";
+import { AuthProvider } from "../../authentication";
 //redux store
 import withRedux from "next-redux-wrapper";
-import { Provider as ProviderSession } from "next-auth/client";
 
 import { Provider as ReduxProvider, useStore } from "react-redux";
 
@@ -37,11 +37,13 @@ function MyApp(props) {
             content="minimum-scale=1, initial-scale=1, width=device-width"
           />
         </Head>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </AuthProvider>
       </React.Fragment>
     );
   }
@@ -54,17 +56,17 @@ function MyApp(props) {
           content="minimum-scale=1, initial-scale=1, width=device-width"
         />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <ProviderSession session={pageProps.session}>
+      <AuthProvider>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
           <Layout>
             <ReduxProvider store={store}>
               <Component {...pageProps} />
             </ReduxProvider>
           </Layout>
-        </ProviderSession>
-      </ThemeProvider>
+        </ThemeProvider>
+      </AuthProvider>
     </React.Fragment>
   );
 }

@@ -24,6 +24,8 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import Post from "../post";
 import Comments from "../comments";
 import moment from "moment";
+import CmtList from "../../../../@coremat/CmtList";
+import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,22 +71,22 @@ const useStyles = makeStyles((theme) => ({
   },
   iconMiddle: { verticalAlign: "top" },
 }));
-import { useSelector, connect, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import axios from "axios";
 import Grow from "@material-ui/core/Grow";
-import { getSession } from "next-auth/client";
 //redux
 
 import {
   createComment,
   clearErrors,
-} from "../../../redux/actions/CommentActions";
+} from "../../../reduxBackup/actions/CommentActions";
 import { wrapper } from "../../../redux/store";
-import { CREATE_COMMENT_SUCCESS } from "../../../redux/constants/allComments";
+import { CREATE_COMMENT_SUCCESS } from "../../../reduxBackup/constants/allComments";
 import { useRouter } from "next/router";
 
 const Feed = ({ group, enroll, personal }) => {
   const router = useRouter();
+  const dispatch = useDispatch();
 
   const [commentActive, setCommentActive] = useState(false);
   const [activePost, setActivePost] = useState(0);
@@ -95,10 +97,6 @@ const Feed = ({ group, enroll, personal }) => {
     setActivePost(id);
   };
 
-  //create comment
-  const refreshData = () => {
-    router.reload(window.location.pathname);
-  };
   //post state
   const [postText, setPostText] = useState("");
   //handler to setPostText
@@ -106,19 +104,9 @@ const Feed = ({ group, enroll, personal }) => {
     setPostText(value);
   };
   //redux action dispatch
-  const dispatch = useDispatch();
   //redux state
-  const { error, success } = useSelector((state) => state.createComment);
   //useeffect
-  useEffect(() => {
-    if (error) {
-      dispatch(clearErrors());
-    }
-    if (success) {
-      dispatch({ type: CREATE_COMMENT_SUCCESS });
-    }
-    return () => {};
-  }, [dispatch, error, success]);
+
   //newsfeed post handler
   const submitHandler = (e) => {
     e.preventDefault();
@@ -131,14 +119,12 @@ const Feed = ({ group, enroll, personal }) => {
     setPostText("");
   };
   async function fetchComments() {
-    const session = await getSession();
-
     await axios
       .get(
         `https://paathshala.staging.baeinnovations.com/newsfeed/comments/?post_id=${activePost}`,
         {
           headers: {
-            Authorization: `token ${session.user.token}`,
+            Authorization: `token `,
           },
         }
       )
@@ -154,62 +140,62 @@ const Feed = ({ group, enroll, personal }) => {
     fetchComments();
   }, [activePost, allComments]);
 
-  const { feeds } = useSelector((state) => state.allFeeds);
+  const { feedPosts } = useSelector(({ wallApp }) => wallApp);
   const classes = useStyles();
-  console.log(feeds);
   return (
     <Box className={classes.root}>
-      {!feeds
-        ? "No Feed! Post and Share!"
-        : feeds?.map((feed) => (
-            <Grow
-              key={feed.id}
-              in={true}
-              style={{ transformOrigin: "0 0 0" }}
-              {...(true ? { timeout: 1000 } : {})}
+      <CmtList
+        data={feedPosts}
+        renderRow={(feed, index) => (
+          <Grow
+            mb={2}
+            key={index}
+            in={true}
+            style={{ transformOrigin: "0 0 0" }}
+            {...(true ? { timeout: 1000 } : {})}
+          >
+            <Box
+              bgcolor="background.box"
+              boxShadow={2}
+              borderRadius={4}
+              className={classes.feed}
             >
               <Box
-                bgcolor="background.box"
-                boxShadow={2}
-                borderRadius={4}
-                className={classes.feed}
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
               >
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-between"
-                >
-                  <Box display="flex" alignItems="center">
-                    <Box>
-                      <Avatar src="" className={classes.profile__img} />
-                    </Box>
-                    <Box>
-                      <Typography
-                        component="h2"
-                        className={classes.profile__name}
-                      >
-                        {feed.user}
-                      </Typography>
-                      <Typography component="h3" className={classes.post__time}>
-                        {moment(feed.timeStamp).fromNow()}
-                      </Typography>
-                    </Box>
+                <Box display="flex" alignItems="center">
+                  <Box>
+                    <Avatar src="" className={classes.profile__img} />
                   </Box>
                   <Box>
-                    <IconButton
-                      color="secondary"
-                      className={classes.appbar_rightIcon}
+                    <Typography
+                      component="h2"
+                      className={classes.profile__name}
                     >
-                      <MoreHorizIcon />
-                    </IconButton>
+                      {feed.user}
+                    </Typography>
+                    <Typography component="h3" className={classes.post__time}>
+                      {moment(feed.timeStamp).fromNow()}
+                    </Typography>
                   </Box>
                 </Box>
-                <Typography className={classes.status}>
-                  {feed.post_text}
-                </Typography>
+                <Box>
+                  <IconButton
+                    color="secondary"
+                    className={classes.appbar_rightIcon}
+                  >
+                    <MoreHorizIcon />
+                  </IconButton>
+                </Box>
+              </Box>
+              <Typography className={classes.status}>
+                {feed.post_text}
+              </Typography>
 
-                <Divider className={classes.divider} />
-                {/* <Box
+              <Divider className={classes.divider} />
+              {/* <Box
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
@@ -262,87 +248,89 @@ const Feed = ({ group, enroll, personal }) => {
                   </Box>
                 </Box>
                 <Divider className={classes.divider} /> */}
-                <Box
-                  display="flex"
-                  alignItems="center"
-                  justifyContent="space-around"
-                  ml={1}
-                  mr={1}
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-around"
+                ml={1}
+                mr={1}
+              >
+                <Button
+                  size="small"
+                  color="secondary"
+                  classes={{ root: classes.button, label: classes.label }}
+                  startIcon={
+                    <ThumbUpAltOutlinedIcon
+                      style={{ fontSize: "24px", verticalAlign: "middle" }}
+                    />
+                  }
                 >
-                  <Button
-                    size="small"
-                    color="secondary"
-                    classes={{ root: classes.button, label: classes.label }}
-                    startIcon={
-                      <ThumbUpAltOutlinedIcon
-                        style={{ fontSize: "24px", verticalAlign: "middle" }}
-                      />
-                    }
-                  >
-                    Like
-                  </Button>
-                  <Button
-                    onClick={() => handleCommentBox(feed.id)}
-                    size="small"
-                    color="secondary"
-                    classes={{ root: classes.button, label: classes.label }}
-                    startIcon={
-                      <ChatBubbleOutlineOutlinedIcon
-                        style={{ fontSize: "24px" }}
-                      />
-                    }
-                  >
-                    Comment
-                  </Button>
-                  <Button
-                    size="small"
-                    color="secondary"
-                    classes={{ root: classes.button, label: classes.label }}
-                    startIcon={
-                      <FontAwesomeIcon
-                        icon={faShare}
-                        style={{ fontSize: "24px" }}
-                      />
-                    }
-                  >
-                    Share
-                  </Button>
-                </Box>
-
-                {commentActive && activePost == feed.id && (
-                  <Collapse in={true}>
-                    <Divider className={classes.divider} />
-                    <Box p={1}>
-                      <Post
-                        submit={submitHandler}
-                        setText={postTextHandler}
-                        post={postText}
-                      />
-                    </Box>
-                    <Divider className={classes.divider} />
-
-                    {allComments.length > 0 ? (
-                      <Box p={1}>
-                        {allComments.map((comment) => (
-                          <Comments comment={comment} />
-                        ))}
-                      </Box>
-                    ) : (
-                      ""
-                    )}
-                  </Collapse>
-                )}
+                  Like
+                </Button>
+                <Button
+                  onClick={() => handleCommentBox(feed.id)}
+                  size="small"
+                  color="secondary"
+                  classes={{ root: classes.button, label: classes.label }}
+                  startIcon={
+                    <ChatBubbleOutlineOutlinedIcon
+                      style={{ fontSize: "24px" }}
+                    />
+                  }
+                >
+                  Comment
+                </Button>
+                <Button
+                  size="small"
+                  color="secondary"
+                  classes={{ root: classes.button, label: classes.label }}
+                  startIcon={
+                    <FontAwesomeIcon
+                      icon={faShare}
+                      style={{ fontSize: "24px" }}
+                    />
+                  }
+                >
+                  Share
+                </Button>
               </Box>
-            </Grow>
-          ))}
+
+              {commentActive && activePost == feed.id && (
+                <Collapse in={true}>
+                  <Divider className={classes.divider} />
+                  <Box p={1}>
+                    <Post
+                      submit={submitHandler}
+                      setText={postTextHandler}
+                      post={postText}
+                    />
+                  </Box>
+                  <Divider className={classes.divider} />
+
+                  {allComments.length > 0 ? (
+                    <Box p={1}>
+                      {allComments.map((comment) => (
+                        <Comments comment={comment} />
+                      ))}
+                    </Box>
+                  ) : (
+                    ""
+                  )}
+                </Collapse>
+              )}
+            </Box>
+          </Grow>
+        )}
+        ListEmptyComponent={
+          <ListEmptyResult
+            loader={true}
+            title="No Post Found"
+            content="Empty result description"
+          />
+        }
+      />
     </Box>
   );
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    createComment: dispatch(createComment()),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Feed);
+export default Feed;

@@ -1,12 +1,11 @@
-import React from "react";
+import React,{useEffect} from "react";
 import Feed from "../feed";
-import { useSelector, connect } from "react-redux";
+import { useDispatch } from "react-redux";
+import { getFeedPosts } from "../../../redux/actions/WallApp";
 
-//feed action -redux
-import { createFeed, getAllFeeds } from "../../../redux/actions/feedActions";
 //redux store
-import { wrapper } from "../../../redux/store";
 const Feeds = () => {
+  
   return (
     <>
       <Feed personal />
@@ -15,17 +14,5 @@ const Feeds = () => {
     </>
   );
 };
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ req, store }) => {
-    store.dispatch(getAllFeeds(req));
-  }
-);
- 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    feeds: dispatch(getAllFeeds()),
-    createFeed: dispatch(createFeed()),
-  };
-};
 
-export default connect(null, mapDispatchToProps)(Feeds);
+export default Feeds;

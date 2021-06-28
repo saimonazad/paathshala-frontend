@@ -1,4 +1,9 @@
-import { CREATE_POST, GET_FEED_POSTS, GET_USER_DETAIL, UPDATE_POST } from '../../../@jumbo/constants/ActionTypes';
+import {
+  CREATE_POST,
+  GET_FEED_POSTS,
+  GET_USER_DETAIL,
+  UPDATE_POST,
+} from "../../../@jumbo/constants/ActionTypes";
 
 const INIT_STATE = {
   userDetail: null,
@@ -26,7 +31,9 @@ export default function WallApp(state = INIT_STATE, action) {
     case UPDATE_POST: {
       return {
         ...state,
-        feedPosts: state.feedPosts.map((item) => (item.id === action.payload.id ? action.payload : item)),
+        feedPosts: state.feedPosts.map((item) =>
+          item.id === action.payload.id ? action.payload : item
+        ),
       };
     }
     default:

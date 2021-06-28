@@ -6,6 +6,7 @@ import Box from "@material-ui/core/Box";
 
 const PostsList = () => {
   const { feedPosts } = useSelector(({ wallApp }) => wallApp);
+  console.log(feedPosts);
   return (
     <CmtList
       data={feedPosts}
