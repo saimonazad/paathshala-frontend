@@ -7,6 +7,14 @@ import {
   GET_FEED_POSTS,
   GET_USER_DETAIL,
   UPDATE_POST,
+  GET_COMMENTS,
+  CREATE_COMMENT,
+  UPDATE_COMMENT,
+  DELETE_COMMENT,
+  RESET_COMMENTS,
+  ALL_PERSONAL_FEEDS_FAIL,
+  ALL_PERSONAL_FEEDS_SUCCESS,
+  CREATE_PERSONAL_FEEDS_SUCCESS,
 } from "../../../@jumbo/constants/ActionTypes";
 
 //for getting user detail
@@ -45,10 +53,51 @@ export const getFeedPosts = () => {
       })
       .catch((error) => {
         dispatch(fetchError("Something went wrong"));
+        localStorage.removeItem("token");
+        httpClient.defaults.headers.common["Authorization"] = "";
       });
   };
 };
 
+//for getting user feed posts
+export const getAllPersonalFeeds = (username) => {
+  return (dispatch) => {
+    dispatch(fetchStart());
+    httpClient
+      .get(`newsfeed/post/?username=${username}`)
+      .then((data) => {
+        if (data.status === 200) {
+          dispatch(fetchSuccess());
+          dispatch({ type: ALL_PERSONAL_FEEDS_SUCCESS, payload: data.data });
+        } else {
+          dispatch(fetchError("Something went wrong"));
+        }
+      })
+      .catch((error) => {
+        dispatch(fetchError("Something went wrong"));
+      });
+  };
+};
+//for creating a personal post
+export const createPersonalPost = (post) => {
+  return (dispatch) => {
+    dispatch(fetchStart());
+    httpClient
+      .post("newsfeed/post/", post)
+      .then((data) => {
+        console.log(data.data);
+        if (data.status === 201) {
+          dispatch(fetchSuccess());
+          dispatch({ type: CREATE_PERSONAL_FEEDS_SUCCESS, payload: data.data });
+        } else {
+          dispatch(fetchError("Something went wrong"));
+        }
+      })
+      .catch((error) => {
+        dispatch(fetchError("Something went wrong"));
+      });
+  };
+};
 //for creating a new post
 export const createPost = (post) => {
   return (dispatch) => {
@@ -97,12 +146,33 @@ export const updatePostLikeStatus = (postId, status) => {
 export const addComment = (postId, comment) => {
   return (dispatch) => {
     dispatch(fetchStart());
-    axios
-      .post("/wall/posts/comments", { postId, comment })
+    httpClient
+      .post(`newsfeed/comments/?post_id=${postId}`, comment)
+      .then((data) => {
+        if (data.status === 201) {
+          dispatch(fetchSuccess());
+          dispatch({ type: CREATE_COMMENT, payload: data.data });
+        } else {
+          dispatch(fetchError("Something went wrong"));
+        }
+      })
+      .catch((error) => {
+        dispatch(fetchError("Something went wrong"));
+      });
+  };
+};
+
+//for getting comments
+export const getComments = (postId) => {
+  return (dispatch) => {
+    dispatch(fetchStart());
+    httpClient
+      .get(`newsfeed/comments/?post_id=${postId}`)
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
-          dispatch({ type: UPDATE_POST, payload: data.data });
+          dispatch({ type: RESET_COMMENTS, payload: "" });
+          dispatch({ type: GET_COMMENTS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }

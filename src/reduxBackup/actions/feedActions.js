@@ -75,7 +75,7 @@ export const createFeed = (feedData) => async (dispatch) => {
 
 //Get all personal feeds
 
-export const getAllPersonalFeeds = (req) => async (dispatch) => {
+export const getAllPersonalFeeds  = (req) => async (dispatch) => {
   try {
     const session = await getSession();
 

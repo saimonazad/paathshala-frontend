@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { makeStyles, Grid } from "@material-ui/core";
 import Info from "./info";
 import Feeds from "../../shared/feeds";
 import Following from "./following";
-import PostCard from "../../shared/postCard"
-import { useSelector, connect } from "react-redux";
+import PostCard from "../../shared/postCard";
+import { useSelector, useDispatch } from "react-redux";
+import { useAuth } from "../../../../authentication";
 
 //feed action -redux
 import {
@@ -13,7 +14,6 @@ import {
   getAcademicInfo,
 } from "../../../redux/actions/profileActions";
 //redux store
-import { wrapper } from "../../../redux/store";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,11 +26,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Posts = () => {
+const Posts = ({ user }) => {
+  const { authUser } = useAuth();
   const classes = useStyles();
-  const { basicInfo } = useSelector((state) => state.basic);
-  const { workInfo } = useSelector((state) => state.work);
-  const { academicInfo } = useSelector((state) => state.academic);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBasicInfo());
+    dispatch(getWorkInfo());
+    dispatch(getAcademicInfo());
+  }, [dispatch]);
+
+  const { basicInfo } = useSelector(({ basic }) => basic);
+  const { workInfo } = useSelector(({ work }) => work);
+  const { academicInfo } = useSelector(({ academic }) => academic);
+
+  // const { basicInfo } = useSelector();
+  // const { workInfo } = useSelector((state) => state.work);
+  // const { academicInfo } = useSelector((state) => state.academic);
 
   return (
     <Grid container className={classes.root} spacing={2}>
@@ -40,28 +53,12 @@ const Posts = () => {
         <Info data={academicInfo} title="Academic Profile" />
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>
-        <Following />
-        <PostCard/>
+        {authUser.username === user.username ? <Following /> : ""}
+        {authUser.username === user.username ? <PostCard /> : ""}
         <Feeds />
       </Grid>
     </Grid>
   );
 };
-//server side fetch redux
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ req, store }) => {
-    store.dispatch(getBasicInfo(req));
-    store.dispatch(getWorkInfo(req));
-    store.dispatch(getAcademicInfo(req));
-  }
-);
-//map dispatch to props
-const mapDispatchToProps = (dispatch) => {
-  return {
-    basic: dispatch(getBasicInfo()),
-    work: dispatch(getWorkInfo()),
-    academic: dispatch(getAcademicInfo()),
-  };
-};
-//connect HOC with mapDispatchToProps
-export default connect(null, mapDispatchToProps)(Posts);
+
+export default Posts;

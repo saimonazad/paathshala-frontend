@@ -176,8 +176,8 @@ const useStyles = makeStyles((theme) => ({
 const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
   const classes = useStyles();
   const { isLoading, error, userLogin } = useAuth();
-  const [username, setUsername] = useState("saimonazad");
-  const [password, setPassword] = useState("Therap12#");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
   const onSubmit = () => {
     userLogin({ username, password });

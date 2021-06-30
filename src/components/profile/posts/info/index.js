@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     padding: theme.spacing(1.5),
     "& h2": {
       color: theme.palette.common.white,
-      fontSize: 20,
+      fontSize: 16,
     },
     "& button": {
       color: theme.palette.secondary.main,
@@ -57,7 +57,6 @@ const useStyles = makeStyles((theme) => ({
     "& .MuiListItemText-root": {
       marginTop: 0,
     },
-    
   },
 }));
 const Info = ({ title, data }) => {

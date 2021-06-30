@@ -1,30 +1,39 @@
-import React from 'react';
+import React from "react";
 
-import clsx from 'clsx';
+import clsx from "clsx";
 
-import { Box, Button, CircularProgress, fade } from '@material-ui/core';
-import makeStyles from '@material-ui/core/styles/makeStyles';
+import { Box, Button, CircularProgress, fade } from "@material-ui/core";
+import makeStyles from "@material-ui/core/styles/makeStyles";
 
 const useStyles = makeStyles((theme) => ({
   emptyListContainer: {
-    flexDirection: 'column',
-    minHeight: 250,
-    height: '100%',
-    display: 'flex',
+    flexDirection: "column",
+    minHeight: 10,
+    height: "100%",
+    display: "flex",
     padding: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${fade(theme.palette.common.black, 0.12)}`,
     borderRadius: 4,
-    textAlign: 'center',
+    textAlign: "center",
   },
   flexRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
   },
 }));
 
-const ListEmptyResult = ({ loader, placeholder, loading, title, actionTitle, content, onClick, children }) => {
+const ListEmptyResult = ({
+  loader,
+  placeholder,
+  loading,
+  title,
+  actionTitle,
+  content,
+  onClick,
+  children,
+}) => {
   const classes = useStyles();
   if (loading || loader) {
     return (
@@ -32,7 +41,13 @@ const ListEmptyResult = ({ loader, placeholder, loading, title, actionTitle, con
         {placeholder ? (
           placeholder
         ) : (
-          <div className={clsx(classes.emptyListContainer, classes.flexRow, 'CmtList-EmptyResult')}>
+          <div
+            className={clsx(
+              classes.emptyListContainer,
+              classes.flexRow,
+              "CmtList-EmptyResult"
+            )}
+          >
             <CircularProgress size={16} />
             <span className="ml-2">Loading...</span>
           </div>
@@ -41,13 +56,13 @@ const ListEmptyResult = ({ loader, placeholder, loading, title, actionTitle, con
     );
   } else {
     return (
-      <div className={clsx(classes.emptyListContainer, 'CmtList-EmptyResult')}>
+      <div className={clsx(classes.emptyListContainer, "CmtList-EmptyResult")}>
         {children ? (
           children
         ) : (
           <React.Fragment>
             {title && (
-              <Box component="h4" fontSize={28} color="text.primary" mb={3}>
+              <Box component="h1" fontSize={20} color="text.primary" >
                 {title}
               </Box>
             )}
@@ -60,7 +75,8 @@ const ListEmptyResult = ({ loader, placeholder, loading, title, actionTitle, con
                 color="primary"
                 variant="contained"
                 style={{ marginTop: 30, height: 45, minWidth: 150 }}
-                onClick={onClick}>
+                onClick={onClick}
+              >
                 {actionTitle}
               </Button>
             )}

@@ -1,66 +1,19 @@
-import React, { useEffect, useState } from "react";
-import Profile from "../../components/profile";
-import { getSession, session, signIn, useSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import axios from "axios";
-import { Typography } from "@material-ui/core";
-import DefaultErrorPage from "next/error";
+import React from "react";
+import dynamic from "next/dynamic";
+import PageLoader from "../../../@jumbo/components/PageComponents/PageLoader";
+import SecurePage from "../../../authentication/auth-page-wrappers/SecurePage";
 
-const profile = () => {
-  const router = useRouter();
-  const { pname } = router.query;
-  const [session] = useSession();
-  const [userProfileInfo, setUserProfileInfo] = useState({});
-
-  async function profileCheck() {
-    await axios
-      .get(
-        `https://paathshala.staging.baeinnovations.com/users/userinfo/${pname}`,
-        {
-          headers: {
-            Authorization: `token ${session.user.token}`,
-          },
-        }
-      )
-      .then((res) => {
-        setUserProfileInfo(res.data);
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+const ProfilePage = dynamic(
+  () => import("../../components/profile/profilePage"),
+  {
+    loading: () => <PageLoader />,
   }
+);
 
-  useEffect(() => {
-    profileCheck();
-  }, [session]);
-  return (
-    <>
-      {userProfileInfo.username ? (
-        <Profile userDetails={userProfileInfo} />
-      ) : (
-        "NO profile found"
-      )}
-    </>
-  );
-};
-export async function getServerSideProps(context) {
-  try {
-    const session = await getSession(context);
-    if (!session) throw new Error("unauthorized");
+const profile = () => (
+  <SecurePage>
+    <ProfilePage />
+  </SecurePage>
+);
 
-    return {
-      props: {
-        session,
-      },
-    };
-  } catch (err) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: "/signin",
-      },
-    };
-  }
-}
 export default profile;

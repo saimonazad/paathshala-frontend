@@ -67,12 +67,25 @@ const Classes = () => {
         alignItems="center"
         className={classes.header}
       >
-        <Typography component="h1">Classes</Typography>
         <div>
+          <Typography component="h1" style={{ display: "inline-block" }}>
+            Classes
+          </Typography>
           <StarIcon className={classes.startIcon} />
           <Typography component="span">4.5/5</Typography>
           <Typography component="span">(36)</Typography>
         </div>
+        <Button
+          variant="outlined"
+          color="secondary"
+          style={{
+            backgroundColor: "#AF5698",
+            fontSize: 16,
+            textTransform: "none",
+          }}
+        >
+          Add Class
+        </Button>
       </Box>
       <Box className={classes.class__list}>
         <Box

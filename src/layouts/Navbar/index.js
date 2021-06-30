@@ -19,7 +19,8 @@ import Divider from "@material-ui/core/Divider";
 import Hidden from "@material-ui/core/Hidden";
 import Avatar from "@material-ui/core/Avatar";
 import theme from "../../utils/theme";
-import { signIn, signOut, useSession } from "next-auth/client";
+import { useAuth } from "../../../authentication";
+import { useRouter } from "next/router";
 
 const useStyles = makeStyles((theme) => ({
   test: {
@@ -117,15 +118,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   menu: {
-   "& .MuiMenu-paper": {
-     top: "60px!important"
-   }
-  }
+    "& .MuiMenu-paper": {
+      top: "60px!important",
+    },
+  },
 }));
 
 export default function SearchAppBar() {
   const classes = useStyles();
-  const [session, loading] = useSession();
+  const router = useRouter();
+
+  const { authUser, userSignOut } = useAuth();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
@@ -135,6 +138,12 @@ export default function SearchAppBar() {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const onLogoutClick = () => {
+    userSignOut(() => {
+      router.push("/signin").then((r) => r);
+    });
   };
 
   return (
@@ -240,23 +249,27 @@ export default function SearchAppBar() {
               <Typography
                 style={{ fontWeight: 500, color: theme.palette.common.black }}
               >
-                {session ? session.user.name : ""}
+                {authUser
+                  ? JSON.parse(localStorage.getItem("user")).username
+                  : ""}
               </Typography>
             </Hidden>
           </Button>
-          {session && (
+          {authUser && (
             <Menu
-            className={classes.menu}
+              className={classes.menu}
               id="simple-menu"
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <Link href={"/u/" + session.user.name}>
+              <Link
+                href={"/u/" + JSON.parse(localStorage.getItem("user")).username}
+              >
                 <MenuItem>Profile</MenuItem>
               </Link>
-              <MenuItem onClick={() => signOut()}>Logout</MenuItem>
+              <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
             </Menu>
           )}
         </Box>

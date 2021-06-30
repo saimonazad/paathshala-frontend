@@ -26,6 +26,10 @@ import Comments from "../comments";
 import moment from "moment";
 import CmtList from "../../../../@coremat/CmtList";
 import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
+import { useSelector, useDispatch } from "react-redux";
+import Grow from "@material-ui/core/Grow";
+import { useRouter } from "next/router";
+import { getComments, addComment } from "../../../redux/actions/WallApp";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,30 +75,18 @@ const useStyles = makeStyles((theme) => ({
   },
   iconMiddle: { verticalAlign: "top" },
 }));
-import { useSelector, useDispatch } from "react-redux";
-import axios from "axios";
-import Grow from "@material-ui/core/Grow";
-//redux
-
-import {
-  createComment,
-  clearErrors,
-} from "../../../reduxBackup/actions/CommentActions";
-import { wrapper } from "../../../redux/store";
-import { CREATE_COMMENT_SUCCESS } from "../../../reduxBackup/constants/allComments";
-import { useRouter } from "next/router";
 
 const Feed = ({ group, enroll, personal }) => {
-  const router = useRouter();
   const dispatch = useDispatch();
 
   const [commentActive, setCommentActive] = useState(false);
   const [activePost, setActivePost] = useState(0);
-  const [allComments, setAllComments] = useState([]);
 
   const handleCommentBox = (id) => {
-    setCommentActive(true);
+    dispatch(getComments(id));
+
     setActivePost(id);
+    setCommentActive(true);
   };
 
   //post state
@@ -114,33 +106,14 @@ const Feed = ({ group, enroll, personal }) => {
     const commentData = {
       comment_text: postText,
     };
-    dispatch(createComment(commentData, activePost));
-    fetchComments();
+    dispatch(addComment(activePost, commentData));
     setPostText("");
   };
-  async function fetchComments() {
-    await axios
-      .get(
-        `https://paathshala.staging.baeinnovations.com/newsfeed/comments/?post_id=${activePost}`,
-        {
-          headers: {
-            Authorization: `token `,
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setAllComments(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  useEffect(() => {
-    fetchComments();
-  }, [activePost, allComments]);
 
   const { feedPosts } = useSelector(({ wallApp }) => wallApp);
+
+  const { comments } = useSelector(({ comment }) => comment);
+  console.table(comments);
   const classes = useStyles();
   return (
     <Box className={classes.root}>
@@ -307,15 +280,12 @@ const Feed = ({ group, enroll, personal }) => {
                   </Box>
                   <Divider className={classes.divider} />
 
-                  {allComments.length > 0 ? (
-                    <Box p={1}>
-                      {allComments.map((comment) => (
-                        <Comments comment={comment} />
-                      ))}
-                    </Box>
-                  ) : (
-                    ""
-                  )}
+                  <CmtList
+                    data={comments}
+                    renderRow={(comment, index) => (
+                      <Comments key={index} comment={comment} />
+                    )}
+                  />
                 </Collapse>
               )}
             </Box>
@@ -323,9 +293,8 @@ const Feed = ({ group, enroll, personal }) => {
         )}
         ListEmptyComponent={
           <ListEmptyResult
-            loader={true}
             title="No Post Found"
-            content="Empty result description"
+            content="Post and share first!"
           />
         }
       />

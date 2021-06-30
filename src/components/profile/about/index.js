@@ -69,11 +69,10 @@ const About = () => {
     console.log(newValue);
   };
   //redux data
-  const { basicInfo } = useSelector((state) => state.basic);
-  const { workInfo } = useSelector((state) => state.work);
-  const { academicInfo } = useSelector((state) => state.academic);
+  const { basicInfo } = useSelector(({ basic }) => basic);
+  const { workInfo } = useSelector(({ work }) => work);
+  const { academicInfo } = useSelector(({ academic }) => academic);
 
-  console.log(academicInfo);
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box alignItems="center" className={classes.header}>
@@ -124,14 +123,15 @@ const About = () => {
                   <Box fontSize={16}>
                     Lives in:
                     <Box pl={0.5} component="span" fontWeight={500}>
-                      {basicInfo[0].lives_in_char}
+                      {basicInfo[0]?.lives_in_char}
                     </Box>
                   </Box>
                 </Box>
               </Box>
             )}
             {activeBtn == "work" &&
-              workInfo.map((work) => {
+              workInfo.length > 0 &&
+              workInfo?.map((work) => {
                 return (
                   <Box pl={6} borderColor="secondary.main">
                     <Box pb={3} display="flex" alignItems="center">
@@ -193,7 +193,7 @@ const About = () => {
                   </Box>
                 );
               })}
-            {activeBtn == "work" && workInfo.length === 0 && (
+            {activeBtn == "work" && workInfo.length == 0 && (
               <Box pl={6} borderColor="secondary.main">
                 <Box pb={3} display="flex" alignItems="center">
                   <WorkIcon className={classes.icon} />
@@ -241,7 +241,7 @@ const About = () => {
                 </Box>
               </Box>
             )}
-            {activeBtn == "academic" &&
+            {activeBtn == "academic" && academicInfo.length>0 &&
               academicInfo.map((level) => {
                 return (
                   <Box pl={6} borderColor="secondary.main">
@@ -303,7 +303,7 @@ const About = () => {
                 );
               })}
 
-            {activeBtn == "academic" && academicInfo.length === 0 && (
+            {activeBtn == "academic" && academicInfo.length == 0 && (
               <Box pl={6} borderColor="secondary.main">
                 <Box pb={3} display="flex" alignItems="center">
                   <SchoolIcon className={classes.icon} />

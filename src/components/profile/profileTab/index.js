@@ -12,9 +12,10 @@ import {
 } from "@material-ui/core";
 import { Hidden } from "@material-ui/core";
 import { NativeSelect } from "@material-ui/core";
-import { useSession } from "next-auth/client";
 import { useRouter } from "next/router";
-import axios from "axios";
+import { useAuth } from "../../../../authentication";
+import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+
 const useStyles = makeStyles((theme) => ({
   tabRoot: {
     padding: 0,
@@ -54,7 +55,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
-  const [session] = useSession();
+  const { authUser } = useAuth();
   const classes = useStyles();
 
   const handleChange = (event, newValue) => {
@@ -68,14 +69,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const router = useRouter();
   const { pname } = router.query;
 
-  const fetcher = (url) =>
-    axios
-      .get(url, {
-        headers: {
-          Authorization: `token ${session.user.token}`,
-        },
-      })
-      .then((res) => res.data);
+  const fetcher = (url) => httpClient.get(url).then((res) => res.data);
 
   const followCheckUrl = `https://paathshala.staging.baeinnovations.com/users/follow_check/?username=${pname}`;
   const { data, error } = useSWR(followCheckUrl, fetcher);
@@ -84,18 +78,10 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   //follow a user
   async function followHandler(values) {
     mutate(followCheckUrl, values, false);
-    await axios
-      .post(
-        "https://paathshala.staging.baeinnovations.com/users/follow/",
-        {
-          followed: `${pname}`,
-        },
-        {
-          headers: {
-            Authorization: `token ${session.user.token}`,
-          },
-        }
-      )
+    await httpClient
+      .post("https://paathshala.staging.baeinnovations.com/users/follow/", {
+        followed: `${pname}`,
+      })
       .then((res) => res.data);
     trigger(followCheckUrl);
   }
@@ -103,19 +89,13 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   async function unfollowHandler(values) {
     const deletefollowUrl = `https://paathshala.staging.baeinnovations.com/users/follow/${values.id}`;
     mutate(followCheckUrl, values, false);
-    await axios
-      .delete(deletefollowUrl, {
-        headers: {
-          Authorization: `token ${session.user.token}`,
-        },
-      })
-      .then((res) => res.data);
+    await httpClient.delete(deletefollowUrl).then((res) => res.data);
     trigger(followCheckUrl);
   }
 
   return (
     <Box display="flex" justifyContent="space-between">
-      {user.username == session.user.name && (
+      {user.username == authUser.username && (
         <>
           <Hidden xsDown>
             <Tabs
@@ -165,7 +145,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
           </Hidden>
         </>
       )}
-      {user.username != session.user.name && (
+      {user.username != authUser.username && (
         <div className={classes.profileLinks__right}>
           <Button color="primary" variant="contained">
             Send Message

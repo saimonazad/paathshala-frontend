@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import moment from "moment";
 import React from "react";
-import { useSession } from "next-auth/client";
+import { useAuth } from "../../../../authentication";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
       fontWeight: 500,
     },
     padding: theme.spacing(1, 2),
-    borderTopLeftRadius:4,
+    borderTopLeftRadius: 4,
     borderTopRightRadius: 4,
   },
   class__time: {
@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Announcement = () => {
-  const [session] = useSession();
+  const { authUser } = useAuth();
   const classes = useStyles();
   const greet = () => {
     let message;
@@ -61,7 +61,12 @@ const Announcement = () => {
     <Box border={2} boxShadow={2} bgcolor="background.box" borderRadius={4}>
       <Box className={classes.header}>
         <Typography variant="h5" component="h1">
-          {greet()}, {session ? session.user.name : ""}
+          {greet()},{" "}
+          {authUser
+            ? JSON.parse(localStorage.getItem("user")).first_name +
+              " " +
+              JSON.parse(localStorage.getItem("user")).last_name
+            : ""}
         </Typography>
       </Box>
       <Typography variant="body2" className={classes.class__number}>

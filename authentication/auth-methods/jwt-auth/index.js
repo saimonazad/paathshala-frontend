@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { httpClient } from "./config";
+import Router from "next-router";
 
 export const useProvideAuth = () => {
   const [authUser, setAuthUser] = useState(null);
@@ -22,9 +23,9 @@ export const useProvideAuth = () => {
     setError(error);
   };
 
-  const userLogin = (user, callbackFun) => {
+  const userLogin = async (user) => {
     fetchStart();
-    httpClient
+    await httpClient
       .post("users/get-token/", user)
       .then(({ data }) => {
         if (data) {
@@ -32,29 +33,24 @@ export const useProvideAuth = () => {
           httpClient.defaults.headers.common["Authorization"] =
             "token " + data.token;
           localStorage.setItem("token", data.token);
-
           getAuthUser(user.username);
         } else {
           fetchError(data.error);
         }
       })
       .catch(function (error) {
-        fetchError(error.message);
+        fetchError("Uername/Password doesn't match. Please try again !");
       });
   };
 
   const userSignup = (user, callbackFun) => {
     fetchStart();
     httpClient
-      .post("auth/register", user)
+      .post("users/register/", user)
       .then(({ data }) => {
-        if (data.result) {
+        if (data) {
           fetchSuccess();
-          localStorage.setItem("token", data.token.access_token);
-          httpClient.defaults.headers.common["Authorization"] =
-            "Bearer " + data.token.access_token;
-          getAuthUser();
-          if (callbackFun) callbackFun();
+          userLogin({ username: user.username, password: user.password });
         } else {
           fetchError(data.error);
         }
@@ -84,24 +80,9 @@ export const useProvideAuth = () => {
 
   const renderSocialMediaLogin = () => null;
 
-  const userSignOut = (callbackFun) => {
-    fetchStart();
-    httpClient
-      .post("auth/logout")
-      .then(({ data }) => {
-        if (data.result) {
-          fetchSuccess();
-          httpClient.defaults.headers.common["Authorization"] = "";
-          localStorage.removeItem("token");
-          setAuthUser(false);
-          if (callbackFun) callbackFun();
-        } else {
-          fetchError(data.error);
-        }
-      })
-      .catch(function (error) {
-        fetchError(error.message);
-      });
+  const userSignOut = () => {
+    localStorage.removeItem("token");
+    setAuthUser(false);
   };
 
   const getAuthUser = (username) => {

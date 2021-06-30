@@ -1,16 +1,8 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Feed from "../feed";
-import { useSelector, connect } from "react-redux";
+import { useDispatch } from "react-redux";
 
-//feed action -redux
-import {
-  createFeed,
-  getAllPersonalFeeds,
-} from "../../../redux/actions/feedActions";
 //redux store
-import { wrapper } from "../../../redux/store";
-import { useSession, getSession } from "next-auth/client";
-
 const Feeds = () => {
   return (
     <>
@@ -20,17 +12,5 @@ const Feeds = () => {
     </>
   );
 };
-export const getServerSideProps = wrapper.getServerSideProps(
-  async ({ req, store }) => {
-    store.dispatch(getAllPersonalFeeds(req));
-  }
-);
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    PersonalFeeds: dispatch(getAllPersonalFeeds()),
-    createFeed: dispatch(createFeed()),
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Feeds);
+export default Feeds;
