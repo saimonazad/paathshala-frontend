@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -9,11 +9,7 @@ import {
 } from "@material-ui/core";
 import StarIcon from "@material-ui/icons/Star";
 import CreateClass from "./createClass";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllPersonalCourses } from "../../../redux/actions/courseActions";
-import CmtList from "../../../../@coremat/CmtList";
-import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
-import { Link } from "@material-ui/icons";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -63,24 +59,13 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Classes = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllPersonalCourses());
-  }, [dispatch]);
-
-  const { personalCourses } = useSelector(
-    ({ personalCourses }) => personalCourses
-  );
-  console.table(personalCourses);
-
   const classes = useStyles();
   const [open, setOpen] = useState(false);
 
   function handleModal(newValue) {
     setOpen(newValue);
   }
-  const test = [];
+
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box
@@ -112,44 +97,63 @@ const Classes = () => {
         <CreateClass isOpen={open} handleModal={handleModal} />
       </Box>
       <Box className={classes.class__list}>
-        <CmtList
-          data={personalCourses}
-          renderRow={(course, index) => (
-            <Box
-              key={index}
-              borderRadius={4}
-              display="flex"
-              justifyContent="space-between"
-              className={classes.class}
-              alignItems="center"
-              mb={2}
-            >
-              <Typography>{course.study_level}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>{course.coursename}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>{course.days}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>
-                {course.start_time} - {course.end_time}
-              </Typography>
-              <Divider orientation="vertical" flexItem />
-              <Button
-                variant="outlined"
-                color="secondary"
-                href={`/class/${course.id}`}
-              >
-                View
-              </Button>
-            </Box>
-          )}
-          ListEmptyComponent={
-            <ListEmptyResult
-              title="No Class Found"
-              content="Create a class first!"
-            />
-          }
-        />
+        <Box
+          borderRadius={4}
+          display="flex"
+          justifyContent="space-between"
+          className={classes.class}
+          alignItems="center"
+        >
+          <Typography>Section 1</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>Monday & Wednesday</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>07:30 PM - 08:30 PM</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>35(50)</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Button variant="outlined" color="secondary">
+            Enroll
+          </Button>
+        </Box>
+        <Box
+          borderRadius={4}
+          display="flex"
+          justifyContent="space-between"
+          className={classes.class}
+          alignItems="center"
+        >
+          <Typography>Section 1</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>Monday & Wednesday</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>07:30 PM - 08:30 PM</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>35(50)</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Button variant="outlined" color="secondary">
+            Enroll
+          </Button>
+        </Box>
+        <Box
+          borderRadius={4}
+          display="flex"
+          justifyContent="space-between"
+          className={classes.class}
+          alignItems="center"
+        >
+          <Typography>Section 1</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>Monday & Wednesday</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>07:30 PM - 08:30 PM</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography>35(50)</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Button variant="outlined" color="secondary">
+            Enroll
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

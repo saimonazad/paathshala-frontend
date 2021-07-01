@@ -12,6 +12,7 @@ import {
 } from "./profileReducer";
 
 import personalFeeds from "./personalFeed";
+import personalCourses from "./personalCourses";
 
 export default combineReducers({
   common: Common,
@@ -22,4 +23,5 @@ export default combineReducers({
   work: workInfoReducer,
   academic: academicInfoReducer,
   feeds: personalFeeds,
+  personalCourses: personalCourses,
 });

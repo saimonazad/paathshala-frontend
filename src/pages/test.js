@@ -1,66 +1,75 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
+import React, { useState } from "react";
 
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+import ToggleButton from "@material-ui/lab/ToggleButton";
+import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
+import { Button } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
-  paper: {
-    position: "absolute",
-    width: 400,
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 4, 3),
+  toggleContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    height: 30,
+    "& > button": {
+      border: "2px solid #AF5698!important",
+      borderRadius: "4px!important",
+      background: "white",
+      padding: 0,
+    },
+    "& * > button": {
+      textTransform: "none",
+    },
+    "& .MuiToggleButton-root.Mui-selected": {
+      padding: 0,
+      background: theme.palette.primary.main,
+      "& * > button": {
+        color: "white",
+        padding: theme.spacing(0, 0),
+      },
+    },
+  },
+  btnToggle: {
+    "&.MuiButton-root": {
+      padding: 0,
+    },
   },
 }));
-
-export default function SimpleModal() {
+export default function ToggleButtonsMultiple() {
   const classes = useStyles();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = React.useState(getModalStyle);
-  const [open, setOpen] = React.useState(false);
+  const [Days, setDays] = useState(() => []);
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleDays = (event, newDays) => {
+    setDays(newDays);
+    console.log(newDays);
   };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const body = (
-    <div style={modalStyle} className={classes.paper}>
-      <h2 id="simple-modal-title">Text in a modal</h2>
-      <p id="simple-modal-description">
-        Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-      </p>
-      <SimpleModal />
-    </div>
-  );
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
-        Open Modal
-      </button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-    </div>
+    <ToggleButtonGroup
+      value={Days}
+      onChange={handleDays}
+      aria-label="text formatting"
+      className={classes.toggleContainer}
+    >
+      <ToggleButton className={classes.btnToggle} value="Sun" aria-label="Sun">
+        <Button disableRipple={true} disableFocusRipple={true}>
+          Sun
+        </Button>
+      </ToggleButton>
+      <ToggleButton className={classes.btnToggle} value="Mon" aria-label="Mon">
+        <Button>Mon</Button>
+      </ToggleButton>
+      <ToggleButton className={classes.btnToggle} value="Tue" aria-label="Tue">
+        <Button>Tue</Button>
+      </ToggleButton>
+      <ToggleButton className={classes.btnToggle} value="Wed" aria-label="Wed">
+        <Button>Wed</Button>
+      </ToggleButton>
+      <ToggleButton className={classes.btnToggle} value="Thu" aria-label="Thu">
+        <Button>Thu</Button>
+      </ToggleButton>
+      <ToggleButton className={classes.btnToggle} value="Fri" aria-label="Fri">
+        <Button>Fri</Button>
+      </ToggleButton>
+    </ToggleButtonGroup>
   );
 }
