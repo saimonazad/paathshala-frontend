@@ -21,7 +21,7 @@ export const createComment = (commentData, post_id) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.post(
-      `https://paathshala.staging.baeinnovations.com/newsfeed/comments/?post_id=${post_id}`,
+      `${process.env.BACKEND_URL}/newsfeed/comments/?post_id=${post_id}`,
       commentData,
       {
         headers: {

@@ -22,7 +22,7 @@ const Profile = (props) => {
 
   async function fetchFollowingLists() {
     await httpClient
-      .get(`https://paathshala.staging.baeinnovations.com/users/follow/`)
+      .get(`${process.env.BACKEND_URL}/users/follow/`)
       .then((res) => {
         console.log(res.data);
         setFollowList(res.data);
@@ -34,7 +34,7 @@ const Profile = (props) => {
   async function fetchFollowersLists() {
     await httpClient
       .get(
-        `https://paathshala.staging.baeinnovations.com/users/follow/?user=${authUser.username}`
+        `${process.env.BACKEND_URL}/users/follow/?user=${authUser.username}`
       )
       .then((res) => {
         console.log(res.data);

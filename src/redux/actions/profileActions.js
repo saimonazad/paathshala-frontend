@@ -17,7 +17,7 @@ export const getBasicInfo = () => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("users/profile/")
+      .get("/users/profile/")
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
@@ -38,7 +38,7 @@ export const getWorkInfo = () => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("users/workinfo/")
+      .get("/users/workinfo/")
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
@@ -59,7 +59,7 @@ export const getAcademicInfo = () => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("users/academic_info/")
+      .get("/users/academic_info/")
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());

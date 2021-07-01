@@ -165,7 +165,11 @@ const useStyles = makeStyles((theme) => ({
   time: {},
 }));
 
-export default function CreateClass({ isOpen, handleModal }) {
+export default function CreateClass({
+  isOpen,
+  handleModal,
+  formSubmissionCheck,
+}) {
   const dispatch = useDispatch();
   //use react hook flowFrom:
   const {
@@ -195,6 +199,7 @@ export default function CreateClass({ isOpen, handleModal }) {
     let classData = { ...data, days: Days.toString() };
     try {
       dispatch(createCourse(classData));
+      formSubmissionCheck(true);
       handleClose();
     } catch (error) {}
   };

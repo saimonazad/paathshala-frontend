@@ -18,7 +18,7 @@ export const getAllFeeds = (req) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.get(
-      "https://paathshala.staging.baeinnovations.com/newsfeed/post/",
+      `${process.env.BACKEND_URL}/newsfeed/post/`,
       {
         headers: {
           Authorization: `token ${session.user.token}`,
@@ -52,7 +52,7 @@ export const createFeed = (feedData) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.post(
-      "https://paathshala.staging.baeinnovations.com/newsfeed/post/",
+      `${process.env.BACKEND_URL}/newsfeed/post/`,
       feedData,
       {
         headers: {
@@ -80,7 +80,7 @@ export const getAllPersonalFeeds  = (req) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.get(
-      `https://paathshala.staging.baeinnovations.com/newsfeed/post/?username=${session.user.name}`,
+      `${process.env.BACKEND_URL}/newsfeed/post/?username=${session.user.name}`,
       {
         headers: {
           Authorization: `token ${session.user.token}`,

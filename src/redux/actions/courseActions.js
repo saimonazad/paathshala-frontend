@@ -11,7 +11,7 @@ export const getAllPersonalCourses = () => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("course/info?type=own")
+      .get("/course/info?type=own")
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
@@ -31,7 +31,7 @@ export const createCourse = (courseInfo) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .post("course/info/", courseInfo)
+      .post("/course/info/", courseInfo)
       .then((data) => {
         if (data.status === 201) {
           dispatch(fetchSuccess());

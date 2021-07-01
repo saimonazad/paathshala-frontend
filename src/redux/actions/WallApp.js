@@ -42,7 +42,7 @@ export const getFeedPosts = () => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("newsfeed/post/")
+      .get("/newsfeed/post/")
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
@@ -64,7 +64,7 @@ export const getAllPersonalFeeds = (username) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get(`newsfeed/post/?username=${username}`)
+      .get(`/newsfeed/post/?username=${username}`)
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
@@ -83,7 +83,7 @@ export const createPersonalPost = (post) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .post("newsfeed/post/", post)
+      .post("/newsfeed/post/", post)
       .then((data) => {
         console.log(data.data);
         if (data.status === 201) {
@@ -103,7 +103,7 @@ export const createPost = (post) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .post("newsfeed/post/", post)
+      .post("/newsfeed/post/", post)
       .then((data) => {
         console.log(data.data);
         if (data.status === 201) {
@@ -147,7 +147,7 @@ export const addComment = (postId, comment) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .post(`newsfeed/comments/?post_id=${postId}`, comment)
+      .post(`/newsfeed/comments/?post_id=${postId}`, comment)
       .then((data) => {
         if (data.status === 201) {
           dispatch(fetchSuccess());
@@ -167,7 +167,7 @@ export const getComments = (postId) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get(`newsfeed/comments/?post_id=${postId}`)
+      .get(`/newsfeed/comments/?post_id=${postId}`)
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());

@@ -26,7 +26,7 @@ export const useProvideAuth = () => {
   const userLogin = async (user) => {
     fetchStart();
     await httpClient
-      .post("users/get-token/", user)
+      .post("/users/get-token/", user)
       .then(({ data }) => {
         if (data) {
           fetchSuccess();
@@ -46,7 +46,7 @@ export const useProvideAuth = () => {
   const userSignup = (user, callbackFun) => {
     fetchStart();
     httpClient
-      .post("users/register/", user)
+      .post("/users/register/", user)
       .then(({ data }) => {
         if (data) {
           fetchSuccess();
@@ -88,7 +88,7 @@ export const useProvideAuth = () => {
   const getAuthUser = (username) => {
     fetchStart();
     httpClient
-      .get(`users/userinfo/${username}`)
+      .get(`/users/userinfo/${username}`)
       .then(({ data }) => {
         if (data.username) {
           fetchSuccess();

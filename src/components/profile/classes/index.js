@@ -64,15 +64,17 @@ const useStyles = makeStyles((theme) => ({
 
 const Classes = () => {
   const dispatch = useDispatch();
-
+  const [isFormSubmitted, setIsFormSUbmitted] = useState(false);
+  function formSubmissionCheck(newValue) {
+    setIsFormSUbmitted(newValue);
+  }
   useEffect(() => {
     dispatch(getAllPersonalCourses());
-  }, [dispatch]);
+  }, [dispatch, isFormSubmitted]);
 
   const { personalCourses } = useSelector(
     ({ personalCourses }) => personalCourses
   );
-  console.table(personalCourses);
 
   const classes = useStyles();
   const [open, setOpen] = useState(false);
@@ -80,7 +82,6 @@ const Classes = () => {
   function handleModal(newValue) {
     setOpen(newValue);
   }
-  const test = [];
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box
@@ -109,7 +110,11 @@ const Classes = () => {
         >
           + Add Class
         </Button>
-        <CreateClass isOpen={open} handleModal={handleModal} />
+        <CreateClass
+          isOpen={open}
+          handleModal={handleModal}
+          formSubmissionCheck={formSubmissionCheck}
+        />
       </Box>
       <Box className={classes.class__list}>
         <CmtList

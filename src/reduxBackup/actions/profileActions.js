@@ -17,7 +17,7 @@ export const getBasicInfo = (req) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.get(
-      "https://paathshala.staging.baeinnovations.com/users/profile/",
+      `${process.env.BACKEND_URL}/users/profile/`,
       {
         headers: {
           Authorization: `token ${session.user.token}`,
@@ -44,7 +44,7 @@ export const getWorkInfo = (req) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.get(
-      "https://paathshala.staging.baeinnovations.com/users/workinfo/",
+      `${process.env.BACKEND_URL}/users/workinfo/`,
       {
         headers: {
           Authorization: `token ${session.user.token}`,
@@ -71,7 +71,7 @@ export const getAcademicInfo = (req) => async (dispatch) => {
     const session = await getSession();
 
     const { data } = await axios.get(
-      "https://paathshala.staging.baeinnovations.com/users/academic_info/",
+      `${process.env.BACKEND_URL}/users/academic_info/`,
       {
         headers: {
           Authorization: `token ${session.user.token}`,

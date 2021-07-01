@@ -71,7 +71,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
 
   const fetcher = (url) => httpClient.get(url).then((res) => res.data);
 
-  const followCheckUrl = `https://paathshala.staging.baeinnovations.com/users/follow_check/?username=${pname}`;
+  const followCheckUrl = `${process.env.BACKEND_URL}/users/follow_check/?username=${pname}`;
   const { data, error } = useSWR(followCheckUrl, fetcher);
   console.log(data);
 
@@ -79,7 +79,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   async function followHandler(values) {
     mutate(followCheckUrl, values, false);
     await httpClient
-      .post("https://paathshala.staging.baeinnovations.com/users/follow/", {
+      .post(`${process.env.BACKEND_URL}/users/follow/`, {
         followed: `${pname}`,
       })
       .then((res) => res.data);
@@ -87,7 +87,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   }
   //delete follw
   async function unfollowHandler(values) {
-    const deletefollowUrl = `https://paathshala.staging.baeinnovations.com/users/follow/${values.id}`;
+    const deletefollowUrl = `${process.env.BACKEND_URL}/users/follow/${values.id}`;
     mutate(followCheckUrl, values, false);
     await httpClient.delete(deletefollowUrl).then((res) => res.data);
     trigger(followCheckUrl);

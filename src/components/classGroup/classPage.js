@@ -8,18 +8,21 @@ import { useAuth } from "../../../authentication";
 
 import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 
+
 const ClassPage = () => {
   const { authUser } = useAuth();
 
   const router = useRouter();
   const { id } = router.query;
-  const [userProfileInfo, setUserProfileInfo] = useState({});
+  const [enrollmentInfo, setenrollmentInfo] = useState({});
 
   async function enrollmentCheck() {
     await httpClient
-      .get(`course/info?course_id=${id}`)
+      .get(
+        `/course/enrollmentCheck/?type=course&username=${authUser.username}&course_id=${id}`
+      )
       .then((res) => {
-        setUserProfileInfo(res.data);
+        setenrollmentInfo(res.data);
         console.log(res.data);
       })
       .catch((error) => {
@@ -33,10 +36,10 @@ const ClassPage = () => {
 
   return (
     <>
-      {!userProfileInfo.username ? (
-        <ClassComponents userDetails={userProfileInfo} />
+      {enrollmentInfo.length > 0 ? (
+        <ClassComponents userDetails={enrollmentInfo} />
       ) : (
-        "No profile found"
+        "asf"
       )}
     </>
   );

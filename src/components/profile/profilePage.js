@@ -16,10 +16,10 @@ const ProfilePage = () => {
   console.log(pname);
   const [userProfileInfo, setUserProfileInfo] = useState({});
 
-  async function profileCheck() {
-    await httpClient
+  function profileCheck() {
+    httpClient
       .get(
-        `https://paathshala.staging.baeinnovations.com/users/userinfo/${pname}`
+        `${process.env.BACKEND_URL}/users/userinfo/${pname}`
       )
       .then((res) => {
         setUserProfileInfo(res.data);
