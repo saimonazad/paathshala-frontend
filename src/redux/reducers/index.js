@@ -13,6 +13,7 @@ import {
 
 import personalFeeds from "./personalFeed";
 import personalCourses from "./personalCourses";
+import getCourse from "./course";
 
 export default combineReducers({
   common: Common,
@@ -24,4 +25,5 @@ export default combineReducers({
   academic: academicInfoReducer,
   feeds: personalFeeds,
   personalCourses: personalCourses,
+  getCourse: getCourse,
 });
