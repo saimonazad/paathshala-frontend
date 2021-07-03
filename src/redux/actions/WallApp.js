@@ -41,21 +41,41 @@ export const getUserDetail = () => {
 export const getFeedPosts = () => {
   return (dispatch) => {
     dispatch(fetchStart());
-    httpClient
-      .get("/newsfeed/post/")
-      .then((data) => {
-        if (data.status === 200) {
-          dispatch(fetchSuccess());
-          dispatch({ type: GET_FEED_POSTS, payload: data.data });
-        } else {
-          dispatch(fetchError("Something went wrong"));
-        }
-      })
-      .catch((error) => {
-        dispatch(fetchError("Something went wrong"));
-        localStorage.removeItem("token");
-        httpClient.defaults.headers.common["Authorization"] = "";
+
+    const ownPostUrl = "/newsfeed/post/?username=saimonazad";
+    const followerPostUrl = "/newsfeed/follower/";
+    const data1 = httpClient.get(ownPostUrl);
+    const data2 = httpClient.get(followerPostUrl);
+
+    try {
+      Promise.all([data1, data2]).then((values) => {
+        let followingPosts = [...values[1].data].flat();
+        const allPosts = [...values[0].data, ...followingPosts];
+        allPosts.sort(
+          (a, b) =>
+            new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        );
+        dispatch(fetchSuccess());
+        dispatch({ type: GET_FEED_POSTS, payload: allPosts });
       });
+    } catch (error) {
+      dispatch(fetchError("Something went wrong"));
+    }
+    // httpClient
+    //   .get("/newsfeed/post/")
+    //   .then((data) => {
+    //     if (data.status === 200) {
+    //       dispatch(fetchSuccess());
+    //       dispatch({ type: GET_FEED_POSTS, payload: data.data });
+    //     } else {
+    //       dispatch(fetchError("Something went wrong"));
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     dispatch(fetchError("Something went wrong"));
+    //     localStorage.removeItem("token");
+    //     httpClient.defaults.headers.common["Authorization"] = "";
+    //   });
   };
 };
 
@@ -173,6 +193,26 @@ export const getComments = (postId) => {
           dispatch(fetchSuccess());
           dispatch({ type: RESET_COMMENTS, payload: "" });
           dispatch({ type: GET_COMMENTS, payload: data.data });
+        } else {
+          dispatch(fetchError("Something went wrong"));
+        }
+      })
+      .catch((error) => {
+        dispatch(fetchError("Something went wrong"));
+      });
+  };
+};
+
+//for getting user feed posts
+export const getAllCourseFeeds = (username) => {
+  return (dispatch) => {
+    dispatch(fetchStart());
+    httpClient
+      .get(`/newsfeed/post/?username=${username}`)
+      .then((data) => {
+        if (data.status === 200) {
+          dispatch(fetchSuccess());
+          dispatch({ type: ALL_PERSONAL_FEEDS_SUCCESS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }

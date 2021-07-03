@@ -150,7 +150,7 @@ const Feed = ({ group, enroll, personal }) => {
                       {feed.user}
                     </Typography>
                     <Typography component="h3" className={classes.post__time}>
-                      {moment(feed.timeStamp).fromNow()}
+                      {moment(feed.timestamp).fromNow()}
                     </Typography>
                   </Box>
                 </Box>

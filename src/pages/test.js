@@ -1,75 +1,33 @@
-import React, { useState } from "react";
-
-import ToggleButton from "@material-ui/lab/ToggleButton";
-import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { Button } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core";
-
-const useStyles = makeStyles((theme) => ({
-  toggleContainer: {
-    display: "flex",
-    justifyContent: "space-between",
-    height: 30,
-    "& > button": {
-      border: "2px solid #AF5698!important",
-      borderRadius: "4px!important",
-      background: "white",
-      padding: 0,
-    },
-    "& * > button": {
-      textTransform: "none",
-    },
-    "& .MuiToggleButton-root.Mui-selected": {
-      padding: 0,
-      background: theme.palette.primary.main,
-      "& * > button": {
-        color: "white",
-        padding: theme.spacing(0, 0),
+import React, { useEffect } from "react";
+import axios from "axios";
+const test = () => {
+  function frtchapi() {
+    const config = {
+      headers: {
+        Authorization: "Token 74a38f33f7a10e19895c5c50589c249e938cd30b",
       },
-    },
-  },
-  btnToggle: {
-    "&.MuiButton-root": {
-      padding: 0,
-    },
-  },
-}));
-export default function ToggleButtonsMultiple() {
-  const classes = useStyles();
-  const [Days, setDays] = useState(() => []);
+    };
+    const ownPostUrl =
+      "http://127.0.0.1:8000/newsfeed/post/?username=saimonazad";
+    const followerPostUrl = "http://127.0.0.1:8000/newsfeed/follower/";
+    const data1 = axios.get(ownPostUrl, config);
+    const data2 = axios.get(followerPostUrl, config);
+    Promise.all([data1, data2]).then((values) => {
+      let followingPosts = [...values[1].data].flat();
+      const allPosts = [...values[0].data, ...followingPosts];
+      allPosts.sort(
+        (a, b) =>
+          new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+      );
 
-  const handleDays = (event, newDays) => {
-    setDays(newDays);
-    console.log(newDays);
-  };
+      console.log(allPosts);
+    });
+  }
+  useEffect(() => {
+    frtchapi();
+  }, []);
 
-  return (
-    <ToggleButtonGroup
-      value={Days}
-      onChange={handleDays}
-      aria-label="text formatting"
-      className={classes.toggleContainer}
-    >
-      <ToggleButton className={classes.btnToggle} value="Sun" aria-label="Sun">
-        <Button disableRipple={true} disableFocusRipple={true}>
-          Sun
-        </Button>
-      </ToggleButton>
-      <ToggleButton className={classes.btnToggle} value="Mon" aria-label="Mon">
-        <Button>Mon</Button>
-      </ToggleButton>
-      <ToggleButton className={classes.btnToggle} value="Tue" aria-label="Tue">
-        <Button>Tue</Button>
-      </ToggleButton>
-      <ToggleButton className={classes.btnToggle} value="Wed" aria-label="Wed">
-        <Button>Wed</Button>
-      </ToggleButton>
-      <ToggleButton className={classes.btnToggle} value="Thu" aria-label="Thu">
-        <Button>Thu</Button>
-      </ToggleButton>
-      <ToggleButton className={classes.btnToggle} value="Fri" aria-label="Fri">
-        <Button>Fri</Button>
-      </ToggleButton>
-    </ToggleButtonGroup>
-  );
-}
+  return <div>he</div>;
+};
+
+export default test;
