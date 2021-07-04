@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
           <link rel="shortcut icon" href="/favicon.ico" />
           <meta
             name="keywords"
-            content="Responsive, HTML5, admin theme, business, professional, React, web design, CSS3, JSS"
+            content="Paathshala"
           />
 
           <meta name="msapplication-TileColor" content="#6200EE" />
@@ -28,12 +28,12 @@ export default class MyDocument extends Document {
             property="og:description"
             content="Web site created using create-react-appn"
           />
-          <meta property="og:title" content="Jumbo - Admin Dashboard" />
+          <meta property="og:title" content="Paathshala" />
           <meta property="og:image" content="/logo512.png" />
-          <meta property="og:site_name" content="Jumbo Admin Template" />
+          <meta property="og:site_name" content="Paathshala" />
           <meta name="keywords" content="react,react-component,stickies" />
           <meta name="twitter:card" content="summary" />
-          <meta name="twitter:title" content="Jumbo - Admin Dashboard" />
+          <meta name="twitter:title" content="Paathshala" />
           <meta
             name="twitter:description"
             content="Web site created using create-react-appn"
