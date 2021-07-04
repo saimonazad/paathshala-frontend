@@ -236,15 +236,7 @@ const Header = (props) => {
             variant="overline"
             className={classes.details__bio}
           >
-            {user.bio}
-          </Typography>
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-            className={classes.details__work}
-          >
-            {user.work}
+            {props.user.bio}
           </Typography>
         </div>
         <div className={classes.actions}>
