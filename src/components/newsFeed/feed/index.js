@@ -143,7 +143,7 @@ const Feed = ({ group, enroll, personal }) => {
                     <Avatar src="" className={classes.profile__img} />
                   </Box>
                   <Box>
-                    <Link href={`/u/${feed.user}`} >
+                    <Link href={`/u/${feed.user}`}>
                       <Typography
                         component="h2"
                         className={classes.profile__name}

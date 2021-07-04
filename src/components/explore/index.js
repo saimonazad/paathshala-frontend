@@ -84,7 +84,7 @@ const Explore = () => {
   }, []);
 
   //tab handling
-  const [activeTab, setActiveTab] = useState("teachers");
+  const [activeTab, setActiveTab] = useState("Teachers");
   function handleTab(newValue) {
     setActiveTab(newValue);
     console.log(activeTab);
@@ -94,19 +94,19 @@ const Explore = () => {
       <Box display="flex" justifyContent="center">
         <ButtonGroup color="primary" aria-label="outlined primary button group">
           <Button
-            value="teachers"
+            value="Teachers"
             onClick={(e) => handleTab(e.currentTarget.value)}
             className={
-              activeTab == "teachers" ? classes.activeTab : classes.test
+              activeTab == "Teachers" ? classes.activeTab : classes.test
             }
           >
             Teachers
           </Button>
           <Button
-            value="classes"
+            value="Classes"
             onClick={(e) => handleTab(e.currentTarget.value)}
             className={
-              activeTab == "classes" ? classes.activeTab : classes.test
+              activeTab == "Classes" ? classes.activeTab : classes.test
             }
           >
             Classes
@@ -114,7 +114,7 @@ const Explore = () => {
         </ButtonGroup>
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
-        <Typography className={classes.title}>Enrolled Classes</Typography>
+        <Typography className={classes.title}>{activeTab}</Typography>
         <div className={classes.search}>
           <div className={classes.searchIcon}>
             <SearchIcon />
@@ -136,8 +136,8 @@ const Explore = () => {
           <Filter />
         </Box>
       </Box>
-      {activeTab == "teachers" && <Teachers />}
-      {activeTab == "classes" && <Classes />}
+      {activeTab == "Teachers" && <Teachers />}
+      {activeTab == "Classes" && <Classes />}
     </Box>
   );
 };

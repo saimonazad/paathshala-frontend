@@ -39,7 +39,7 @@ const PostMediaUpload = () => {
           Upload Photos
         </Button>
       </Grid>
-      <Grid item>
+      {/* <Grid item>
         <Button
           size="small"
           color="secondary"
@@ -48,7 +48,7 @@ const PostMediaUpload = () => {
         >
           Upload Videos
         </Button>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 };
