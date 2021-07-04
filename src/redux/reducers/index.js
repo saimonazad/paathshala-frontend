@@ -14,6 +14,7 @@ import {
 import personalFeeds from "./personalFeed";
 import personalCourses from "./personalCourses";
 import getCourse from "./course";
+import getAllUsers from "./explore";
 
 export default combineReducers({
   common: Common,
@@ -26,4 +27,5 @@ export default combineReducers({
   feeds: personalFeeds,
   personalCourses: personalCourses,
   getCourse: getCourse,
+  getAllUsers: getAllUsers,
 });

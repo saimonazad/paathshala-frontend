@@ -19,10 +19,10 @@ const ProfilePage = () => {
   function profileCheck() {
     httpClient
       .get(
-        `${process.env.BACKEND_URL}/users/userinfo/${pname}`
+        `${process.env.BACKEND_URL}/users/userinfo/?username=${pname}`
       )
       .then((res) => {
-        setUserProfileInfo(res.data);
+        setUserProfileInfo(res.data[0]);
         console.log(res.data);
       })
       .catch((error) => {

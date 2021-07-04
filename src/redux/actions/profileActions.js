@@ -21,7 +21,7 @@ export const getBasicInfo = () => {
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
-          dispatch({ type: ALL_BASIC_INFO_SUCCESS, payload: data });
+          dispatch({ type: ALL_BASIC_INFO_SUCCESS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }
@@ -42,7 +42,7 @@ export const getWorkInfo = () => {
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
-          dispatch({ type: ALL_WORK_INFO_SUCCESS, payload: data });
+          dispatch({ type: ALL_WORK_INFO_SUCCESS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }
@@ -63,7 +63,7 @@ export const getAcademicInfo = () => {
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
-          dispatch({ type: ALL_ACADEMIC_INFO_SUCCESS, payload: data });
+          dispatch({ type: ALL_ACADEMIC_INFO_SUCCESS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }

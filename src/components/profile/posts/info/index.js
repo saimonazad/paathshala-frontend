@@ -17,6 +17,10 @@ import PeopleIcon from "@material-ui/icons/People";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 import SchoolIcon from "@material-ui/icons/School";
 import React from "react";
+import CmtList from "../../../../../@coremat/CmtList";
+import ListEmptyResult from "../../../../../@coremat/CmtList/ListEmptyResult";
+import { useRouter } from "next/router";
+import { useAuth } from "../../../../../authentication";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -60,6 +64,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const Info = ({ title, data }) => {
+  const router = useRouter();
+  const { pname } = router.query;
+  const { authUser } = useAuth();
+
   const classes = useStyles();
   return (
     <Box bgcolor="background.box" border={2} borderRadius={4}>
@@ -71,82 +79,88 @@ const Info = ({ title, data }) => {
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        <Button>See More</Button>
+        {authUser.username == pname ? (
+          <Button variant="primary">Add/Update</Button>
+        ) : (
+          ""
+        )}
       </Box>
-      {title == "Basic Info" && data && data.length > 0 ? (
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {data.map((info) => {
-            return (
-              <>
-                <ListItem className={classes.list}>
-                  <ListItemAvatar>
-                    <ListItemIcon className={classes.list__icon}>
-                      <PlaceIcon />
-                    </ListItemIcon>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    Lives in: <span>{info.lives_in_char}</span>
-                  </ListItemText>
-                </ListItem>
-              </>
-            );
-          })}
-        </List>
-      ) : (
-        ""
+      {console.log(data)}
+
+      {title == "Basic Info" && (
+        <CmtList
+          data={data}
+          renderRow={(info, index) => (
+            <List
+              sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            >
+              <ListItem className={classes.list}>
+                <ListItemAvatar>
+                  <ListItemIcon className={classes.list__icon}>
+                    <PlaceIcon />
+                  </ListItemIcon>
+                </ListItemAvatar>
+                <ListItemText>
+                  Lives in: <span>{info.lives_in_char}</span>
+                </ListItemText>
+              </ListItem>
+            </List>
+          )}
+          ListEmptyComponent={
+            <ListEmptyResult loader={false} title="No Info Found" />
+          }
+        />
       )}
-      {title == "Work Info" && data && data.length > 0 ? (
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {data.map((info) => {
-            return (
-              <>
-                <ListItem className={classes.list}>
-                  <ListItemAvatar>
-                    <ListItemIcon className={classes.list__icon}>
-                      <BusinessCenterIcon />
-                    </ListItemIcon>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <span>{info.position}</span>
-                    <p>{info.dept}</p>
-                    <p>{info.company}</p>
-                  </ListItemText>
-                </ListItem>
-              </>
-            );
-          })}
-        </List>
-      ) : (
-        ""
+      {title == "Work Info" && (
+        <CmtList
+          data={data}
+          renderRow={(info, index) => (
+            <List
+              sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            >
+              <ListItem className={classes.list}>
+                <ListItemAvatar>
+                  <ListItemIcon className={classes.list__icon}>
+                    <BusinessCenterIcon />
+                  </ListItemIcon>
+                </ListItemAvatar>
+                <ListItemText>
+                  <span>{info.position}</span>
+                  <p>{info.dept}</p>
+                  <p>{info.company}</p>
+                </ListItemText>
+              </ListItem>
+            </List>
+          )}
+          ListEmptyComponent={
+            <ListEmptyResult loader={false} title="No Info Found" />
+          }
+        />
       )}
-      {title == "Academic Profile" && data && data.length > 0 ? (
-        <List
-          sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
-        >
-          {data.map((info) => {
-            return (
-              <>
-                <ListItem className={classes.list}>
-                  <ListItemAvatar>
-                    <ListItemIcon className={classes.list__icon}>
-                      <SchoolIcon />
-                    </ListItemIcon>
-                  </ListItemAvatar>
-                  <ListItemText>
-                    <span>{info.degree}</span>|<span>{info.result}</span>|
-                    <span>{info.dept}</span>|<span>{info.institution}</span>
-                  </ListItemText>
-                </ListItem>
-              </>
-            );
-          })}
-        </List>
-      ) : (
-        ""
+      {title == "Academic Profile" && (
+        <CmtList
+          data={data}
+          renderRow={(info, index) => (
+            <List
+              sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}
+            >
+              <ListItem className={classes.list}>
+                <ListItemAvatar>
+                  <ListItemIcon className={classes.list__icon}>
+                    <SchoolIcon />
+                  </ListItemIcon>
+                </ListItemAvatar>
+                <ListItemText>
+                  <span>{info.degree}</span>|<span>{info.result}</span>|
+                  <span>{info.dept}</span>|<span>{info.institution}</span>
+                </ListItemText>
+              </ListItem>
+            </List>
+          )}
+          ListEmptyComponent={
+            <ListEmptyResult loader={false} title="No Info Found" />
+          }
+        />
       )}
     </Box>
   );

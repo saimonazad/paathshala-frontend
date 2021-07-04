@@ -21,16 +21,19 @@ import Avatar from "@material-ui/core/Avatar";
 import theme from "../../utils/theme";
 import { useAuth } from "../../../authentication";
 import { useRouter } from "next/router";
-
 const useStyles = makeStyles((theme) => ({
-  test: {
-    height: "4px",
-    width: "100%",
-    position: "absolute",
-    top: "94%",
-    backgroundColor: theme.palette.secondary.main,
-    borderTopLeftRadius: "10px",
-    borderTopRightRadius: "10px",
+  empty: {},
+  active: {
+    "&::after": {
+      content: "''",
+      height: "4px",
+      width: "100%",
+      position: "absolute",
+      top: "94%",
+      backgroundColor: theme.palette.secondary.main,
+      borderTopLeftRadius: "10px",
+      borderTopRightRadius: "10px",
+    },
   },
   root: {
     borderBottom: `2px solid ${theme.palette.secondary.main}`,
@@ -127,6 +130,7 @@ const useStyles = makeStyles((theme) => ({
 export default function SearchAppBar() {
   const classes = useStyles();
   const router = useRouter();
+  const { asPath } = useRouter();
 
   const { authUser, userSignOut } = useAuth();
 
@@ -180,12 +184,13 @@ export default function SearchAppBar() {
         <Hidden smDown>
           <Box style={{}}>
             <Button
+              href={"/"}
               size="small"
+              className={asPath === "/" ? classes.active : classes.empty}
               classes={{ root: classes.button, label: classes.label }}
             >
               <HomeIcon />
               Home
-              <div className={classes.test}></div>
             </Button>
             <Button
               size="small"
@@ -202,7 +207,9 @@ export default function SearchAppBar() {
               Inbox
             </Button>
             <Button
+              href={"/explore"}
               size="small"
+              className={asPath === "/explore" ? classes.active : classes.empty}
               classes={{ root: classes.button, label: classes.label }}
             >
               <ExploreIcon />

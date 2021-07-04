@@ -30,7 +30,7 @@ import { useSelector, useDispatch } from "react-redux";
 import Grow from "@material-ui/core/Grow";
 import { useRouter } from "next/router";
 import { getComments, addComment } from "../../../redux/actions/WallApp";
-
+import Link from "@material-ui/core/Link";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -111,9 +111,9 @@ const Feed = ({ group, enroll, personal }) => {
   };
 
   const { feedPosts } = useSelector(({ wallApp }) => wallApp);
+  console.table(feedPosts);
 
   const { comments } = useSelector(({ comment }) => comment);
-  console.table(comments);
   const classes = useStyles();
   return (
     <Box className={classes.root}>
@@ -143,12 +143,15 @@ const Feed = ({ group, enroll, personal }) => {
                     <Avatar src="" className={classes.profile__img} />
                   </Box>
                   <Box>
-                    <Typography
-                      component="h2"
-                      className={classes.profile__name}
-                    >
-                      {feed.user}
-                    </Typography>
+                    <Link href={`/u/${feed.user}`} >
+                      <Typography
+                        component="h2"
+                        className={classes.profile__name}
+                      >
+                        {feed.user}
+                      </Typography>
+                    </Link>
+
                     <Typography component="h3" className={classes.post__time}>
                       {moment(feed.timestamp).fromNow()}
                     </Typography>

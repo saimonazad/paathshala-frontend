@@ -74,7 +74,6 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const followCheckUrl = `${process.env.BACKEND_URL}/users/follow_check/?username=${pname}`;
   const { data, error } = useSWR(followCheckUrl, fetcher);
   console.log(data);
-
   //follow a user
   async function followHandler(values) {
     mutate(followCheckUrl, values, false);

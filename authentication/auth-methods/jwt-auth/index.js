@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { httpClient } from "./config";
 import Router from "next-router";
-
+import axios from "axios";
 export const useProvideAuth = () => {
   const [authUser, setAuthUser] = useState(null);
   const [error, setError] = useState("");
@@ -25,8 +25,8 @@ export const useProvideAuth = () => {
 
   const userLogin = async (user) => {
     fetchStart();
-    await httpClient
-      .post("/users/get-token/", user)
+    await axios
+      .post(`${process.env.BACKEND_URL}/users/get-token/`, user)
       .then(({ data }) => {
         if (data) {
           fetchSuccess();
@@ -88,12 +88,12 @@ export const useProvideAuth = () => {
   const getAuthUser = (username) => {
     fetchStart();
     httpClient
-      .get(`/users/userinfo/${username}`)
+      .get(`/users/userinfo/?username=${username}`)
       .then(({ data }) => {
-        if (data.username) {
+        if (data[0].username) {
           fetchSuccess();
-          setAuthUser(data.username);
-          localStorage.setItem("user", JSON.stringify(data));
+          setAuthUser(data[0].username);
+          localStorage.setItem("user", JSON.stringify(data[0]));
         } else {
           fetchError(data.error);
         }

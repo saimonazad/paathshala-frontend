@@ -11,13 +11,17 @@ const useStyles = makeStyles((theme) => ({
     minHeight: 10,
     height: "100%",
     display: "flex",
-    padding: 20,
+    padding: 10,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: theme.palette.background.paper,
     border: `1px solid ${fade(theme.palette.common.black, 0.12)}`,
     borderRadius: 4,
     textAlign: "center",
+    "& h1": {
+      margin: 0,
+      padding: 0,
+    },
   },
   flexRow: {
     flexDirection: "row",
@@ -62,7 +66,7 @@ const ListEmptyResult = ({
         ) : (
           <React.Fragment>
             {title && (
-              <Box component="h1" fontSize={20} color="text.primary" >
+              <Box component="h1" fontSize={20} color="text.primary" p={0}>
                 {title}
               </Box>
             )}
@@ -74,7 +78,12 @@ const ListEmptyResult = ({
               <Button
                 color="primary"
                 variant="contained"
-                style={{ marginTop: 30, height: 45, minWidth: 150 }}
+                style={{
+                  marginTop: 0,
+                  height: 35,
+                  minWidth: 120,
+                  textTransform: "none",
+                }}
                 onClick={onClick}
               >
                 {actionTitle}

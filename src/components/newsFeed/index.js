@@ -6,7 +6,7 @@ import Feeds from "./feeds";
 import { useDispatch } from "react-redux";
 import { getFeedPosts } from "../../redux/actions/WallApp";
 import { makeStyles } from "@material-ui/core";
-
+import { useAuth } from "../../../authentication";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -16,11 +16,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NewsFeed = () => {
+  const { authUser } = useAuth();
   const classes = useStyles();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getFeedPosts());
+    dispatch(getFeedPosts(authUser.username));
   }, [dispatch]);
 
   return (
