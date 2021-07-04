@@ -1,5 +1,5 @@
 module.exports = {
   env: {
-    BACKEND_URL: "http://localhost:8000",
+    BACKEND_URL: "https://paathshala.staging.baeinnovations.com",
   },
 };
