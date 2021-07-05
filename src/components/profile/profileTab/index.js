@@ -15,7 +15,7 @@ import { NativeSelect } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useAuth } from "../../../../authentication";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
-
+import { fetcher } from "../../../services/fetcher";
 const useStyles = makeStyles((theme) => ({
   tabRoot: {
     padding: 0,
@@ -69,16 +69,13 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const router = useRouter();
   const { pname } = router.query;
 
-  const fetcher = (url) => httpClient.get(url).then((res) => res.data);
-
-  const followCheckUrl = `${process.env.BACKEND_URL}/users/follow_check/?username=${pname}`;
+  const followCheckUrl = `/users/follow_check/?username=${pname}`;
   const { data, error } = useSWR(followCheckUrl, fetcher);
-  console.log(data);
   //follow a user
   async function followHandler(values) {
     mutate(followCheckUrl, values, false);
     await httpClient
-      .post(`${process.env.BACKEND_URL}/users/follow/`, {
+      .post(`/users/follow/`, {
         followed: `${pname}`,
       })
       .then((res) => res.data);
@@ -86,7 +83,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   }
   //delete follw
   async function unfollowHandler(values) {
-    const deletefollowUrl = `${process.env.BACKEND_URL}/users/follow/${values.id}`;
+    const deletefollowUrl = `/users/follow/${values.id}`;
     mutate(followCheckUrl, values, false);
     await httpClient.delete(deletefollowUrl).then((res) => res.data);
     trigger(followCheckUrl);

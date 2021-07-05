@@ -14,7 +14,7 @@ export default function getCourse(state = INIT_STATE, action) {
     }
 
     case GET_USER_COURSE_SUCCESS: {
-      return { courseInfo: action.payload };
+      return { courseInfo: [action.payload] };
     }
 
     default:

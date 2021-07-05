@@ -5,6 +5,7 @@ import {
   makeStyles,
   Typography,
   Avatar,
+  Link,
 } from "@material-ui/core";
 import StarIcon from "@material-ui/icons/Star";
 import useSWR, { mutate, trigger } from "swr";
@@ -99,9 +100,11 @@ const Teacher = ({ user }) => {
         <Box display="flex">
           <Avatar src="" className={classes.avatar} />
           <Box>
-            <Typography component="h3">
-              {user?.first_name} {user?.last_name}
-            </Typography>
+            <Link href={`/u/${user.username}`}>
+              <Typography component="h3">
+                {user?.first_name} {user?.last_name}
+              </Typography>
+            </Link>
             <Typography component="p" variant="subtitle2">
               {user?.bio}
             </Typography>

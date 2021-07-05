@@ -5,11 +5,10 @@ import {
   Button,
   makeStyles,
 } from "@material-ui/core";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllUserCourses } from "../../../redux/actions/courseActions";
+import React from "react";
 import CmtList from "../../../../@coremat/CmtList";
-import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
+import useSWR from "swr";
+import { fetcher } from "../../../services/fetcher";
 
 const useStyles = makeStyles((theme) => ({
   class: {
@@ -28,55 +27,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Class = ({ username }) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getAllUserCourses(username));
-  }, []);
-
-  const { courseInfo } = useSelector(({ getCourse }) => getCourse);
-  console.log(courseInfo);
+  const getClassesofUser = `/course/info?type=user&username=${username}`;
+  const { data, error } = useSWR(getClassesofUser, fetcher);
+  console.log(data);
   return (
     <>
-      {courseInfo[0]?.user == username ? (
-        <CmtList
-          data={courseInfo}
-          renderRow={(course, index) => (
-            <Box
-              key={index}
-              mb={1.5}
-              borderRadius={4}
-              display="flex"
-              justifyContent="space-between"
-              className={classes.class}
-              alignItems="center"
+      <CmtList
+        data={data}
+        renderRow={(course, index) => (
+          <Box
+            key={index}
+            mb={1.5}
+            borderRadius={4}
+            display="flex"
+            justifyContent="space-between"
+            className={classes.class}
+            alignItems="center"
+          >
+            <Typography>{course.coursename}</Typography>
+            <Divider orientation="vertical" flexItem />
+            <Typography>{course.study_level}</Typography>
+            <Divider orientation="vertical" flexItem />
+            <Typography>{course.days}</Typography>
+            <Divider orientation="vertical" flexItem />
+            <Typography>
+              {course.start_time} - {course.end_time}
+            </Typography>
+            <Divider orientation="vertical" flexItem />
+            <Button
+              href={`/class/${course.id}`}
+              variant="contained"
+              color="primary"
             >
-              <Typography>{course.coursename}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>{course.study_level}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>{course.days}</Typography>
-              <Divider orientation="vertical" flexItem />
-              <Typography>
-                {course.start_time} - {course.end_time}
-              </Typography>
-              <Divider orientation="vertical" flexItem />
-              <Button
-                href={`/class/${course.id}`}
-                variant="contained"
-                color="primary"
-              >
-                View
-              </Button>
-            </Box>
-          )}
-          ListEmptyComponent={
-            <ListEmptyResult loader={false} title="No Course Found" />
-          }
-        />
-      ) : (
-        ""
-      )}
+              View
+            </Button>
+          </Box>
+        )}
+      />
     </>
   );
 };
