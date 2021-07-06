@@ -11,6 +11,12 @@ import StarIcon from "@material-ui/icons/Star";
 import useSWR, { mutate, trigger } from "swr";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 import React from "react";
+import { fetcher } from "../../../services/fetcher";
+import {
+  followHandler,
+  followCheckUrl,
+  unfollowHandler,
+} from "../../../services/follow";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -65,29 +71,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Teacher = ({ user }) => {
   const classes = useStyles();
-
-  const fetcher = (url) => httpClient.get(url).then((res) => res.data);
-
-  const followCheckUrl = `${process.env.BACKEND_URL}/users/follow_check/?username=${user.username}`;
-  const { data, error } = useSWR(followCheckUrl, fetcher);
-
-  //follow a user
-  async function followHandler(values) {
-    mutate(followCheckUrl, values, false);
-    await httpClient
-      .post(`${process.env.BACKEND_URL}/users/follow/`, {
-        followed: `${user.username}`,
-      })
-      .then((res) => res.data);
-    trigger(followCheckUrl);
-  }
-  //delete follw
-  async function unfollowHandler(values) {
-    const deletefollowUrl = `${process.env.BACKEND_URL}/users/follow/${values.id}`;
-    mutate(followCheckUrl, values, false);
-    await httpClient.delete(deletefollowUrl).then((res) => res.data);
-    trigger(followCheckUrl);
-  }
+  const url = followCheckUrl(user.username);
+  const { data, error } = useSWR(url, fetcher);
 
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
@@ -119,7 +104,7 @@ const Teacher = ({ user }) => {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => unfollowHandler({ follow: false, id: data.id })}
+            onClick={() => unfollowHandler({ follow: false, id: data.id }, url)}
           >
             Unfollow
           </Button>
@@ -127,7 +112,9 @@ const Teacher = ({ user }) => {
           <Button
             color="primary"
             variant="contained"
-            onClick={() => followHandler({ follow: true, id: data?.id })}
+            onClick={() =>
+              followHandler({ follow: true, id: data?.id }, url, user.username)
+            }
           >
             Follow
           </Button>

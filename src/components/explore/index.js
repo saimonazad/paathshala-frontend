@@ -13,6 +13,11 @@ import Teachers from "./teachers";
 import React, { useState, useEffect } from "react";
 import { getAllUsers } from "../../redux/actions/explore";
 import { useDispatch, useSelector } from "react-redux";
+import useSWR, { mutate, trigger } from "swr";
+import { fetcher } from "../../services/fetcher";
+import CmtSearch from "../../../@coremat/CmtSearch";
+var _ = require("lodash");
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -75,20 +80,22 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Explore = () => {
   const classes = useStyles();
-
-  //
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getAllUsers());
-  }, []);
-
+  const [searchTerm, setSearchTerm] = useState("");
   //tab handling
   const [activeTab, setActiveTab] = useState("Teachers");
   function handleTab(newValue) {
     setActiveTab(newValue);
     console.log(activeTab);
   }
+  //fetch users
+  const getUsersUrl = `/users/userinfo`;
+  const { data: users, error } = useSWR(getUsersUrl, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  });
+
+  // console.log(_.filter(users, { last_name: "User" }));
+
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="center">
@@ -115,29 +122,35 @@ const Explore = () => {
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography className={classes.title}>{activeTab}</Typography>
-        <div className={classes.search}>
-          <div className={classes.searchIcon}>
-            <SearchIcon />
-          </div>
-          <InputBase
-            placeholder="Search…"
-            classes={{
-              root: classes.inputRoot,
-              input: classes.inputInput,
-            }}
-            inputProps={{ "aria-label": "search" }}
-            color="secondary"
-          />
-        </div>
+        <CmtSearch
+          border={true}
+          onlyIcon={false}
+          iconPosition="right"
+          align="right"
+          placeholder="Search Keywords"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </Box>
-      <Box display="flex" alignItems="center" justifyContent="space-between">
-        <Typography>5 class found</Typography>
-        <Box display="flex" alignItems="center">
-          <Filter />
-        </Box>
-      </Box>
-      {activeTab == "Teachers" && <Teachers />}
-      {activeTab == "Classes" && <Classes />}
+
+      {activeTab == "Teachers" && (
+        <Teachers users={users} search={searchTerm} />
+      )}
+      {activeTab == "Classes" && (
+        <>
+          <Box
+            display="flex"
+            alignItems="center"
+            justifyContent="space-between"
+          >
+            <Typography>5 class found</Typography>
+            <Box display="flex" alignItems="center">
+              <Filter />
+            </Box>
+          </Box>
+          <Classes users={users} search={searchTerm}  />
+        </>
+      )}
     </Box>
   );
 };

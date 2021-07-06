@@ -17,25 +17,11 @@ const Profile = (props) => {
     setActiveTab(newValue);
   }
   //following
-  const [followlist, setFollowList] = useState([]);
   const [followerslist, setFollowersList] = useState([]);
 
-  async function fetchFollowingLists() {
-    await httpClient
-      .get(`${process.env.BACKEND_URL}/users/follow/`)
-      .then((res) => {
-        console.log(res.data);
-        setFollowList(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
   async function fetchFollowersLists() {
     await httpClient
-      .get(
-        `${process.env.BACKEND_URL}/users/follow/?user=${authUser.username}`
-      )
+      .get(`${process.env.BACKEND_URL}/users/follow/?user=${authUser.username}`)
       .then((res) => {
         console.log(res.data);
         setFollowersList(res.data);
@@ -47,7 +33,6 @@ const Profile = (props) => {
 
   useEffect(() => {
     if (true) {
-      fetchFollowingLists();
       fetchFollowersLists();
     }
   }, []);
@@ -67,9 +52,7 @@ const Profile = (props) => {
           {activeTab == "followers" && (
             <Followers type="Followers" lists={followerslist} />
           )}
-          {activeTab == "following" && (
-            <Following type="Following" lists={followlist} />
-          )}
+          {activeTab == "following" && <Following type="Following" />}
           {activeTab == "enrolled" && <Enrolled />}
         </>
       )}

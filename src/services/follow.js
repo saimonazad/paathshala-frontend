@@ -1,16 +1,26 @@
-export async function followHandler(values) {
-  mutate(followCheckUrl, values, false);
+import { mutate, trigger } from "swr";
+import { httpClient } from "../../authentication/auth-methods/jwt-auth/config";
+
+export function followCheckUrl(username) {
+  return `${process.env.BACKEND_URL}/users/follow_check/?username=${username}`;
+}
+
+export const fetchFollowingUrl = `/users/follow/`;
+
+//follow a user
+export async function followHandler(values, url, username) {
+  mutate(url, values, false);
   await httpClient
     .post(`${process.env.BACKEND_URL}/users/follow/`, {
-      followed: `${pname}`,
+      followed: `${username}`,
     })
     .then((res) => res.data);
-  trigger(followCheckUrl);
+  trigger(url);
 }
-//delete follw
-export async function unfollowHandler(values) {
+//unfollow a user
+export async function unfollowHandler(values, url) {
   const deletefollowUrl = `${process.env.BACKEND_URL}/users/follow/${values.id}`;
-  mutate(followCheckUrl, values, false);
+  mutate(url, values, false);
   await httpClient.delete(deletefollowUrl).then((res) => res.data);
-  trigger(followCheckUrl);
+  trigger(url);
 }

@@ -28,9 +28,14 @@ const useStyles = makeStyles((theme) => ({
 const Class = ({ username }) => {
   const classes = useStyles();
 
-  const getClassesofUser = `/course/info?type=user&username=${username}`;
-  const { data, error } = useSWR(getClassesofUser, fetcher);
-  console.log(data);
+  // const getClassesofUser = `/course/info?type=user&username=${username}`;
+  // const { data, error } = useSWR(getClassesofUser, fetcher, {
+  //   revalidateOnFocus: false,
+  //   shouldRetryOnError: false,
+  //   refreshInterval: 0,
+  // });
+  // console.log(course)
+  
   return (
     <>
       <CmtList

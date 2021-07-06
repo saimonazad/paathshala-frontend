@@ -14,15 +14,22 @@ import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
 
 import Teacher from "./teacher";
 
-const Teachers = () => {
-  
-  const { users } = useSelector(({ getAllUsers }) => getAllUsers);
-
+const Teachers = ({ users, search }) => {
+  const [searchData, setsearchData] = useState(true);
+  const filteredResult =
+    searchData && search != ""
+      ? users.filter((user) =>
+          (
+            user.first_name.toLowerCase() + user.last_name.toLowerCase()
+          ).includes(search)
+        )
+      : users;
   return (
     <>
-      {users.map((user, index) => (
-        <Teacher user={user} key={index} />
-      ))}
+      <CmtList
+        data={filteredResult}
+        renderRow={(user, index) => <Teacher user={user} key={index} />}
+      />
     </>
   );
 };

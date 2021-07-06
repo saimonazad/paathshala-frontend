@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -14,7 +14,8 @@ import Class from "./class";
 
 import CmtList from "../../../../@coremat/CmtList";
 import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
-
+import useSWR from "swr";
+import { fetcher } from "../../../services/fetcher";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -70,38 +71,97 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Classes = () => {
+const Classes = ({ users, search }) => {
   const classes = useStyles();
-  const { users } = useSelector(({ getAllUsers }) => getAllUsers);
 
+  const getClassesofUser = `/course/info`;
+  const { data: course, error } = useSWR(getClassesofUser, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    refreshInterval: 0,
+  });
+  // let res = [];
+  // if (course != undefined) {
+  //   for (var i = 0; i < users.length; i++) {
+  //     for (var j = 0; j < course.length; j++) {
+  //       if (users[i].username == course[j].user) {
+  //         let merged = { ...users[i], ...course[j] };
+  //         res.push(merged);
+  //       }
+  //     }
+  //   }
+  // }
+  // const groupedData = _.chain(res).groupBy("user").value();
+  // let result = Object.entries(groupedData).map((e) => ({ [e[0]]: e[1] }));
+  const [searchData, setsearchData] = useState(true);
+  const filteredResult =
+    searchData && search != ""
+      ? course.filter((user) => user.coursename.toLowerCase().includes(search))
+      : course;
   return (
     <>
       <CmtList
-        data={users}
-        renderRow={(user, index) => (
-          <Box
-            bgcolor="background.box"
-            borderRadius={4}
-            className={classes.root}
-          >
-            <Box display="flex" alignItems="center" className={classes.header}>
-              <Avatar src="" className={classes.avatar} />
-              <Link href={`/u/${user.username}`}>
-                <Typography component="h3">
-                  {user?.first_name} {user?.last_name}
-                </Typography>
-              </Link>
-              <div>
-                <StarIcon className={classes.startIcon} />
-                <Typography component="span">{user?.rating}</Typography>
-                <Typography component="span">({user?.rating_count})</Typography>
-              </div>
+        data={filteredResult}
+        renderRow={(course, index) => {
+          console.log(course);
+
+          return (
+            <Box
+              bgcolor="background.box"
+              borderRadius={4}
+              className={classes.root}
+            >
+              {/* <Box
+                display="flex"
+                alignItems="center"
+                className={classes.header}
+              >
+                <Avatar src="" className={classes.avatar} />
+                <Link href={`/u/${user.username}`}>
+                  <Typography component="h3">
+                    {user?.first_name} {user?.last_name}
+                  </Typography>
+                </Link>
+                <div>
+                  <StarIcon className={classes.startIcon} />
+                  <Typography component="span">{user?.rating}</Typography>
+                  <Typography component="span">
+                    ({user?.rating_count})
+                  </Typography>
+                </div>
+              </Box> */}
+              <Box className={classes.class__list}>
+                <Box
+                  key={index}
+                  mb={1.5}
+                  borderRadius={4}
+                  display="flex"
+                  justifyContent="space-between"
+                  className={classes.class}
+                  alignItems="center"
+                >
+                  <Typography>{course.coursename}</Typography>
+                  <Divider orientation="vertical" flexItem />
+                  <Typography>{course.study_level}</Typography>
+                  <Divider orientation="vertical" flexItem />
+                  <Typography>{course.days}</Typography>
+                  <Divider orientation="vertical" flexItem />
+                  <Typography>
+                    {course.start_time} - {course.end_time}
+                  </Typography>
+                  <Divider orientation="vertical" flexItem />
+                  <Button
+                    href={`/class/${course.id}`}
+                    variant="contained"
+                    color="primary"
+                  >
+                    View
+                  </Button>
+                </Box>{" "}
+              </Box>
             </Box>
-            <Box className={classes.class__list}>
-              <Class username={user.username} />
-            </Box>
-          </Box>
-        )}
+          );
+        }}
       />
     </>
   );
