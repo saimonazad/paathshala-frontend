@@ -252,6 +252,7 @@ export default function CreateClass({
                 <option value="">Select Level</option>
                 <option value="SSC">SSC</option>
                 <option value="HSC">HSC</option>
+                <option value="BSC">BSC</option>
               </NativeSelect>
             </FormControl>
             {errors.study_level && errors.study_level.type === "required" && (

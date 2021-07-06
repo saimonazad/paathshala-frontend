@@ -71,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Classes = ({ users, search }) => {
+const Classes = ({ users, search, studyFilter }) => {
   const classes = useStyles();
 
   const getClassesofUser = `/course/info`;
@@ -94,17 +94,21 @@ const Classes = ({ users, search }) => {
   // const groupedData = _.chain(res).groupBy("user").value();
   // let result = Object.entries(groupedData).map((e) => ({ [e[0]]: e[1] }));
   const [searchData, setsearchData] = useState(true);
+
   const filteredResult =
     searchData && search != ""
       ? course.filter((user) => user.coursename.toLowerCase().includes(search))
       : course;
+
+  const filteredResultonFilter =
+    studyFilter != ""
+      ? course.filter((course) => course.study_level == studyFilter)
+      : course;
   return (
     <>
       <CmtList
-        data={filteredResult}
+        data={filteredResultonFilter}
         renderRow={(course, index) => {
-          console.log(course);
-
           return (
             <Box
               bgcolor="background.box"

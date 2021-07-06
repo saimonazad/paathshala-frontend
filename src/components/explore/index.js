@@ -81,6 +81,8 @@ const useStyles = makeStyles((theme) => ({
 const Explore = () => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
+  //filter
+  const [studyFilter, setstudyFilter] = useState("");
   //tab handling
   const [activeTab, setActiveTab] = useState("Teachers");
   function handleTab(newValue) {
@@ -145,10 +147,17 @@ const Explore = () => {
           >
             <Typography>5 class found</Typography>
             <Box display="flex" alignItems="center">
-              <Filter />
+              <Filter
+                setstudyFilter={setstudyFilter}
+                studyFilter={studyFilter}
+              />
             </Box>
           </Box>
-          <Classes users={users} search={searchTerm}  />
+          <Classes
+            users={users}
+            search={searchTerm}
+            studyFilter={studyFilter}
+          />
         </>
       )}
     </Box>

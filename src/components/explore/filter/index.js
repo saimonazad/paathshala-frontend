@@ -53,12 +53,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Filter = () => {
+const Filter = ({ setstudyFilter, studyFilter }) => {
   const classes = useStyles();
   const [subject, setSubject] = useState("");
 
+  const handleStudyLevel = (event) => {
+    setstudyFilter(event.target.value);
+    console.log(event.target.value);
+  };
   const handleChange = (event) => {
-    setSubject(event.target.value);
+    console.log(event.target.value);
   };
   return (
     <>
@@ -66,16 +70,16 @@ const Filter = () => {
         {/* <InputLabel htmlFor="demo-customized-select-native">Age</InputLabel> */}
         <NativeSelect
           id="demo-customized-select-native"
-          value={subject}
-          onChange={handleChange}
+          value={studyFilter}
+          onChange={handleStudyLevel}
           input={<BootstrapInput />}
         >
-          <option aria-label="None" value="">
+          <option aria-label="None" value={""}>
             - Study Level
           </option>
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+          <option value={"SSC"}>SSC</option>
+          <option value={"HSC"}>HSC</option>
+          <option value={"BSC"}>BSC</option>
         </NativeSelect>
       </FormControl>
       <FormControl className={classes.select}>
