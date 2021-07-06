@@ -102,8 +102,8 @@ const Classes = ({ users, search, studyFilter }) => {
 
   const filteredResultonFilter =
     studyFilter != ""
-      ? course.filter((course) => course.study_level == studyFilter)
-      : course;
+      ? filteredResult.filter((course) => course.study_level == studyFilter)
+      : filteredResult;
   return (
     <>
       <CmtList
