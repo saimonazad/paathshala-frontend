@@ -78,7 +78,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
             className={classes.tabText}
           >
             <Tab className={classes.tabRoot} value="posts" label="Post" />
-            <Tab className={classes.tabRoot} value="classes" label="Classes" />
+            {/* <Tab className={classes.tabRoot} value="classes" label="Classes" />
             <Tab className={classes.tabRoot} value="about" label="About" />
             <Tab
               className={classes.tabRoot}
@@ -94,7 +94,7 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
               className={classes.tabRoot}
               value="enrolled"
               label="Enrolled In"
-            />
+            /> */}
           </Tabs>
         </Hidden>
         <Hidden smUp>
@@ -105,8 +105,8 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
               onChange={handleChangeMobile}
             >
               <option value="posts">Posts</option>
-              <option value="followers">Followers</option>
-              <option value="classes">Classes</option>
+              {/* <option value="followers">Followers</option>
+              <option value="classes">Classes</option> */}
             </NativeSelect>
           </FormControl>
         </Hidden>
