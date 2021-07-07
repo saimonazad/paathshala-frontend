@@ -82,7 +82,21 @@ const Explore = () => {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
   //filter
-  const [studyFilter, setstudyFilter] = useState("");
+  const [studyFilter, setstudyFilter] = useState(null);
+  const [subjectFilter, setsubjectFilter] = useState(null);
+  //fetch course with  filter
+  const { data: classFilterData } = useSWR(
+    () =>
+      studyFilter
+        ? `/course/info/?type=explore&study_level=${studyFilter}`
+        : subjectFilter
+        ? `/course/info/?type=explore&subject=${subjectFilter}`
+        : subjectFilter && studyFilter
+        ? `/course/info/?type=explore&subject=${subjectFilter}&study_level=${studyFilter}`
+        : null,
+    fetcher
+  );
+
   //tab handling
   const [activeTab, setActiveTab] = useState("Teachers");
   function handleTab(newValue) {
@@ -150,13 +164,15 @@ const Explore = () => {
               <Filter
                 setstudyFilter={setstudyFilter}
                 studyFilter={studyFilter}
+                subjectFilter={subjectFilter}
+                setsubjectFilter={setsubjectFilter}
               />
             </Box>
           </Box>
           <Classes
             users={users}
             search={searchTerm}
-            studyFilter={studyFilter}
+            classFilterData={classFilterData}
           />
         </>
       )}

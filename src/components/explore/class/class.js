@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Class = ({ username }) => {
+const Class = ({ course }) => {
   const classes = useStyles();
 
   // const getClassesofUser = `/course/info?type=user&username=${username}`;
@@ -39,7 +39,7 @@ const Class = ({ username }) => {
   return (
     <>
       <CmtList
-        data={data}
+        data={course}
         renderRow={(course, index) => (
           <Box
             key={index}

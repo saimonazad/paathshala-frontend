@@ -53,13 +53,19 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Filter = ({ setstudyFilter, studyFilter }) => {
+const Filter = ({
+  setstudyFilter,
+  studyFilter,
+  subjectFilter,
+  setsubjectFilter,
+}) => {
   const classes = useStyles();
-  const [subject, setSubject] = useState("");
 
   const handleStudyLevel = (event) => {
     setstudyFilter(event.target.value);
-    console.log(event.target.value);
+  };
+  const handleSubject = (event) => {
+    setsubjectFilter(event.target.value);
   };
   const handleChange = (event) => {
     console.log(event.target.value);
@@ -82,8 +88,7 @@ const Filter = ({ setstudyFilter, studyFilter }) => {
           <option value={"BSC"}>BSC</option>
         </NativeSelect>
       </FormControl>
-      <FormControl className={classes.select}>
-        {/* <InputLabel htmlFor="demo-customized-select-native">Age</InputLabel> */}
+      {/* <FormControl className={classes.select}>
         <NativeSelect
           id="demo-customized-select-native"
           value={subject}
@@ -97,21 +102,21 @@ const Filter = ({ setstudyFilter, studyFilter }) => {
           <option value={20}>Twenty</option>
           <option value={30}>Thirty</option>
         </NativeSelect>
-      </FormControl>
+      </FormControl> */}
       <FormControl className={classes.select}>
         {/* <InputLabel htmlFor="demo-customized-select-native">Age</InputLabel> */}
         <NativeSelect
           id="demo-customized-select-native"
-          value={subject}
-          onChange={handleChange}
+          value={subjectFilter}
+          onChange={handleSubject}
           input={<BootstrapInput />}
         >
           <option aria-label="None" value="">
             - Subjects
           </option>
-          <option value={10}>Ten</option>
-          <option value={20}>Twenty</option>
-          <option value={30}>Thirty</option>
+          <option value={"ICT"}>ICT</option>
+          <option value={"DDC"}>DDC</option>
+          <option value={"Bangla 1st"}>Bangla 1st</option>
         </NativeSelect>
       </FormControl>
       <Button

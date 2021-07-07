@@ -267,12 +267,12 @@ export default function CreateClass({
             <FormControl
               variant="filled"
               className={classes.formControl}
-              error={errors.company ? true : false}
+              error={errors.subject ? true : false}
             >
               <NativeSelect
                 className={classes.selectEmpty}
-                name="company"
-                {...register("company", {
+                name="subject"
+                {...register("subject", {
                   required: true,
                 })}
               >
@@ -282,7 +282,7 @@ export default function CreateClass({
                 <option value="ICT">ICT</option>
               </NativeSelect>
             </FormControl>
-            {errors.company && errors.company.type === "required" && (
+            {errors.subject && errors.subject.type === "required" && (
               <p className={classes.errorText}>Subject is required</p>
             )}
           </Grid>

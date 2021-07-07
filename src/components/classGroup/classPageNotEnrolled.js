@@ -203,7 +203,7 @@ const ClassPageNotEnrolled = (props) => {
         justifyContent="center"
       >
         {courseInfo[0]?.coursename} | {courseInfo[0]?.study_level} |{" "}
-        {courseInfo[0]?.company}
+        {courseInfo[0]?.subject}
       </Box>
       <Box
         className={classes.class__info}
