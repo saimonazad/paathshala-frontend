@@ -1,12 +1,14 @@
 import React, { useEffect } from "react";
 import { makeStyles, Grid, Box } from "@material-ui/core";
 import Info from "./info";
-import Feeds from "../../shared/feeds";
+import Feeds from "./feeds";
 import Following from "./following";
-import PostCard from "../../shared/postCard";
+import PostCard from "./postCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "../../../../authentication";
 import Rating from "./rating";
+import { useRouter } from "next/router";
+
 //feed action -redux
 import {
   getBasicInfo,
@@ -27,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Posts = ({ user }) => {
+   const router = useRouter();
   const { authUser } = useAuth();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -38,7 +41,7 @@ const Posts = ({ user }) => {
   }, [dispatch]);
 
   return (
-    <Box container className={classes.root} >
+    <Box container className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <Rating />

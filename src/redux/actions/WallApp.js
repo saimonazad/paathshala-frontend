@@ -15,6 +15,8 @@ import {
   ALL_PERSONAL_FEEDS_FAIL,
   ALL_PERSONAL_FEEDS_SUCCESS,
   CREATE_PERSONAL_FEEDS_SUCCESS,
+  CREATE_COURSE_FEEDS_SUCCESS,
+  ALL_COURSE_FEEDS_SUCCESS,
 } from "../../../@jumbo/constants/ActionTypes";
 
 //for getting user detail
@@ -203,16 +205,39 @@ export const getComments = (postId) => {
   };
 };
 
+
+
+//for creating a course post
+export const createCoursePost = (post) => {
+  return (dispatch) => {
+    dispatch(fetchStart());
+    httpClient
+      .post("/newsfeed/post/", post)
+      .then((data) => {
+        console.log(data.data);
+        if (data.status === 201) {
+          dispatch(fetchSuccess());
+          dispatch({ type: CREATE_COURSE_FEEDS_SUCCESS, payload: data.data });
+        } else {
+          dispatch(fetchError("Something went wrong"));
+        }
+      })
+      .catch((error) => {
+        dispatch(fetchError("Something went wrong"));
+      });
+  };
+};
+
 //for getting user feed posts
 export const getAllCourseFeeds = (courseId) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get(`/newsfeed/post/?username=${username}`)
+      .get(`/newsfeed/post/?posted_on=${courseId}`)
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
-          dispatch({ type: ALL_PERSONAL_FEEDS_SUCCESS, payload: data.data });
+          dispatch({ type: ALL_COURSE_FEEDS_SUCCESS, payload: data.data });
         } else {
           dispatch(fetchError("Something went wrong"));
         }
