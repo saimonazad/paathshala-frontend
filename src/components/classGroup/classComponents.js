@@ -13,39 +13,6 @@ const ClassComponents = (props) => {
   function handleTabChange(newValue) {
     setActiveTab(newValue);
   }
-  //following
-  const [followlist, setFollowList] = useState([]);
-  const [followerslist, setFollowersList] = useState([]);
-
-  async function fetchFollowingLists() {
-    await httpClient
-      .get(`${process.env.BACKEND_URL}/users/follow/`)
-      .then((res) => {
-        console.log(res.data);
-        setFollowList(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-  async function fetchFollowersLists() {
-    await httpClient
-      .get(`${process.env.BACKEND_URL}/users/follow/?user=${authUser.username}`)
-      .then((res) => {
-        console.log(res.data);
-        setFollowersList(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
-  useEffect(() => {
-    if (true) {
-      fetchFollowingLists();
-      fetchFollowersLists();
-    }
-  }, []);
 
   return (
     <>

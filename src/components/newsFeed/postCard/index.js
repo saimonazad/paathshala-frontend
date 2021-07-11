@@ -15,9 +15,11 @@ import PostMediaUpload from "../postMediaUpload";
 //import redux
 import { useDispatch, useSelector } from "react-redux";
 
-import { createPost } from "../../../redux/actions/WallApp";
-
+import useSWR, { mutate, trigger } from "swr";
 import { useRouter } from "next/router";
+import { addition } from "../../../services/fetcher";
+import { useAuth } from "../../../../authentication";
+import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -34,10 +36,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const PostCard = () => {
+const PostCard = ({ feed }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const { authUser } = useAuth();
   const classes = useStyles();
   //post state
   const [postText, setPostText] = useState("");
@@ -56,7 +58,15 @@ const PostCard = () => {
       posted_on: "dashboard",
       post_type: "testPost",
     };
-    dispatch(createPost(feedData));
+    mutate(
+      "/newsfeed/follower/",
+      [[{ ...feedData, user: authUser.username }], ...feed],
+      false
+    );
+    httpClient
+      .post(`/newsfeed/post/`, feedData)
+      .then((res) => trigger("/newsfeed/follower/"))
+      .catch((e) => console.log(e));
     setPostText("");
   };
   return (

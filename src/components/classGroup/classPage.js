@@ -10,7 +10,6 @@ import ClassPageNotEnrolled from "./classPageNotEnrolled";
 import { useDispatch, useSelector } from "react-redux";
 import { getCourse } from "../../redux/actions/courseActions";
 
-
 const ClassPage = () => {
   const { authUser } = useAuth();
   const router = useRouter();

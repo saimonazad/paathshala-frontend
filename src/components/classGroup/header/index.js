@@ -22,7 +22,10 @@ import {
 import PersonAddIcon from "@material-ui/icons/PersonAdd";
 //components
 import ProfileTab from "../profileTab";
-
+import CircularProgress from "@material-ui/core/CircularProgress";
+import { useRouter } from "next/router";
+import useSWR from "swr";
+import { fetcher } from "../../../services/fetcher";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -147,9 +150,19 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Header = (props) => {
+  const router = useRouter();
   const { className, ...rest } = props;
   const classes = useStyles();
-
+  //course info
+  const classInfoUrl = `/course/info?course_id=${router.query.id}`;
+  const { data: classInfo, error } = useSWR(classInfoUrl, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    refreshInterval: 0,
+  });
+  if (error) {
+    return <h6>Error loadinh=g</h6>;
+  }
   const user = {
     name: "Ashiqur Rahman",
     bio: "Lecturer | Bangla",
@@ -164,61 +177,64 @@ const Header = (props) => {
   const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus); // if rejected do not show the button
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  return (
-    <div {...rest} className={clsx(classes.root, className)}>
-      <Box
-        className={classes.title}
-        display="flex"
-        alignContent="center"
-        justifyContent="center"
-      >
-        Jobaer | Bangla | Section 1
-      </Box>
-      <Box
-        className={classes.class__info}
-        display="flex"
-        justifyContent="center"
-        alignItems="center"
-      >
-        <Typography className={classes.tag}>
-          <AccessTimeIcon className={classes.icon} />
-          Time
-        </Typography>
-        <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
-        <Divider orientation="vertical" flexItem />
-        <Typography className={classes.divider} className={classes.tag}>
-          <CalendarTodayIcon className={classes.icon} />
-          Date
-        </Typography>
-        <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
-      </Box>
-      <div className={classes.container}>
-        <div className={classes.details}>
-          <Typography
-            component="h2"
-            gutterBottom
-            variant="overline"
-            className={classes.details__work}
-          >
-            The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax
-            quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick
-            quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox nymphs
-            grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright
-            vixens jump; dozy fowl quack
+  if (classInfo) {
+    return (
+      <div {...rest} className={clsx(classes.root, className)}>
+        <Box
+          className={classes.title}
+          display="flex"
+          alignContent="center"
+          justifyContent="center"
+        >
+          {classInfo[0].user} | Bangla | Section 1
+        </Box>
+        <Box
+          className={classes.class__info}
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Typography className={classes.tag}>
+            <AccessTimeIcon className={classes.icon} />
+            Time
           </Typography>
+          <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
+          <Divider orientation="vertical" flexItem />
+          <Typography className={classes.divider} className={classes.tag}>
+            <CalendarTodayIcon className={classes.icon} />
+            Date
+          </Typography>
+          <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
+        </Box>
+        <div className={classes.container}>
+          <div className={classes.details}>
+            <Typography
+              component="h2"
+              gutterBottom
+              variant="overline"
+              className={classes.details__work}
+            >
+              The quick, brown fox jumps over a lazy dog. DJs flock by when MTV
+              ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick
+              quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox
+              nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox.
+              Bright vixens jump; dozy fowl quack
+            </Typography>
+          </div>
+        </div>
+        <div className={classes.profileLinks}>
+          <Divider />
+          <ProfileTab
+            tabvalue={props.tabvalue}
+            setTabValue={props.changetab}
+            follow={props.followHandler}
+            user={props.user}
+          />
         </div>
       </div>
-      <div className={classes.profileLinks}>
-        <Divider />
-        <ProfileTab
-          tabvalue={props.tabvalue}
-          setTabValue={props.changetab}
-          follow={props.followHandler}
-          user={props.user}
-        />
-      </div>
-    </div>
-  );
+    );
+  }
+  return <CircularProgress color="secondary" />;
 };
 
 Header.propTypes = {

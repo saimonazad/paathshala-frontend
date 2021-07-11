@@ -8,14 +8,9 @@ export default class MyDocument extends Document {
       <Html lang="en">
         <Head>
           {/* PWA primary color */}
-          <meta
-            name="theme-color"
-          />
+          <meta name="theme-color" />
           <link rel="shortcut icon" href="/favicon.ico" />
-          <meta
-            name="keywords"
-            content="Paathshala"
-          />
+          <meta name="keywords" content="Paathshala" />
 
           <meta name="msapplication-TileColor" content="#6200EE" />
           <meta name="msapplication-TileImage" content="/logo512.png" />

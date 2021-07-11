@@ -11,6 +11,7 @@ import {
   Button,
   label,
   Collapse,
+  TextField,
 } from "@material-ui/core/";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -31,6 +32,15 @@ import Grow from "@material-ui/core/Grow";
 import { useRouter } from "next/router";
 import { getComments, addComment } from "../../../redux/actions/WallApp";
 import Link from "@material-ui/core/Link";
+import { fetcher, deletion } from "../../../services/fetcher";
+import useSWR, { mutate, trigger } from "swr";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Fade from "@material-ui/core/Fade";
+import PageLoader from "../../../../@jumbo/components/PageComponents/PageLoader";
+import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -76,11 +86,12 @@ const useStyles = makeStyles((theme) => ({
   iconMiddle: { verticalAlign: "top" },
 }));
 
-const Feed = ({ group, enroll, personal }) => {
+const Feed = ({ group, enroll, personal, feed }) => {
   const dispatch = useDispatch();
-
+  const [loading, setloading] = useState(null);
   const [commentActive, setCommentActive] = useState(false);
   const [activePost, setActivePost] = useState(0);
+  const [selectedPost, setselectedPost] = useState(0);
 
   const handleCommentBox = (id) => {
     dispatch(getComments(id));
@@ -95,9 +106,6 @@ const Feed = ({ group, enroll, personal }) => {
   const postTextHandler = (value) => {
     setPostText(value);
   };
-  //redux action dispatch
-  //redux state
-  //useeffect
 
   //newsfeed post handler
   const submitHandler = (e) => {
@@ -110,10 +118,46 @@ const Feed = ({ group, enroll, personal }) => {
     setPostText("");
   };
 
-  const { feedPosts } = useSelector(({ wallApp }) => wallApp);
-  console.table(feedPosts);
+  //destructure feed array to render
+  let feedPosts;
+  if (feed) {
+    feedPosts = [].concat(...feed);
+    //sort by time
+    feedPosts.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+  }
 
-  const { comments } = useSelector(({ comment }) => comment);
+  const { comments, isLoading } = useSelector(({ comment }) => comment);
+
+  //post 3 dots open/close
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setselectedPost(event.currentTarget.value);
+    setAnchorEl(event.currentTarget);
+  };
+  //post 3 dots menu close
+  const handleClose = (e) => {
+    setAnchorEl(null);
+  };
+
+  //post delete func
+  const postDeleteHandler = () => {
+    console.log(selectedPost);
+    setloading(true);
+    let updatedFeed = feed.map((k) => k.filter((e) => e.id !== selectedPost));
+    mutate("/newsfeed/follower/", updatedFeed, true);
+    httpClient
+      .delete(`/newsfeed/post/?post_id=${selectedPost}`)
+      .then((res) => trigger("/newsfeed/follower/"))
+      .catch((e) => console.log(e));
+    setloading(false);
+    setAnchorEl(null);
+  };
+
   const classes = useStyles();
   return (
     <Box className={classes.root}>
@@ -159,16 +203,61 @@ const Feed = ({ group, enroll, personal }) => {
                 </Box>
                 <Box>
                   <IconButton
+                    value={feed.id}
+                    onClick={(e) => handleClick(e)}
                     color="secondary"
                     className={classes.appbar_rightIcon}
                   >
                     <MoreHorizIcon />
                   </IconButton>
                 </Box>
+                <Menu
+                  elevation={1}
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  open={open}
+                  onClose={handleClose}
+
+                  // className={classes.menu}
+                >
+                  <MenuItem onClick={handleClose}>Edit/Update</MenuItem>
+                  <MenuItem onClick={postDeleteHandler}>Delete</MenuItem>
+                </Menu>
               </Box>
               <Typography className={classes.status}>
                 {feed.post_text}
               </Typography>
+              {/* <form noValidate autoComplete="off">
+                <Box display="flex">
+                  <Box flexGrow={4} pl={1} pr={1}>
+                    <TextField
+                      defaultValue={feed.post_text}
+                      name="post"
+                      variant="outlined"
+                      required
+                      fullWidth
+                      id="post"
+                      InputProps={{
+                        className: classes.postInput,
+                      }}
+                    />
+                  </Box>
+                  <Box flexGrow={1}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      color="primary"
+                      className={classes.btn}
+                      fullWidth
+                    >
+                      Update
+                    </Button>
+                  </Box>
+                </Box>
+              </form> */}
 
               <Divider className={classes.divider} />
               {/* <Box
@@ -301,6 +390,7 @@ const Feed = ({ group, enroll, personal }) => {
           />
         }
       />
+      {loading && <PageLoader />}
     </Box>
   );
 };

@@ -7,6 +7,8 @@ import { useDispatch } from "react-redux";
 import { getFeedPosts } from "../../redux/actions/WallApp";
 import { makeStyles } from "@material-ui/core";
 import { useAuth } from "../../../authentication";
+import useSWR from "swr";
+import { fetcher } from "../../services/fetcher";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -20,15 +22,14 @@ const NewsFeed = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getFeedPosts(authUser.username));
-  }, [dispatch]);
+  //get newsfeed post
+  const { data: feed, error } = useSWR("/newsfeed/follower/", fetcher);
 
   return (
     <div className={classes.root}>
       <Announcement />
-      <PostCard />
-      <Feeds />
+      <PostCard feed={feed} />
+      <Feeds feed={feed} />
     </div>
   );
 };
