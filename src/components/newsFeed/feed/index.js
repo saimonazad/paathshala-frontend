@@ -39,6 +39,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Fade from "@material-ui/core/Fade";
 import PageLoader from "../../../../@jumbo/components/PageComponents/PageLoader";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+import { useAuth } from "../../../../authentication";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => ({
@@ -87,6 +88,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Feed = ({ group, enroll, personal, feed }) => {
+  const { authUser } = useAuth();
   const dispatch = useDispatch();
   const [loading, setloading] = useState(null);
   const [commentActive, setCommentActive] = useState(false);
@@ -201,16 +203,18 @@ const Feed = ({ group, enroll, personal, feed }) => {
                     </Typography>
                   </Box>
                 </Box>
-                <Box>
-                  <IconButton
-                    value={feed.id}
-                    onClick={(e) => handleClick(e)}
-                    color="secondary"
-                    className={classes.appbar_rightIcon}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                </Box>
+                {authUser.username == feed.user && (
+                  <Box>
+                    <IconButton
+                      value={feed.id}
+                      onClick={(e) => handleClick(e)}
+                      color="secondary"
+                      className={classes.appbar_rightIcon}
+                    >
+                      <MoreHorizIcon />
+                    </IconButton>
+                  </Box>
+                )}
                 <Menu
                   elevation={1}
                   id="menu-appbar"
