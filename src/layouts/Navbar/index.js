@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import Box from "@material-ui/core/Box";
-import { Button, Link, Menu, MenuItem } from "@material-ui/core";
+import { Button, Menu, MenuItem } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -19,6 +19,7 @@ import Divider from "@material-ui/core/Divider";
 import Hidden from "@material-ui/core/Hidden";
 import Avatar from "@material-ui/core/Avatar";
 import theme from "../../utils/theme";
+import Link from "next/dist/client/link";
 import { useAuth } from "../../../authentication";
 import { useRouter } from "next/router";
 const useStyles = makeStyles((theme) => ({
