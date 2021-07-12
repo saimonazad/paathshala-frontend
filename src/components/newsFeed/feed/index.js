@@ -41,7 +41,7 @@ import PageLoader from "../../../../@jumbo/components/PageComponents/PageLoader"
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 import { useAuth } from "../../../../authentication";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import UserDetails from "./userDetails";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -85,6 +85,17 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   iconMiddle: { verticalAlign: "top" },
+  postInput: {
+    height: 36,
+    border: `1px solid ${theme.palette.text.mineShaft}`,
+    "&::focus": {
+      border: "none",
+    },
+  },
+  btn: { textTransform: "none", fontWeight: 400 },
+  divider: {
+    margin: theme.spacing(2, 0, 1, 0),
+  },
 }));
 
 const Feed = ({ group, enroll, personal, feed }) => {
@@ -159,6 +170,30 @@ const Feed = ({ group, enroll, personal, feed }) => {
     setloading(false);
     setAnchorEl(null);
   };
+  //edit post
+  const [editPost, seteditPost] = useState(false);
+
+  const postEditHandler = () => {
+    seteditPost(!editPost);
+    setAnchorEl(null);
+  };
+  const submitUpdatedPost = (e) => {
+    e.preventDefault();
+    setloading(true);
+    var updatedFeed = feed.map((el) =>
+      el.map((k) => (k.id == selectedPost ? { ...k, post_text: postText } : k))
+    );
+    mutate("/newsfeed/follower/", updatedFeed, true);
+    httpClient
+      .put(`/newsfeed/post/?post_id=${selectedPost}`, {
+        post_text: postText,
+      })
+      .then((res) => trigger("/newsfeed/follower/"))
+      .catch((e) => console.log(e));
+    setloading(false);
+
+    seteditPost(false);
+  };
 
   const classes = useStyles();
   return (
@@ -189,14 +224,10 @@ const Feed = ({ group, enroll, personal, feed }) => {
                     <Avatar src="" className={classes.profile__img} />
                   </Box>
                   <Box>
-                    <Link href={`/u/${feed.user}`}>
-                      <Typography
-                        component="h2"
-                        className={classes.profile__name}
-                      >
-                        {feed.user}
-                      </Typography>
-                    </Link>
+                    <UserDetails
+                      courseId={feed.posted_on}
+                      username={feed.user}
+                    />
 
                     <Typography component="h3" className={classes.post__time}>
                       {moment(feed.timestamp).fromNow()}
@@ -227,41 +258,61 @@ const Feed = ({ group, enroll, personal, feed }) => {
 
                   // className={classes.menu}
                 >
-                  <MenuItem onClick={handleClose}>Edit/Update</MenuItem>
+                  <MenuItem onClick={postEditHandler}>Edit/Update</MenuItem>
                   <MenuItem onClick={postDeleteHandler}>Delete</MenuItem>
                 </Menu>
               </Box>
-              <Typography className={classes.status}>
-                {feed.post_text}
-              </Typography>
-              {/* <form noValidate autoComplete="off">
-                <Box display="flex">
-                  <Box flexGrow={4} pl={1} pr={1}>
-                    <TextField
-                      defaultValue={feed.post_text}
-                      name="post"
-                      variant="outlined"
-                      required
-                      fullWidth
-                      id="post"
-                      InputProps={{
-                        className: classes.postInput,
-                      }}
-                    />
+              {editPost && selectedPost == feed.id ? (
+                <form
+                  noValidate
+                  autoComplete="off"
+                  onSubmit={submitUpdatedPost}
+                >
+                  <Box display="flex" mt={1}>
+                    <Box flexGrow={4} pl={1} pr={1}>
+                      <TextField
+                        defaultValue={feed.post_text}
+                        onChange={(e) => setPostText(e.target.value)}
+                        name="post"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="post"
+                        InputProps={{
+                          className: classes.postInput,
+                        }}
+                      />
+                    </Box>
+                    <Box flexGrow={1}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.btn}
+                        fullWidth
+                      >
+                        Update
+                      </Button>
+                    </Box>
+                    <Box flexGrow={1} ml={1}>
+                      <Button
+                        onClick={postEditHandler}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.btn}
+                        fullWidth
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
                   </Box>
-                  <Box flexGrow={1}>
-                    <Button
-                      type="submit"
-                      variant="contained"
-                      color="primary"
-                      className={classes.btn}
-                      fullWidth
-                    >
-                      Update
-                    </Button>
-                  </Box>
-                </Box>
-              </form> */}
+                </form>
+              ) : (
+                <Typography className={classes.status}>
+                  {feed.post_text}
+                </Typography>
+              )}
 
               <Divider className={classes.divider} />
               {/* <Box
