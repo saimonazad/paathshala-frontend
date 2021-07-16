@@ -233,9 +233,14 @@ export default function SearchAppBar() {
             <AddIcon />
           </IconButton>
           <Hidden xsDown>
-            <IconButton color="secondary" className={classes.appbar_rightIcon}>
-              <ShoppingCartIcon />
-            </IconButton>
+            <Link href="/cart">
+              <IconButton
+                color="secondary"
+                className={classes.appbar_rightIcon}
+              >
+                <ShoppingCartIcon />
+              </IconButton>
+            </Link>
             <IconButton color="secondary" className={classes.appbar_rightIcon}>
               <MenuIcon />
             </IconButton>

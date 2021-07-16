@@ -192,8 +192,8 @@ const ClassPageNotEnrolled = (props) => {
       dispatch(getUserDetail(courseInfo[0]?.user));
   }, [courseInfo]);
   const { userDetail } = useSelector(({ profileApp }) => profileApp);
-  console.log(userDetail);
-  console.log(courseInfo);
+  // console.log(userDetail);
+  // console.log(courseInfo);
   return (
     <div {...rest} className={clsx(classes.root, className)}>
       <Box
@@ -251,7 +251,7 @@ const ClassPageNotEnrolled = (props) => {
               } catch (error) {}
             }}
           >
-            100Tk to Enroll
+            Free enroll for 7 days
           </Button>
         </div>
         <Divider className={classes.divider} />

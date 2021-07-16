@@ -16,12 +16,12 @@ import PlaceIcon from "@material-ui/icons/Place";
 import PeopleIcon from "@material-ui/icons/People";
 import BusinessCenterIcon from "@material-ui/icons/BusinessCenter";
 import SchoolIcon from "@material-ui/icons/School";
-import React from "react";
+import React, { useState } from "react";
 import CmtList from "../../../../../@coremat/CmtList";
 import ListEmptyResult from "../../../../../@coremat/CmtList/ListEmptyResult";
 import { useRouter } from "next/router";
 import { useAuth } from "../../../../../authentication";
-
+import AddUpdateModal from "./AddUpdateModal";
 const useStyles = makeStyles((theme) => ({
   header: {
     alignItems: "center",
@@ -67,6 +67,16 @@ const Info = ({ title, data }) => {
   const router = useRouter();
   const { pname } = router.query;
   const { authUser } = useAuth();
+  //add update modal
+  const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
+
+  const handleModalOpen = () => {
+    setIsInfoModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsInfoModalOpen(false);
+  };
 
   const classes = useStyles();
   return (
@@ -80,12 +90,21 @@ const Info = ({ title, data }) => {
           {title}
         </Typography>
         {authUser.username == pname ? (
-          <Button variant="primary">Add/Update</Button>
+          <>
+            <Button variant="primary" onClick={handleModalOpen}>
+              Add/Update
+            </Button>
+            <AddUpdateModal
+              isInfoModalOpen={isInfoModalOpen}
+              handleModalClose={handleModalClose}
+              title={title}
+              data={data}
+            />
+          </>
         ) : (
           ""
         )}
       </Box>
-      {console.log(data)}
 
       {title == "Basic Info" && (
         <CmtList

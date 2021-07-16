@@ -16,7 +16,7 @@ const ClassPage = () => {
   const { id } = router.query;
   const dispatch = useDispatch();
   const [enrollmentInfo, setenrollmentInfo] = useState({});
-
+  const [error, setError] = useState(false);
   function enrollmentCheck() {
     httpClient
       .get(
@@ -24,10 +24,10 @@ const ClassPage = () => {
       )
       .then((res) => {
         setenrollmentInfo(res.data);
-        console.log(res.data);
+        console.log({ course: res.data });
       })
       .catch((error) => {
-        console.log(error);
+        setError(true);
       });
   }
 
@@ -36,12 +36,17 @@ const ClassPage = () => {
     dispatch(getCourse(id));
   }, [id, dispatch]);
 
+  if (error) {
+    return <DefaultErrorPage statusCode={404} />;
+  }
+
+  if (enrollmentInfo.length != 1) {
+    return <ClassPageNotEnrolled />;
+  }
   return (
     <>
-      {enrollmentInfo.length > 0 ? (
+      {enrollmentInfo.length == 1 && !error && (
         <ClassComponents userDetails={enrollmentInfo} />
-      ) : (
-        <ClassPageNotEnrolled />
       )}
     </>
   );

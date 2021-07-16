@@ -6,3 +6,6 @@ export const deletion = (url) => httpClient.delete(url).then((res) => res.data);
 
 export const addition = (url, data) =>
   httpClient.post(url, data).then((res) => res.data);
+
+export const update = (url, data) =>
+  httpClient.put(url, data).then((res) => res.data);

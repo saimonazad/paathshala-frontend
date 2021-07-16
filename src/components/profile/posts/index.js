@@ -1,19 +1,12 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { makeStyles, Grid } from "@material-ui/core";
 import Info from "./info";
 import Feeds from "../../shared/feeds";
 import Following from "./following";
 import PostCard from "../../shared/postCard";
-import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "../../../../authentication";
-
-//feed action -redux
-import {
-  getBasicInfo,
-  getWorkInfo,
-  getAcademicInfo,
-} from "../../../redux/actions/profileActions";
-//redux store
+import useSWR from "swr";
+import { fetcher } from "../../../services/fetcher";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,21 +22,10 @@ const useStyles = makeStyles((theme) => ({
 const Posts = ({ user }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
-  const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(getBasicInfo());
-    dispatch(getWorkInfo());
-    dispatch(getAcademicInfo());
-  }, [dispatch]);
-
-  const { basicInfo } = useSelector(({ basic }) => basic);
-  const { workInfo } = useSelector(({ work }) => work);
-  const { academicInfo } = useSelector(({ academic }) => academic);
-
-  // const { basicInfo } = useSelector();
-  // const { workInfo } = useSelector((state) => state.work);
-  // const { academicInfo } = useSelector((state) => state.academic);
+  const { data: basicInfo } = useSWR(`/users/profile/`, fetcher);
+  const { data: workInfo } = useSWR(`/users/workinfo/`, fetcher);
+  const { data: academicInfo } = useSWR(`/users/academic_info/`, fetcher);
 
   return (
     <Grid container className={classes.root} spacing={2}>
