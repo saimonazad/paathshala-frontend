@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import clsx from "clsx";
 import { makeStyles } from "@material-ui/styles";
+import { useRouter } from "next/router";
 import {
   Avatar,
   Typography,
@@ -22,7 +23,7 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 //components
 import ProfileTab from "../profileTab";
 import { useSession } from "next-auth/client";
-
+import SocialMediaButtons from "../../facebook-share";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -176,7 +177,8 @@ const Header = (props) => {
   const { className, ...rest } = props;
   const [session] = useSession();
   const classes = useStyles();
-
+  const router = useRouter();
+  console.log(`${process.env.BACKEND_URL}${router.asPath}`);
   const user = {
     name: "Ashiqur Rahman",
     bio: "Lecturer | Bangla",
@@ -240,26 +242,10 @@ const Header = (props) => {
           </Typography>
         </div>
         <div className={classes.actions}>
-          {connectedStatus === "not_connected" && (
-            <Button
-              color="primary"
-              onClick={handleConnectToggle}
-              variant="contained"
-            >
-              <PersonAddIcon className={classes.personAddIcon} />
-              Share Profile
-            </Button>
-          )}
-          {connectedStatus === "pending" && (
-            <Button
-              className={classes.pendingButton}
-              onClick={handleConnectToggle}
-              variant="contained"
-            >
-              <PersonAddIcon className={classes.personAddIcon} />
-              Pending connection
-            </Button>
-          )}
+          <SocialMediaButtons
+            url={`${process.env.BACKEND_URL}${router.asPath}`}
+            text="Check out this profile at Paathshala!"
+          />
         </div>
       </div>
       <div className={classes.profileLinks}>
