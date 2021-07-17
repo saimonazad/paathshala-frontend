@@ -16,6 +16,9 @@ import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { faWindowClose } from "@fortawesome/fontawesome-free-solid";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   fetchError,
   fetchStart,
@@ -206,8 +209,13 @@ export default function CreateClass({
 
   const body = (
     <div style={modalStyle} className={classes.paper}>
-      <Box display="flex">
+      <Box display="flex" justifyContent="space-between">
         <Typography variant="h6">Create Class</Typography>
+        <FontAwesomeIcon
+          onClick={handleClose}
+          icon={faWindowClose}
+          style={{ fontSize: "25px", cursor: "pointer" }}
+        />
       </Box>
       <Divider />
       <form className={classes.form} onSubmit={handleSubmit(onSubmit)}>

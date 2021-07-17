@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import IconButton from "@material-ui/core/IconButton";
@@ -22,6 +22,7 @@ import theme from "../../utils/theme";
 import Link from "next/dist/client/link";
 import { useAuth } from "../../../authentication";
 import { useRouter } from "next/router";
+import CreateClass from "../../components/profile/classes/createClass";
 const useStyles = makeStyles((theme) => ({
   empty: {},
   active: {
@@ -150,7 +151,16 @@ export default function SearchAppBar() {
       router.push("/signin").then((r) => r);
     });
   };
+  //create class modal
+  const [open, setOpen] = useState(false);
 
+  function handleModal(newValue) {
+    setOpen(newValue);
+  }
+  const [isFormSubmitted, setIsFormSUbmitted] = useState(false);
+  function formSubmissionCheck(newValue) {
+    setIsFormSUbmitted(newValue);
+  }
   return (
     <AppBar position="static" className={classes.root} component="nav">
       <Toolbar className={classes.toolbar}>
@@ -229,9 +239,18 @@ export default function SearchAppBar() {
           <IconButton color="secondary" className={classes.appbar_rightIcon}>
             <SearchIcon />
           </IconButton>
-          <IconButton color="secondary" className={classes.appbar_rightIcon}>
+          <IconButton
+            onClick={() => setOpen(!open)}
+            color="secondary"
+            className={classes.appbar_rightIcon}
+          >
             <AddIcon />
           </IconButton>
+          <CreateClass
+            isOpen={open}
+            handleModal={handleModal}
+            formSubmissionCheck={formSubmissionCheck}
+          />
           <Hidden xsDown>
             <Link href="/cart">
               <IconButton
