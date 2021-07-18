@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Announcement from "./announcement";
 import PostCard from "./postCard";
 import Feeds from "./feeds";
@@ -9,6 +9,7 @@ import { makeStyles } from "@material-ui/core";
 import { useAuth } from "../../../authentication";
 import useSWR from "swr";
 import { fetcher } from "../../services/fetcher";
+import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
