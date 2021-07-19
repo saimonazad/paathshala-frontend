@@ -14,6 +14,8 @@ import Container from "@material-ui/core/Container";
 import Divider from "@material-ui/core/Divider";
 import { useAuth } from "../../../authentication";
 import { NotificationLoader } from "../../../@jumbo/components/ContentLoader";
+import { CircularProgress } from "@material-ui/core";
+
 //css
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -249,6 +251,8 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
                     className={classes.submit}
                   >
                     Sign In
+                    {!isLoading && "Sign In"}
+                    {isLoading && <CircularProgress size={14} />}
                   </Button>
                 </Grid>
               </Grid>

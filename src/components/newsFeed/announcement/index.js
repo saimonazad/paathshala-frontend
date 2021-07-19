@@ -59,7 +59,11 @@ const Announcement = () => {
 
   function courseSchedule() {
     httpClient
-      .get(`/course/enrollmentCheck/?username=${authUser.username}&type=all`)
+      .get(
+        `/course/enrollmentCheck/?username=${
+          JSON.parse(localStorage.getItem("user")).username
+        }&type=all`
+      )
       .then((res1) => {
         res1.data.map((course) => {
           if (course.course != null) {

@@ -8,6 +8,11 @@ import {
   Typography,
 } from "@material-ui/core";
 import StarIcon from "@material-ui/icons/Star";
+import useSWR from "swr";
+import { fetcher } from "../../../services/fetcher";
+import { useAuth } from "../../../../authentication";
+import CmtList from "../../../../@coremat/CmtList";
+import ClassInfo from "./classInfo";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -58,6 +63,12 @@ const useStyles = makeStyles((theme) => ({
 
 const Enrolled = () => {
   const classes = useStyles();
+  const { authUser } = useAuth();
+
+  const { data: enrollInfo, error } = useSWR(
+    `/course/enrollmentCheck/?username=${authUser.username}&type=all`,
+    fetcher
+  );
 
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
@@ -75,29 +86,14 @@ const Enrolled = () => {
         </div>
       </Box>
       <Box className={classes.class__list}>
-        <Box
-          borderRadius={4}
-          display="flex"
-          justifyContent="space-between"
-          className={classes.class}
-          alignItems="center"
-        >
-          <Typography>Bangla</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Typography>Mansur Uddin</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Typography>Section 1</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Typography>Monday & Wednesday</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Typography>07:30 PM - 08:30 PM</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Typography>35(50)</Typography>
-          <Divider orientation="vertical" flexItem />
-          <Button variant="outlined" color="secondary">
-            Enroll
-          </Button>
-        </Box>
+        <CmtList
+          data={enrollInfo}
+          renderRow={(course) => {
+            if (course.course != null) {
+              return <ClassInfo courseId={course.course} />;
+            }
+          }}
+        />
       </Box>
     </Box>
   );
