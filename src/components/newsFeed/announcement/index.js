@@ -127,7 +127,10 @@ const Announcement = () => {
             <Chip
               key={index}
               className={classes.class__time}
-              label={`${course.coursename} at ${course.start_time}`}
+              label={`${course.coursename} at ${moment(
+                course?.start_time,
+                "HH:mm"
+              ).format("hh:mm A")}`}
             />
           )}
         />
