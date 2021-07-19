@@ -34,6 +34,7 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: theme.palette.secondary.light,
     color: theme.palette.text.primary,
     marginRight: theme.spacing(1),
+    marginBottom: theme.spacing(1),
   },
   postInput: {
     height: 38,
@@ -46,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.mineShaft,
   },
   class__box: {
-    padding: theme.spacing(0, 2, 2),
+    padding: theme.spacing(0, 2, 1),
   },
 }));
 let temp = [];
