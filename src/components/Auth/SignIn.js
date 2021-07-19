@@ -250,7 +250,6 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
                     color="secondary"
                     className={classes.submit}
                   >
-                    Sign In
                     {!isLoading && "Sign In"}
                     {isLoading && <CircularProgress size={14} />}
                   </Button>
