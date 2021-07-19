@@ -178,7 +178,7 @@ const Header = (props) => {
   const [session] = useSession();
   const classes = useStyles();
   const router = useRouter();
-  console.log(`${process.env.BACKEND_URL}${router.asPath}`);
+  console.log(`${window.location}}`);
   const user = {
     name: "Ashiqur Rahman",
     bio: "Lecturer | Bangla",
@@ -243,7 +243,7 @@ const Header = (props) => {
         </div>
         <div className={classes.actions}>
           <SocialMediaButtons
-            url={`${process.env.BACKEND_URL}${router.asPath}`}
+            url={`${window.location}`}
             text="Check out this profile at Paathshala!"
           />
         </div>
