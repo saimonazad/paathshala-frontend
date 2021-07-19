@@ -8,7 +8,7 @@ import ChatIcon from "@material-ui/icons/Chat";
 import ExploreIcon from "@material-ui/icons/Explore";
 import MenuIcon from "@material-ui/icons/Menu";
 import theme from "../../utils/theme";
-
+import { useRouter } from "next/dist/client/router";
 const useStyles = makeStyles({
   root: {
     position: "fixed",
@@ -37,8 +37,9 @@ const useStyles = makeStyles({
 
 export default function BottomNavBar() {
   const classes = useStyles();
-  const [value, setValue] = React.useState("recents");
+  const router = useRouter();
 
+  const [value, setValue] = React.useState(router.asPath);
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
@@ -49,8 +50,12 @@ export default function BottomNavBar() {
       onChange={handleChange}
       className={classes.root}
     >
-      <BottomNavigationAction value="recents" icon={<HomeIcon />} />
-      <BottomNavigationAction value="favorites" icon={<ExploreIcon />} />
+      <BottomNavigationAction value="/" icon={<HomeIcon />} href={"/"} />
+      <BottomNavigationAction
+        value="/explore"
+        icon={<ExploreIcon />}
+        href={"/explore"}
+      />
       <BottomNavigationAction value="nearby" icon={<ChatIcon />} />
       <BottomNavigationAction value="folder" icon={<NotificationsIcon />} />
       <BottomNavigationAction value="menu" icon={<MenuIcon />} />
