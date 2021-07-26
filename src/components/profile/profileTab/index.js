@@ -88,10 +88,13 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
     await httpClient.delete(deletefollowUrl).then((res) => res.data);
     trigger(followCheckUrl);
   }
-
+  const [authUername, setauthUername] = useState("");
+  useEffect(() => {
+    setauthUername(authUser.username);
+  }, [authUser]);
   return (
     <Box display="flex" justifyContent="space-between">
-      {user.username == authUser.username && (
+      {authUername == authUser.username && (
         <>
           <Hidden xsDown>
             <Tabs

@@ -32,10 +32,8 @@ const Profile = (props) => {
   }
 
   useEffect(() => {
-    if (true) {
-      fetchFollowersLists();
-    }
-  }, []);
+    fetchFollowersLists();
+  }, [authUser]);
 
   return (
     <>

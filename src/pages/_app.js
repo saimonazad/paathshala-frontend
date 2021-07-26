@@ -7,7 +7,6 @@ import theme from "../utils/theme";
 import Layout from "../layouts/app-layout";
 import { AuthProvider } from "../../authentication";
 import "font-awesome/css/font-awesome.min.css";
-
 //redux store
 import withRedux from "next-redux-wrapper";
 
