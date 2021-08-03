@@ -13,10 +13,12 @@ import { getCourse } from "../../redux/actions/courseActions";
 const ClassPage = () => {
   const { authUser } = useAuth();
   const router = useRouter();
-  const { id } = router.query;
+  const urlParam = router.query;
+  let id = urlParam.slug[0];
   const dispatch = useDispatch();
   const [enrollmentInfo, setenrollmentInfo] = useState({});
   const [error, setError] = useState(false);
+
   function enrollmentCheck() {
     httpClient
       .get(

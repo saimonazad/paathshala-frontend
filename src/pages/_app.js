@@ -9,6 +9,7 @@ import { AuthProvider } from "../../authentication";
 import "font-awesome/css/font-awesome.min.css";
 //redux store
 import withRedux from "next-redux-wrapper";
+import { CartProvider } from "react-use-cart";
 
 import { Provider as ReduxProvider, useStore } from "react-redux";
 
@@ -58,15 +59,17 @@ function MyApp(props) {
         />
       </Head>
       <AuthProvider>
-        <ThemeProvider theme={theme}>
-          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-          <CssBaseline />
-          <Layout>
-            <ReduxProvider store={store}>
-              <Component {...pageProps} />
-            </ReduxProvider>
-          </Layout>
-        </ThemeProvider>
+        <CartProvider>
+          <ThemeProvider theme={theme}>
+            {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+            <CssBaseline />
+            <Layout>
+              <ReduxProvider store={store}>
+                <Component {...pageProps} />
+              </ReduxProvider>
+            </Layout>
+          </ThemeProvider>
+        </CartProvider>
       </AuthProvider>
     </React.Fragment>
   );

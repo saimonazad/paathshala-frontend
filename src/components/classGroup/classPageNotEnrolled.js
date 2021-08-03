@@ -20,6 +20,9 @@ import moment from "moment";
 import { Star } from "@material-ui/icons";
 import { getUserDetail } from "../../redux/actions/ProfileApp";
 import { enrollCourse } from "../../redux/actions/courseActions";
+import { useCart } from "react-use-cart";
+import useSWR from "swr";
+import { fetcher } from "../../services/fetcher";
 
 //components
 
@@ -180,9 +183,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const ClassPageNotEnrolled = (props) => {
+  const { addItem, inCart } = useCart();
+
   const dispatch = useDispatch();
   const router = useRouter();
-  const { id } = router.query;
+  const urlParam = router.query;
+  let id = urlParam.slug[0];
   const { className, ...rest } = props;
   const classes = useStyles();
   const { courseInfo } = useSelector(({ getCourse }) => getCourse);
@@ -234,33 +240,64 @@ const ClassPageNotEnrolled = (props) => {
             variant="overline"
             className={classes.details__work}
           >
-            The quick, brown fox jumps over a lazy dog. DJs flock by when MTV ax
-            quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick
-            quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox nymphs
-            grab quick-jived waltz. Brick quiz whangs jumpy veldt fox. Bright
-            vixens jump; dozy fowl quack
+            {courseInfo[0]?.description}
           </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.btn}
-            onClick={() => {
-              try {
-                dispatch(enrollCourse(courseInfo[0]?.id));
-                router.reload(window.location.pathname);
-              } catch (error) {}
-            }}
-          >
-            Free enroll for 7 days
-          </Button>
+          {inCart(courseInfo[0]?.id) ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
+              disabled
+            >
+              Already added to cart
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.btn}
+              // onClick={() => {
+              //   try {
+              //     dispatch(enrollCourse(courseInfo[0]?.id));
+              //     router.reload(window.location.pathname);
+              //   } catch (error) {}
+              // }}
+              onClick={() =>
+                addItem({
+                  id: courseInfo[0]?.id,
+                  price: courseInfo[0]?.monthly_fee,
+                })
+              }
+            >
+              Free enroll for 7 days
+            </Button>
+          )}
         </div>
         <Divider className={classes.divider} />
         <Box display="flex" justifyContent="space-between" alignItems="center">
+          <User username={courseInfo[0]?.user} />
+        </Box>
+      </div>
+    </div>
+  );
+};
+
+function User({ username }) {
+  const classes = useStyles();
+
+  const { data: user } = useSWR(
+    `/users/userinfo/?username=${username}`,
+    fetcher
+  );
+  return (
+    <>
+      {user ? (
+        <>
           <Box display="flex">
             <Avatar className={classes.avatar} />
             <Box>
               <Typography className={classes.name} component="h2">
-                {userDetail?.first_name} {userDetail?.last_name}
+                {user[0]?.first_name} {user[0]?.last_name}
               </Typography>
               <Typography className={classes.subtitle1} component="p">
                 Lecturer | Bangla
@@ -271,21 +308,25 @@ const ClassPageNotEnrolled = (props) => {
             </Box>
             <Box className={classes.rating}>
               <Star style={{ verticalAlign: "middle", color: "orange" }} />
-              <Typography component="span">4.5/5</Typography>
+              <Typography component="span">
+                {user[0]?.rating}/({user[0]?.rating_count})
+              </Typography>
             </Box>
           </Box>
           <Button
             className={classes.btn}
             variant="outlined"
             color="secondary"
-            href={`/u/${userDetail?.username}`}
+            href={`/u/${user[0]?.username}`}
           >
             View Profile
           </Button>
-        </Box>
-      </div>
-    </div>
+        </>
+      ) : (
+        <Typography className={classes.name}>{user}</Typography>
+      )}
+    </>
   );
-};
+}
 
 export default ClassPageNotEnrolled;

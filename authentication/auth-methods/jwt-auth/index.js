@@ -56,7 +56,11 @@ export const useProvideAuth = () => {
         }
       })
       .catch(function (error) {
-        fetchError(error.message);
+        if (error.response.data.username) {
+          fetchError(error.response.data.username);
+        } else {
+          fetchError("Something went wrong! Please try again");
+        }
       });
   };
 

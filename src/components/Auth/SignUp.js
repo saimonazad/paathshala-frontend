@@ -325,7 +325,11 @@ export default function SignUp() {
                     fullWidth
                     id="username"
                     autoFocus
-                    error={errors.username ? true : false}
+                    error={
+                      error == "A user with that username already exists."
+                        ? true
+                        : false
+                    }
                     {...register("username", {
                       required: true,
                       maxLength: 30,
@@ -525,6 +529,7 @@ export default function SignUp() {
             </Typography>
           </Box>
         </Container>
+        <NotificationLoader loading={isLoading} error={error} />
       </Container>
     </div>
   );

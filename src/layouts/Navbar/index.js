@@ -8,7 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MenuIcon from "@material-ui/icons/Menu";
 import SearchIcon from "@material-ui/icons/Search";
 import Box from "@material-ui/core/Box";
-import { Button, Menu, MenuItem } from "@material-ui/core";
+import { Button, Menu, MenuItem, Badge } from "@material-ui/core";
 import HomeIcon from "@material-ui/icons/Home";
 import NotificationsIcon from "@material-ui/icons/Notifications";
 import ChatIcon from "@material-ui/icons/Chat";
@@ -23,6 +23,8 @@ import Link from "next/dist/client/link";
 import { useAuth } from "../../../authentication";
 import { useRouter } from "next/router";
 import CreateClass from "../../components/profile/classes/createClass";
+import { useCart } from "react-use-cart";
+
 const useStyles = makeStyles((theme) => ({
   empty: {},
   active: {
@@ -130,6 +132,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SearchAppBar() {
+  const { totalUniqueItems } = useCart();
+
   const classes = useStyles();
   const router = useRouter();
   const { asPath } = useRouter();
@@ -257,7 +261,9 @@ export default function SearchAppBar() {
                 color="secondary"
                 className={classes.appbar_rightIcon}
               >
-                <ShoppingCartIcon />
+                <Badge badgeContent={totalUniqueItems} color="primary">
+                  <ShoppingCartIcon />
+                </Badge>
               </IconButton>
             </Link>
             <IconButton color="secondary" className={classes.appbar_rightIcon}>
