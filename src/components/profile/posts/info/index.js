@@ -24,6 +24,9 @@ import { useAuth } from "../../../../../authentication";
 import AddUpdateModal from "./AddUpdateModal";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
+import useSWR, { mutate, trigger } from "swr";
+import { deletion } from "../../../../services/fetcher";
+import { httpClient } from "../../../../../authentication/auth-methods/jwt-auth/config";
 const useStyles = makeStyles((theme) => ({
   header: {
     alignItems: "center",
@@ -71,6 +74,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 const Info = ({ title, data }) => {
   const router = useRouter();
+
   const { pname } = router.query;
   const { authUser } = useAuth();
   //add update modal
@@ -82,6 +86,13 @@ const Info = ({ title, data }) => {
 
   const handleModalClose = () => {
     setIsInfoModalOpen(false);
+  };
+
+  const handleDeleteWork = (id) => {
+    httpClient
+      .delete(`/users/workinfo/?workinfo_id=${id}`)
+      .then((res) => trigger("/users/workinfo/"))
+      .catch((e) => console.log(e));
   };
 
   const classes = useStyles();
@@ -158,7 +169,10 @@ const Info = ({ title, data }) => {
                   <EditIcon className={classes.list_edit__icon} />
                 </ListItemIcon>
                 <ListItemIcon>
-                  <DeleteIcon className={classes.list_edit__icon} />
+                  <DeleteIcon
+                    className={classes.list_edit__icon}
+                    onClick={() => handleDeleteWork(info.id)}
+                  />
                 </ListItemIcon>
               </ListItem>
             </List>
