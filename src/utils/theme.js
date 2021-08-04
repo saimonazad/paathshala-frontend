@@ -19,7 +19,7 @@ const theme = createMuiTheme({
     },
     secondary: {
       main: "#5d1049",
-      light: "#fbdef3",
+      light: "#c2c2c2",
     },
     other: {
       grey: "#DADADA",
@@ -28,7 +28,7 @@ const theme = createMuiTheme({
       jacaranda: "#220219",
       star: "#ffb400",
       silverChalice: "#AFAFAF",
-      bonJour:"#DCD8DB"
+      bonJour: "#DCD8DB",
     },
     error: {
       main: red.A400,
