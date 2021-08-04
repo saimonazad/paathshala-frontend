@@ -22,6 +22,8 @@ import ListEmptyResult from "../../../../../@coremat/CmtList/ListEmptyResult";
 import { useRouter } from "next/router";
 import { useAuth } from "../../../../../authentication";
 import AddUpdateModal from "./AddUpdateModal";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 const useStyles = makeStyles((theme) => ({
   header: {
     alignItems: "center",
@@ -43,9 +45,13 @@ const useStyles = makeStyles((theme) => ({
 
     color: theme.palette.secondary.main,
   },
+  list_edit__icon: {
+    fontSize: 20,
+    cursor: "pointer",
+  },
   list: {
     alignItems: "flex-start",
-
+    "& .MuiListItemAvatar-root": { minWidth: 20 },
     padding: theme.spacing(0, 1.5),
     "& span": {
       paddingRight: theme.spacing(0.5),
@@ -148,6 +154,12 @@ const Info = ({ title, data }) => {
                   <p>{info.dept}</p>
                   <p>{info.company}</p>
                 </ListItemText>
+                <ListItemIcon>
+                  <EditIcon className={classes.list_edit__icon} />
+                </ListItemIcon>
+                <ListItemIcon>
+                  <DeleteIcon className={classes.list_edit__icon} />
+                </ListItemIcon>
               </ListItem>
             </List>
           )}
