@@ -59,7 +59,7 @@ const ClassInfo = ({ courseId }) => {
           <Button
             variant="outlined"
             color="secondary"
-            href={`/class/${classDetails[0]?.id}`}
+            href={`/c/${classDetails[0]?.id}`}
           >
             View
           </Button>

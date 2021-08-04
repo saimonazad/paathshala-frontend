@@ -35,7 +35,7 @@ const Class = ({ course }) => {
   //   refreshInterval: 0,
   // });
   // console.log(course)
-  
+
   return (
     <>
       <CmtList
@@ -61,7 +61,7 @@ const Class = ({ course }) => {
             </Typography>
             <Divider orientation="vertical" flexItem />
             <Button
-              href={`/class/${course.id}`}
+              href={`/c/${course.id}`}
               variant="contained"
               color="primary"
             >

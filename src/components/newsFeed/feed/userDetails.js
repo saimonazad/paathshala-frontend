@@ -31,7 +31,7 @@ const UserDetails = ({ username, courseId }) => {
         </Typography>
       </Link>
       {course && (
-        <Link href={`/class/${course[0]?.id}`}>
+        <Link href={`/c/${course[0]?.id}`}>
           <Typography component="h2" className={classes.profile__name}>
             {courseId != "dashboard" ? (
               <>

@@ -189,7 +189,8 @@ const Header = (props) => {
           alignContent="center"
           justifyContent="center"
         >
-          {courseInfo[0].user} | {courseInfo[0].user} | Section 1
+          <User username={courseInfo[0]?.user} /> | {courseInfo[0]?.coursename}{" "}
+          | {courseInfo[0]?.subject}{" "}
         </Box>
         <Box
           className={classes.class__info}
@@ -241,6 +242,26 @@ const Header = (props) => {
   }
   return <CircularProgress color="secondary" />;
 };
+
+function User({ username }) {
+  const classes = useStyles();
+
+  const { data: user } = useSWR(
+    `/users/userinfo/?username=${username}`,
+    fetcher
+  );
+  return (
+    <>
+      {user ? (
+        <>
+          {user[0]?.first_name} {user[0]?.last_name}
+        </>
+      ) : (
+        <>{user}</>
+      )}
+    </>
+  );
+}
 
 Header.propTypes = {
   className: PropTypes.string,

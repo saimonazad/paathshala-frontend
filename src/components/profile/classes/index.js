@@ -142,7 +142,7 @@ const Classes = () => {
               <Button
                 variant="outlined"
                 color="secondary"
-                href={`/class/${course.id}`}
+                href={`/c/${course.id}`}
               >
                 View
               </Button>
