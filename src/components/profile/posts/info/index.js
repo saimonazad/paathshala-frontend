@@ -79,7 +79,8 @@ const Info = ({ title, data }) => {
   const { authUser } = useAuth();
   //add update modal
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false);
-
+  const [selectedItem, setselectedItem] = useState(0);
+  const [method, setmethod] = useState("");
   const handleModalOpen = () => {
     setIsInfoModalOpen(true);
   };
@@ -108,7 +109,13 @@ const Info = ({ title, data }) => {
         </Typography>
         {authUser.username == pname ? (
           <>
-            <Button variant="primary" onClick={handleModalOpen}>
+            <Button
+              variant="primary"
+              onClick={() => {
+                handleModalOpen();
+                setmethod("add");
+              }}
+            >
               Add/Update
             </Button>
             <AddUpdateModal
@@ -116,6 +123,8 @@ const Info = ({ title, data }) => {
               handleModalClose={handleModalClose}
               title={title}
               data={data}
+              id={selectedItem}
+              method={method}
             />
           </>
         ) : (
@@ -165,15 +174,27 @@ const Info = ({ title, data }) => {
                   <p>{info.dept}</p>
                   <p>{info.company}</p>
                 </ListItemText>
-                <ListItemIcon>
-                  <EditIcon className={classes.list_edit__icon} />
-                </ListItemIcon>
-                <ListItemIcon>
-                  <DeleteIcon
-                    className={classes.list_edit__icon}
-                    onClick={() => handleDeleteWork(info.id)}
-                  />
-                </ListItemIcon>
+                {authUser.username == pname ? (
+                  <>
+                    <ListItemIcon>
+                      <EditIcon
+                        onClick={() => {
+                          handleModalOpen();
+                          setmethod("edit");
+                        }}
+                        className={classes.list_edit__icon}
+                      />
+                    </ListItemIcon>
+                    <ListItemIcon>
+                      <DeleteIcon
+                        className={classes.list_edit__icon}
+                        onClick={() => handleDeleteWork(info.id)}
+                      />
+                    </ListItemIcon>
+                  </>
+                ) : (
+                  ""
+                )}
               </ListItem>
             </List>
           )}

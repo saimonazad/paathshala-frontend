@@ -26,6 +26,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import { useRouter } from "next/router";
 import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -151,17 +152,19 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const router = useRouter();
+  const urlParam = router.query;
+  let id = urlParam.slug[0];
   const { className, ...rest } = props;
   const classes = useStyles();
   //course info
-  const classInfoUrl = `/course/info?course_id=${router.query.id}`;
-  const { data: classInfo, error } = useSWR(classInfoUrl, fetcher, {
+  const courseInfoUrl = `/course/info?course_id=${id}`;
+  const { data: courseInfo, error } = useSWR(courseInfoUrl, fetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
     refreshInterval: 0,
   });
   if (error) {
-    return <h6>Error loadinh=g</h6>;
+    return <h6>Error loading</h6>;
   }
   const user = {
     name: "Ashiqur Rahman",
@@ -177,7 +180,7 @@ const Header = (props) => {
   const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus); // if rejected do not show the button
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  if (classInfo) {
+  if (courseInfo) {
     return (
       <div {...rest} className={clsx(classes.root, className)}>
         <Box
@@ -186,7 +189,7 @@ const Header = (props) => {
           alignContent="center"
           justifyContent="center"
         >
-          {classInfo[0].user} | Bangla | Section 1
+          {courseInfo[0].user} | {courseInfo[0].user} | Section 1
         </Box>
         <Box
           className={classes.class__info}
@@ -198,13 +201,18 @@ const Header = (props) => {
             <AccessTimeIcon className={classes.icon} />
             Time
           </Typography>
-          <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
+          <Typography className={classes.time}>
+            {moment(courseInfo[0]?.start_time, "HH:mm").format("hh:mm A")} -{" "}
+            {moment(courseInfo[0]?.end_time, "HH:mm").format("hh:mm A")}
+          </Typography>
           <Divider orientation="vertical" flexItem />
           <Typography className={classes.divider} className={classes.tag}>
             <CalendarTodayIcon className={classes.icon} />
             Date
           </Typography>
-          <Typography className={classes.time}>4:30 PM - 5:30 PM</Typography>
+          <Typography className={classes.time}>
+            {courseInfo[0]?.days}
+          </Typography>
         </Box>
         <div className={classes.container}>
           <div className={classes.details}>
@@ -214,11 +222,8 @@ const Header = (props) => {
               variant="overline"
               className={classes.details__work}
             >
-              The quick, brown fox jumps over a lazy dog. DJs flock by when MTV
-              ax quiz prog. Junk MTV quiz graced by fox whelps. Bawds jog, flick
-              quartz, vex nymphs. Waltz, bad nymph, for quick jigs vex! Fox
-              nymphs grab quick-jived waltz. Brick quiz whangs jumpy veldt fox.
-              Bright vixens jump; dozy fowl quack
+              {courseInfo[0]?.description ||
+                `${courseInfo[0].subject} Class Page`}
             </Typography>
           </div>
         </div>
