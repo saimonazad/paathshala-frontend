@@ -72,7 +72,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 }));
-const Info = ({ title, data }) => {
+const Info = ({ title, data, updateData }) => {
   const router = useRouter();
 
   const { pname } = router.query;
@@ -122,9 +122,10 @@ const Info = ({ title, data }) => {
               isInfoModalOpen={isInfoModalOpen}
               handleModalClose={handleModalClose}
               title={title}
-              data={data}
+              InfoData={data}
               id={selectedItem}
               method={method}
+              updateData={updateData}
             />
           </>
         ) : (
@@ -181,6 +182,7 @@ const Info = ({ title, data }) => {
                         onClick={() => {
                           handleModalOpen();
                           setmethod("edit");
+                          setselectedItem(info.id);
                         }}
                         className={classes.list_edit__icon}
                       />

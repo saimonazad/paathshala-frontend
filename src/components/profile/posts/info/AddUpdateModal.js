@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
@@ -7,8 +7,14 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { useForm } from "react-hook-form";
-import {FormControl,FormLabel,makeStyles} from "@material-ui/core"
-import useSWR from "swr";
+import {
+  FormControl,
+  FormLabel,
+  makeStyles,
+  Grid,
+  Box,
+} from "@material-ui/core";
+import useSWR, { mutate, trigger } from "swr";
 import { fetcher, update } from "../../../../services/fetcher";
 import { httpClient } from "../../../../../authentication/auth-methods/jwt-auth/config";
 const useStyles = makeStyles((theme) => ({
@@ -145,21 +151,32 @@ export default function FormDialog({
   isInfoModalOpen,
   handleModalClose,
   title,
-  data,
+  InfoData,
   id,
   method,
+  updateData,
 }) {
-
-    const classes = useStyles();
-
+  const classes = useStyles();
+  const [render, setrender] = useState(false);
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm();
+
+  const {
+    register: registerWork,
+    handleSubmit: handleSubmitWork,
+    formState: { errors: errorsWork },
+  } = useForm();
+
   const handleFormSubmitBasicInfo = (data) => {
     httpClient.post("/users/profile/", data);
+  };
+
+  const handleFormSubmitWorkInfo = (data) => {
+    httpClient.put(`/users/workinfo/?workinfo_id=${id}`, data);
+    updateData(Math.random());
   };
 
   const basic = (
@@ -192,29 +209,100 @@ export default function FormDialog({
   const workEdit = (
     <>
       <DialogTitle id="form-dialog-title">Work Info</DialogTitle>
-      <form onSubmit={handleSubmit(handleFormSubmitBasicInfo)}>
+      <form onSubmit={handleSubmitWork(handleFormSubmitWorkInfo)}>
         <DialogContent>
           <FormLabel htmlFor="input" className={classes.label}>
-            End Date
+            Position
           </FormLabel>
-          <FormControl
-            variant="filled"
-            className={classes.select}
-            error={errors.gender ? true : false}
-          >
-            <TextField
-              id="date"
-              type="date"
-              className={classes.textField}
-              InputLabelProps={{
-                shrink: false,
-              }}
-              error={errors.end_date ? true : false}
-              {...register("end_date", {
-                required: true,
-              })}
-            />
-          </FormControl>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerWork("position")}
+          />
+          <FormLabel htmlFor="input" className={classes.label}>
+            Department
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerWork("dept")}
+          />
+          <FormLabel htmlFor="input" className={classes.label}>
+            Company
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerWork("company")}
+          />
+          <Box display="flex">
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                Start Date
+              </FormLabel>
+              <FormControl
+                variant="filled"
+                className={classes.select}
+                error={errors.gender ? true : false}
+              >
+                <TextField
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={errors.starting_date ? true : false}
+                  {...registerWork("starting_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+            </Box>
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                End Date
+              </FormLabel>
+              <FormControl
+                variant="filled"
+                className={classes.select}
+                error={errors.gender ? true : false}
+              >
+                <TextField
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={errors.ending_date ? true : false}
+                  {...registerWork("ending_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+            </Box>
+          </Box>
+          <FormLabel htmlFor="input" className={classes.label}>
+            address
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerWork("address")}
+          />
         </DialogContent>
         <DialogActions>
           <Button onClick={handleModalClose} color="primary">
