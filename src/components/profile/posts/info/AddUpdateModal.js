@@ -5,12 +5,16 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
+import MuiDialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import Typography from "@material-ui/core/Typography";
 import { useForm } from "react-hook-form";
 import {
   FormControl,
   FormLabel,
   makeStyles,
+  withStyles,
   Grid,
   Box,
 } from "@material-ui/core";
@@ -30,7 +34,15 @@ const useStyles = makeStyles((theme) => ({
       width: 600,
     },
   },
-
+  date: {
+    [theme.breakpoints.down("xs")]: {
+      flexDirection: "column",
+      width: "100%",
+      "& .MuiFormControl-root": {
+        width: "100%",
+      },
+    },
+  },
   submit: {
     margin: theme.spacing(1, 0, 2),
     padding: theme.spacing(1.5, 3),
@@ -72,6 +84,7 @@ const useStyles = makeStyles((theme) => ({
   label: {
     display: "block",
     fontSize: 12,
+    marginTop: 15,
     [theme.breakpoints.up("sm")]: {
       fontSize: 16,
     },
@@ -147,6 +160,37 @@ const useStyles = makeStyles((theme) => ({
   },
   time: {},
 }));
+const dialogTitleStyle = (theme) => ({
+  root: {
+    margin: 0,
+    padding: theme.spacing(2),
+  },
+  closeButton: {
+    position: "absolute",
+    right: theme.spacing(1),
+    top: theme.spacing(1),
+    color: theme.palette.grey[500],
+  },
+});
+//custom dialog title
+const DialogTitle = withStyles(dialogTitleStyle)((props) => {
+  const { children, classes, onClose, ...other } = props;
+  return (
+    <MuiDialogTitle disableTypography className={classes.root} {...other}>
+      <Typography variant="h6">{children}</Typography>
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          className={classes.closeButton}
+          onClick={onClose}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </MuiDialogTitle>
+  );
+});
+//main func
 export default function FormDialog({
   isInfoModalOpen,
   handleModalClose,
@@ -168,6 +212,7 @@ export default function FormDialog({
     register: registerWork,
     handleSubmit: handleSubmitWork,
     formState: { errors: errorsWork },
+    reset: resetWork,
   } = useForm();
 
   const handleFormSubmitBasicInfo = (data) => {
@@ -177,11 +222,13 @@ export default function FormDialog({
   const handleFormSubmitWorkInfo = (data) => {
     httpClient.put(`/users/workinfo/?workinfo_id=${id}`, data);
     updateData(Math.random());
+    resetWork();
   };
-
   const basic = (
     <>
-      <DialogTitle id="form-dialog-title">Basic Info</DialogTitle>
+      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
+        Modal title
+      </DialogTitle>
       <form onSubmit={handleSubmit(handleFormSubmitBasicInfo)}>
         <DialogContent>
           {/* <DialogContentText>{title}</DialogContentText> */}
@@ -208,13 +255,16 @@ export default function FormDialog({
   );
   const workEdit = (
     <>
-      <DialogTitle id="form-dialog-title">Work Info</DialogTitle>
+      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
+        Work Info
+      </DialogTitle>
       <form onSubmit={handleSubmitWork(handleFormSubmitWorkInfo)}>
         <DialogContent>
           <FormLabel htmlFor="input" className={classes.label}>
             Position
           </FormLabel>
           <TextField
+            value={InfoData ? InfoData[id]?.position : "a"}
             autoFocus
             margin="dense"
             id="name"
@@ -244,7 +294,11 @@ export default function FormDialog({
             fullWidth
             {...registerWork("company")}
           />
-          <Box display="flex">
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            className={classes.date}
+          >
             <Box>
               <FormLabel htmlFor="input" className={classes.label}>
                 Start Date
@@ -319,7 +373,7 @@ export default function FormDialog({
     <div>
       <Dialog
         fullWidth={true}
-        maxWidth={"sm"}
+        maxWidth={"xs"}
         open={isInfoModalOpen}
         onClose={handleModalClose}
         aria-labelledby="form-dialog-title"

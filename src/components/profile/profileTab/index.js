@@ -91,10 +91,10 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
   const [authUername, setauthUername] = useState("");
   useEffect(() => {
     setauthUername(authUser.username);
-  }, [authUser]);
+  }, [authUser.username]);
   return (
     <Box display="flex" justifyContent="space-between">
-      {authUername == authUser.username && (
+      {authUername == user.username && (
         <>
           <Hidden xsDown>
             <Tabs
