@@ -240,9 +240,11 @@ export default function SearchAppBar() {
           }}
           className={classes.nav__right}
         >
-          <IconButton color="secondary" className={classes.appbar_rightIcon}>
-            <SearchIcon />
-          </IconButton>
+          <Hidden smUp>
+            <IconButton color="secondary" className={classes.appbar_rightIcon}>
+              <SearchIcon />
+            </IconButton>
+          </Hidden>
           <IconButton
             onClick={() => setOpen(!open)}
             color="secondary"
