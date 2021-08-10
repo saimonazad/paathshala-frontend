@@ -142,11 +142,11 @@ export default function SearchAppBar() {
 
   const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
+  const handleMenuModal = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const handleMenuModalClose = () => {
     setAnchorEl(null);
   };
 
@@ -255,18 +255,19 @@ export default function SearchAppBar() {
             handleModal={handleModal}
             formSubmissionCheck={formSubmissionCheck}
           />
-          <Hidden xsDown>
-            <Link href="/cart">
-              <IconButton
-                color="secondary"
-                className={classes.appbar_rightIcon}
-              >
-                <Badge badgeContent={totalUniqueItems} color="primary">
-                  <ShoppingCartIcon />
-                </Badge>
-              </IconButton>
-            </Link>
+          <Link href="/cart">
             <IconButton color="secondary" className={classes.appbar_rightIcon}>
+              <Badge badgeContent={totalUniqueItems} color="primary">
+                <ShoppingCartIcon />
+              </Badge>
+            </IconButton>
+          </Link>
+          <Hidden xsDown>
+            <IconButton
+              color="secondary"
+              className={classes.appbar_rightIcon}
+              onClick={handleMenuModal}
+            >
               <MenuIcon />
             </IconButton>
           </Hidden>
@@ -276,11 +277,12 @@ export default function SearchAppBar() {
             flexItem
             className={classes.divider}
           />
+
           <Button
             aria-controls="simple-menu"
             aria-haspopup="true"
-            onClick={handleClick}
             style={{ textTransform: "none" }}
+            href={"/u/" + authUser}
           >
             <Avatar className={classes.avatar} alt="Remy Sharp" src=""></Avatar>
             <Hidden smDown>
@@ -300,13 +302,8 @@ export default function SearchAppBar() {
               anchorEl={anchorEl}
               keepMounted
               open={Boolean(anchorEl)}
-              onClose={handleClose}
+              onClose={handleMenuModalClose}
             >
-              <Link
-                href={"/u/" + JSON.parse(localStorage.getItem("user")).username}
-              >
-                <MenuItem>Profile</MenuItem>
-              </Link>
               <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
             </Menu>
           )}
