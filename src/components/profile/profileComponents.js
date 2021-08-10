@@ -21,7 +21,7 @@ const Profile = (props) => {
 
   async function fetchFollowersLists() {
     await httpClient
-      .get(`${process.env.BACKEND_URL}/users/follow/?user=${authUser.username}`)
+      .get(`${process.env.BACKEND_URL}/users/follow/?user=${authUser}`)
       .then((res) => {
         console.log(res.data);
         setFollowersList(res.data);
@@ -43,7 +43,7 @@ const Profile = (props) => {
         user={props.userDetails}
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
-      {authUser.username == props.userDetails.username && (
+      {authUser == props.userDetails.username && (
         <>
           {activeTab == "classes" && <Classes />}
           {activeTab == "about" && <About />}

@@ -112,7 +112,7 @@ export const useProvideAuth = () => {
     if (token) {
       httpClient.defaults.headers.common["Authorization"] = "token " + token;
       setLoadingAuthUser(false);
-      setAuthUser(JSON.parse(localStorage.getItem("user")));
+      setAuthUser(JSON.parse(localStorage.getItem("user")).username);
     } else {
       localStorage.removeItem("token");
       httpClient.defaults.headers.common["Authorization"] = "";

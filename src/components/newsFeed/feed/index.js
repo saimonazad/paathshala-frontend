@@ -234,7 +234,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
                     </Typography>
                   </Box>
                 </Box>
-                {authUser.username == feed.user && (
+                {authUser == feed.user && (
                   <Box>
                     <IconButton
                       value={feed.id}

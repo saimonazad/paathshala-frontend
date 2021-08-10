@@ -60,7 +60,7 @@ const PostCard = ({ feed }) => {
     };
     mutate(
       "/newsfeed/follower/",
-      [[{ ...feedData, user: authUser.username }], ...feed],
+      [[{ ...feedData, user: authUser }], ...feed],
       false
     );
     httpClient

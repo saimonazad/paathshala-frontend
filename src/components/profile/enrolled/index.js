@@ -66,7 +66,7 @@ const Enrolled = () => {
   const { authUser } = useAuth();
 
   const { data: enrollInfo, error } = useSWR(
-    `/course/enrollmentCheck/?username=${authUser.username}&type=all`,
+    `/course/enrollmentCheck/?username=${authUser}&type=all`,
     fetcher
   );
 

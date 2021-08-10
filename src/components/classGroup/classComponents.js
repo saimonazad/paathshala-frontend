@@ -22,7 +22,7 @@ const ClassComponents = (props) => {
         user={props.userDetails}
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
-      {authUser.username == props.userDetails.username && (
+      {authUser == props.userDetails.username && (
         <>{activeTab == "about" && <About />}</>
       )}
     </>

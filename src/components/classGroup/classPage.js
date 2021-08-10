@@ -22,7 +22,7 @@ const ClassPage = () => {
   function enrollmentCheck() {
     httpClient
       .get(
-        `/course/enrollmentCheck/?type=course&username=${authUser.username}&course_id=${id}`
+        `/course/enrollmentCheck/?type=course&username=${authUser}&course_id=${id}`
       )
       .then((res) => {
         setenrollmentInfo(res.data);

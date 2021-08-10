@@ -55,8 +55,8 @@ const Posts = ({ user }) => {
         <Info data={academicInfo} title="Academic Profile" />
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>
-        {authUser.username === user.username ? <Following /> : ""}
-        {authUser.username === user.username ? <PostCard /> : ""}
+        {authUser === user.username ? <Following /> : ""}
+        {authUser === user.username ? <PostCard /> : ""}
         <Feeds />
       </Grid>
     </Grid>

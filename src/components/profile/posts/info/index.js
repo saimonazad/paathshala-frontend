@@ -107,7 +107,7 @@ const Info = ({ title, data, updateData }) => {
         <Typography variant="h5" component="h2">
           {title}
         </Typography>
-        {authUser.username == pname ? (
+        {authUser == pname ? (
           <>
             <Button
               variant="primary"
@@ -175,7 +175,7 @@ const Info = ({ title, data, updateData }) => {
                   <p>{info.dept}</p>
                   <p>{info.company}</p>
                 </ListItemText>
-                {authUser.username == pname ? (
+                {authUser == pname ? (
                   <>
                     <ListItemIcon>
                       <EditIcon
