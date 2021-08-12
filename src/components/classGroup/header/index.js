@@ -27,6 +27,7 @@ import { useRouter } from "next/router";
 import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
 import moment from "moment";
+import { useAuth } from "../../../../authentication";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -152,35 +153,21 @@ const useStyles = makeStyles((theme) => ({
 
 const Header = (props) => {
   const router = useRouter();
+  const { authUser } = useAuth();
   const urlParam = router.query;
   let id = urlParam.slug[0];
   const { className, ...rest } = props;
   const classes = useStyles();
   //course info
-  const courseInfoUrl = `/course/info?course_id=${id}`;
-  const { data: courseInfo, error } = useSWR(courseInfoUrl, fetcher, {
-    revalidateOnFocus: false,
-    shouldRetryOnError: false,
-    refreshInterval: 0,
-  });
-  if (error) {
+
+  if (props.error) {
     return <h6>Error loading</h6>;
   }
-  const user = {
-    name: "Ashiqur Rahman",
-    bio: "Lecturer | Bangla",
-    work: "Dhaka Commerce College",
-    avatar:
-      "https://img.favpng.com/18/18/18/computer-icons-icon-design-avatar-png-favpng-X29r5WhWMXVYvNsYXkR4iBgwf.jpg",
-    cover:
-      "https://static-cse.canva.com/blob/129490/steve-roe-734236-unsplash.64603fa0.jpg",
-    connectedStatus: "not_connected",
-  };
 
-  const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus); // if rejected do not show the button
-  const [openSnackbar, setOpenSnackbar] = useState(false);
+  // const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus); // if rejected do not show the button
+  // const [openSnackbar, setOpenSnackbar] = useState(false);
 
-  if (courseInfo) {
+  if (props.courseInfo) {
     return (
       <div {...rest} className={clsx(classes.root, className)}>
         <Box
@@ -189,8 +176,8 @@ const Header = (props) => {
           alignContent="center"
           justifyContent="center"
         >
-          <User username={courseInfo[0]?.user} /> | {courseInfo[0]?.coursename}{" "}
-          | {courseInfo[0]?.subject}{" "}
+          {props.courseInfo[0]?.user} | {props.courseInfo[0]?.coursename} |{" "}
+          {props.courseInfo[0]?.subject}{" "}
         </Box>
         <Box
           className={classes.class__info}
@@ -203,8 +190,8 @@ const Header = (props) => {
             Time
           </Typography>
           <Typography className={classes.time}>
-            {moment(courseInfo[0]?.start_time, "HH:mm").format("hh:mm A")} -{" "}
-            {moment(courseInfo[0]?.end_time, "HH:mm").format("hh:mm A")}
+            {moment(props.courseInfo[0]?.start_time, "HH:mm").format("hh:mm A")}{" "}
+            - {moment(props.courseInfo[0]?.end_time, "HH:mm").format("hh:mm A")}
           </Typography>
           <Divider orientation="vertical" flexItem />
           <Typography className={classes.divider} className={classes.tag}>
@@ -212,7 +199,7 @@ const Header = (props) => {
             Date
           </Typography>
           <Typography className={classes.time}>
-            {courseInfo[0]?.days}
+            {props.courseInfo[0]?.days}
           </Typography>
         </Box>
         <div className={classes.container}>
@@ -223,8 +210,8 @@ const Header = (props) => {
               variant="overline"
               className={classes.details__work}
             >
-              {courseInfo[0]?.description ||
-                `${courseInfo[0].subject} Class Page`}
+              {props.courseInfo[0]?.description ||
+                `${props.courseInfo[0].subject} Class Page`}
             </Typography>
           </div>
         </div>

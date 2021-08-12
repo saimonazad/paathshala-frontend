@@ -1,18 +1,35 @@
 import React, { useState, useEffect } from "react";
 import Header from "./header";
 import Posts from "./posts";
-import About from "./about";
-
+import Students from "./students";
 import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 import { useAuth } from "../../../authentication";
-
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import { fetcher } from "../../services/fetcher";
 const ClassComponents = (props) => {
   const { authUser } = useAuth();
+  //get course id
+  const router = useRouter();
+  const urlParam = router.query;
+  let id = urlParam.slug[0];
+  //tab state
   const [activeTab, setActiveTab] = useState("posts");
-
+  //handle tab change
   function handleTabChange(newValue) {
     setActiveTab(newValue);
   }
+  //get course student
+  const { data: students } = useSWR(
+    `/course/controller?course_id=${id}`,
+    fetcher
+  );
+  const courseInfoUrl = `/course/info?course_id=${id}`;
+  const { data: courseInfo, error } = useSWR(courseInfoUrl, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+    refreshInterval: 0,
+  });
 
   return (
     <>
@@ -20,10 +37,12 @@ const ClassComponents = (props) => {
         tabvalue={activeTab}
         changetab={handleTabChange}
         user={props.userDetails}
+        courseInfo={courseInfo}
+        error={error}
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
-      {authUser == props.userDetails.username && (
-        <>{activeTab == "about" && <About />}</>
+      {activeTab == "students" && (
+        <Students data={students} courseInfo={courseInfo} />
       )}
     </>
   );

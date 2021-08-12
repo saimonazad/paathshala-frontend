@@ -24,7 +24,8 @@ import { useAuth } from "../../../authentication";
 import { useRouter } from "next/router";
 import CreateClass from "../../components/profile/classes/createClass";
 import { useCart } from "react-use-cart";
-
+import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
+import Router from "next/router";
 const useStyles = makeStyles((theme) => ({
   empty: {},
   active: {
@@ -165,6 +166,22 @@ export default function SearchAppBar() {
   function formSubmissionCheck(newValue) {
     setIsFormSUbmitted(newValue);
   }
+
+  //search users
+  const [searchTerm, setsearchTerm] = useState("");
+  function changeSearchTerm(e) {
+    setsearchTerm(e.target.value);
+    console.log(searchTerm);
+  }
+  function handleSearchUsers(e) {
+    e.preventDefault();
+    Router.push({
+      pathname: "/search",
+      query: { q: searchTerm },
+    });
+    setsearchTerm("");
+  }
+
   return (
     <AppBar position="static" className={classes.root} component="nav">
       <Toolbar className={classes.toolbar}>
@@ -181,19 +198,23 @@ export default function SearchAppBar() {
             </Typography>
           </Link>
           <Hidden xsDown>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
+            <form onSubmit={(e) => handleSearchUsers(e)}>
+              <div className={classes.search}>
+                <div className={classes.searchIcon}>
+                  <SearchIcon />
+                </div>
+                <InputBase
+                  value={searchTerm}
+                  onChange={(e) => changeSearchTerm(e)}
+                  placeholder="Search…"
+                  classes={{
+                    root: classes.inputRoot,
+                    input: classes.inputInput,
+                  }}
+                  inputProps={{ "aria-label": "search" }}
+                />
               </div>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                inputProps={{ "aria-label": "search" }}
-              />
-            </div>
+            </form>
           </Hidden>
         </Box>
         <Hidden smDown>

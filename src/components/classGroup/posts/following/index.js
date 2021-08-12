@@ -57,7 +57,7 @@ const Following = () => {
   const theme = useTheme();
 
   const classes = useStyles();
-  const { data, error } = useSWR(`/course/controller?course_id=2`, fetcher);
+  const { data, error } = useSWR(`/course/controller?course_id=1`, fetcher);
   let students = data?.students;
 
   const moreItemsTooltip = (data) => (
