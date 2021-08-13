@@ -289,7 +289,7 @@ export default function SignUp() {
                     )}
                 </Grid>
 
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Email Address
                   </FormLabel>
@@ -311,7 +311,7 @@ export default function SignUp() {
                   {errors.email && errors.email.type === "required" && (
                     <p>Email is required</p>
                   )}
-                </Grid>
+                </Grid> */}
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Username
@@ -371,7 +371,7 @@ export default function SignUp() {
                   />
                   {errors.phoneNo && <p>{errors.phoneNo.message}</p>}
                 </Grid>
-                <Grid item xs={6} className={classes.select}>
+                {/* <Grid item xs={6} className={classes.select}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Gender
                   </FormLabel>
@@ -396,28 +396,7 @@ export default function SignUp() {
                   {errors.gender && errors.gender.type === "required" && (
                     <p>Gender is required</p>
                   )}
-                  {/* <FormLabel htmlFor="input" className={classes.label}>
-                    Gender
-                  </FormLabel>
-                  <TextField
-                    className={classes.textField}
-                    color="secondary"
-                    placeholder="Type here..."
-                    autoComplete="gender"
-                    variant="outlined"
-                    fullWidth
-                    id="gender"
-                    autoFocus
-                    error={errors.gender ? true : false}
-                    {...register("gender", {
-                      required: true,
-                      maxLength: 30,
-                    })}
-                  />
-                  {errors.gender && errors.gender.type === "required" && (
-                    <p>Gender is required</p>
-                  )} */}
-                </Grid>
+                </Grid> */}
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Password
@@ -469,7 +448,7 @@ export default function SignUp() {
                     <p>{errors.password_repeat.message}</p>
                   )}
                 </Grid>
-                <Grid item xs={6}>
+                {/* <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Referral Code
                   </FormLabel>
@@ -483,7 +462,7 @@ export default function SignUp() {
                     id="referral_code"
                     autoFocus
                   />
-                </Grid>
+                </Grid> */}
                 <Grid item xs={12} className={classes.tos}>
                   <FormControlLabel
                     control={
