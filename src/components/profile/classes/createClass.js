@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
+import Dialog from "@material-ui/core/Dialog";
+import DialogContent from "@material-ui/core/DialogContent";
+
 import {
   Grid,
   FormLabel,
@@ -17,38 +19,15 @@ import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { faWindowClose } from "@fortawesome/fontawesome-free-solid";
-
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  fetchError,
-  fetchStart,
-  fetchSuccess,
-} from "../../../redux/actions/Common";
 import { createCourse } from "../../../redux/actions/courseActions";
-
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "relative",
-    width: "100%",
-    overflow: "auto",
     backgroundColor: theme.palette.background.paper,
     border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: theme.spacing(2, 1, 3),
-    [theme.breakpoints.up("md")]: {
-      width: 600,
-    },
   },
 
   submit: {
@@ -188,8 +167,6 @@ export default function CreateClass({
   const handleDays = (event, newDays) => {
     setDays(newDays);
   };
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [modalStyle] = useState(getModalStyle);
 
   const handleOpen = () => {
     handleModal(true);
@@ -208,7 +185,7 @@ export default function CreateClass({
   };
 
   const body = (
-    <div style={modalStyle} className={classes.paper}>
+    <div>
       <Box display="flex" justifyContent="space-between">
         <Typography variant="h6">Create Class</Typography>
         <FontAwesomeIcon
@@ -506,14 +483,23 @@ export default function CreateClass({
 
   return (
     <div>
-      <Modal
+      {/* <Modal
         open={isOpen}
         onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
         {body}
-      </Modal>
+      </Modal> */}
+      <Dialog
+        fullWidth={true}
+        maxWidth={"sm"}
+        open={isOpen}
+        onClose={handleClose}
+        aria-labelledby="form-dialog-title"
+      >
+        <DialogContent className={classes.paper}>{body}</DialogContent>
+      </Dialog>
     </div>
   );
 }
