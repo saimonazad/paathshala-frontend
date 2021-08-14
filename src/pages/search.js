@@ -14,9 +14,13 @@ import theme from "../utils/theme";
 import Link from "next/Link";
 const useStyles = makeStyles((theme) => ({
   card: {
+    cursor: "pointer",
     "& .Cmt-media-header .MuiTypography-h2": {
       fontSize: 20,
       fontWeight: 500,
+    },
+    "& .Cmt-media-image": {
+      marginTop: 0,
     },
   },
 }));
@@ -43,7 +47,7 @@ const Search = () => {
           <CmtCard className={classes.card}>
             <CmtCardContent>
               <CmtMediaObject
-                avatar={item.logo}
+                avatar={item.picture}
                 title={item.first_name + " " + item.last_name}
                 titleProps={{ className: "pointer titleRoot" }}
                 actionsComponent={
@@ -83,7 +87,7 @@ const Search = () => {
         onEndReached={() => console.log("You have reached end of list")}
         ListEmptyComponent={
           <GridEmptyResult
-            loader={false}
+            loader={results ? false : true}
             title="No Result Found"
             content="Please type in search field and try!"
           />
