@@ -42,6 +42,9 @@ import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/con
 import { useAuth } from "../../../../authentication";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import UserDetails from "./userDetails";
+var linkify = require("linkify-it")();
+import { LinkPreview } from "@dhaiwat10/react-link-preview";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     "& > *": {
@@ -310,7 +313,15 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 </form>
               ) : (
                 <Typography className={classes.status}>
-                  {feed.post_text}
+                  {console.log(linkify.match("Site github.com! azad.com"))}
+                  {linkify.match(feed.post_text) ? (
+                    <LinkPreview
+                      url={linkify.match(feed.post_text)[0].url}
+                      width="100%"
+                    />
+                  ) : (
+                    feed.post_text
+                  )}
                 </Typography>
               )}
 

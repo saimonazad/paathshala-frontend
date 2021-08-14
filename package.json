@@ -9,6 +9,7 @@
     "export": "next export"
   },
   "dependencies": {
+    "@dhaiwat10/react-link-preview": "^1.7.2",
     "@fortawesome/fontawesome-free-solid": "^5.0.13",
     "@fortawesome/fontawesome-svg-core": "^1.2.35",
     "@fortawesome/free-brands-svg-icons": "^5.15.3",
@@ -22,6 +23,7 @@
     "axios-mock-adapter": "^1.19.0",
     "font-awesome": "^4.7.0",
     "js-cookie": "^2.2.1",
+    "linkify-it": "^3.0.2",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
     "next": "^11.0.0",
