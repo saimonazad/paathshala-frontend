@@ -313,7 +313,6 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 </form>
               ) : (
                 <Typography className={classes.status}>
-                  {console.log(linkify.match("Site github.com! azad.com"))}
                   {linkify.match(feed.post_text) ? (
                     <LinkPreview
                       url={linkify.match(feed.post_text)[0].url}

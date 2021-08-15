@@ -20,6 +20,8 @@ import { useRouter } from "next/router";
 import { addition } from "../../../services/fetcher";
 import { useAuth } from "../../../../authentication";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+import CreatePost from "../post/createPost";
+import { useDropzone } from "react-dropzone";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -52,6 +54,10 @@ const PostCard = ({ feed }) => {
   //newsfeed post handler
   const submitHandler = (e) => {
     e.preventDefault();
+
+    if (attachments.length > 0) {
+      console.log(attachments);
+    }
     //feed data to post
     const feedData = {
       post_text: postText,
@@ -65,21 +71,62 @@ const PostCard = ({ feed }) => {
     );
     httpClient
       .post(`/newsfeed/post/`, feedData)
-      .then((res) => trigger("/newsfeed/follower/"))
+      .then((res) => {
+        trigger("/newsfeed/follower/");
+        // httpClient
+        //   .post(`/newsfeed/media/`, {
+        //     post: 3,
+        //     file: attachments[0],
+        //   })
+        //   .then((res) => trigger("/newsfeed/follower/"));
+      })
       .catch((e) => console.log(e));
     setPostText("");
   };
+  //image attachments
+
+  const [attachments, setAttachments] = useState([]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    accept: "image/*, .pdf",
+    multiple: true,
+    onDrop: (acceptedFiles) => {
+      // const files = acceptedFiles.map((file) => {
+      //   return {
+      //     id: Math.floor(Math.random() * 10000),
+      //     path: file.path,
+      //     metaData: { type: file.type, size: file.size },
+      //     preview: URL.createObjectURL(file),
+      //     file: file,
+      //   };
+      // });
+      setAttachments(acceptedFiles);
+    },
+  });
+
+  const onAddAttachments = (files) => {
+    setAttachments([...attachments, ...files]);
+  };
   return (
-    <Box
-      boxShadow={2}
-      borderRadius={4}
-      bgcolor="background.box"
-      className={classes.root}
-    >
-      <Post submit={submitHandler} setText={postTextHandler} post={postText} />
-      <Divider className={classes.divider} />
-      <PostMediaUpload />
-    </Box>
+    // <Box
+    //   boxShadow={2}
+    //   borderRadius={4}
+    //   bgcolor="background.box"
+    //   className={classes.root}
+    // >
+    //   <Post submit={submitHandler} setText={postTextHandler} post={postText} />
+    //   <CreatePost />
+    //   <Divider className={classes.divider} />
+    //   <PostMediaUpload />
+    // </Box>
+    <CreatePost
+      submit={submitHandler}
+      setText={postTextHandler}
+      post={postText}
+      attachments={attachments}
+      getRootProps={getRootProps}
+      getInputProps={getInputProps}
+    />
   );
 };
 
