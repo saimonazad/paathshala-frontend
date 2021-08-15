@@ -289,7 +289,7 @@ export default function SignUp() {
                     )}
                 </Grid>
 
-                {/* <Grid item xs={6}>
+                <Grid item xs={12}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Email Address
                   </FormLabel>
@@ -311,7 +311,7 @@ export default function SignUp() {
                   {errors.email && errors.email.type === "required" && (
                     <p>Email is required</p>
                   )}
-                </Grid> */}
+                </Grid>
                 <Grid item xs={6}>
                   <FormLabel htmlFor="input" className={classes.label}>
                     Username

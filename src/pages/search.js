@@ -11,7 +11,7 @@ import CmtMediaObject from "../../@coremat/CmtMediaObject";
 import { Box, Typography } from "@material-ui/core";
 import { ThemeProvider, useTheme, makeStyles } from "@material-ui/styles";
 import theme from "../utils/theme";
-import Link from "next/Link";
+import Link from "next/link";
 const useStyles = makeStyles((theme) => ({
   card: {
     cursor: "pointer",
