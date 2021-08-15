@@ -10,7 +10,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import CmtList from "../../../../@coremat/CmtList";
 import CameraEnhanceIcon from "@material-ui/icons/CameraEnhance";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
-
+import CancelIcon from "@material-ui/icons/Cancel";
 const useStyles = makeStyles(() => ({
   textFieldRoot: {
     "& .MuiInput-underline": {
@@ -37,6 +37,7 @@ const CreatePost = ({
   attachments,
   getRootProps,
   getInputProps,
+  setAttachments,
 }) => {
   const classes = useStyles();
 
@@ -68,10 +69,20 @@ const CreatePost = ({
                 data={attachments}
                 style={{ display: "flex", flexWrap: "wrap" }}
                 renderRow={(item, index) => (
-                  <Box p={1} key={index}>
+                  <Box p={1} key={index} style={{ position: "relative" }}>
                     <CmtImage
                       className={classes.gridThumb}
                       src={item.preview}
+                    />
+                    <CancelIcon
+                      onClick={() => setAttachments([])}
+                      color="text.primary"
+                      style={{
+                        position: "absolute",
+                        right: -8,
+                        top: -8,
+                        cursor: "pointer",
+                      }}
                     />
                   </Box>
                 )}
@@ -87,7 +98,10 @@ const CreatePost = ({
                 fontSize={12}
                 className="pointer"
               >
-                <input {...getInputProps()} />
+                <input
+                  {...getInputProps()}
+                  disabled={attachments.length != 0}
+                />
                 <CameraEnhanceIcon className={classes.iconSm} />{" "}
                 <Box ml={3}>Add photo video</Box>
               </Box>
@@ -96,7 +110,7 @@ const CreatePost = ({
                   size="small"
                   color="primary"
                   variant="contained"
-                  disabled={!post.trim() && attachments.length === 0}
+                  disabled={!post.trim()}
                   type="submit"
                 >
                   Post

@@ -72,35 +72,38 @@ const PostCard = ({ feed }) => {
     httpClient
       .post(`/newsfeed/post/`, feedData)
       .then((res) => {
+        if (attachments.length > 0) {
+          const formData = new FormData();
+          formData.append("post", res.data.id);
+          formData.append("file", attachments[0].file);
+          httpClient
+            .post(`/newsfeed/media/`, formData)
+            .then((res) => trigger("/newsfeed/follower/"));
+        }
         trigger("/newsfeed/follower/");
-        // httpClient
-        //   .post(`/newsfeed/media/`, {
-        //     post: 3,
-        //     file: attachments[0],
-        //   })
-        //   .then((res) => trigger("/newsfeed/follower/"));
       })
       .catch((e) => console.log(e));
     setPostText("");
+    setAttachments([]);
   };
   //image attachments
 
   const [attachments, setAttachments] = useState([]);
 
   const { getRootProps, getInputProps } = useDropzone({
-    accept: "image/*, .pdf",
-    multiple: true,
+    accept: "image/*",
+    multiple: false,
     onDrop: (acceptedFiles) => {
-      // const files = acceptedFiles.map((file) => {
-      //   return {
-      //     id: Math.floor(Math.random() * 10000),
-      //     path: file.path,
-      //     metaData: { type: file.type, size: file.size },
-      //     preview: URL.createObjectURL(file),
-      //     file: file,
-      //   };
-      // });
-      setAttachments(acceptedFiles);
+      const files = acceptedFiles.map((file) => {
+        return {
+          id: Math.floor(Math.random() * 10000),
+          path: file.path,
+          metaData: { type: file.type, size: file.size },
+          preview: URL.createObjectURL(file),
+          file: file,
+        };
+      });
+      onAddAttachments(files);
     },
   });
 
@@ -126,6 +129,7 @@ const PostCard = ({ feed }) => {
       attachments={attachments}
       getRootProps={getRootProps}
       getInputProps={getInputProps}
+      setAttachments={setAttachments}
     />
   );
 };
