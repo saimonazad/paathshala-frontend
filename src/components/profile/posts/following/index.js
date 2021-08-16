@@ -2,6 +2,7 @@ import React from "react";
 import { Avatar, Box, makeStyles, Typography } from "@material-ui/core";
 import CmtAvatarGroup from "../../../../../@coremat/CmtAvatarGroup";
 import CmtAvatar from "../../../../../@coremat/CmtAvatar";
+import CmtList from "../../../../../@coremat/CmtList";
 
 import useSWR from "swr";
 import { fetcher } from "../../../../services/fetcher";
