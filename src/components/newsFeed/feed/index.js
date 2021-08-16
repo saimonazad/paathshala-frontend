@@ -41,6 +41,7 @@ import PageLoader from "../../../../@jumbo/components/PageComponents/PageLoader"
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 import { useAuth } from "../../../../authentication";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import Linkify from "react-linkify";
 import UserDetails from "./userDetails";
 var linkify = require("linkify-it")();
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
@@ -313,13 +314,12 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 </form>
               ) : (
                 <Typography className={classes.status}>
-                  {linkify.match(feed.post_text) ? (
+                  <Linkify>{feed.post_text}</Linkify>,
+                  {linkify.match(feed.post_text) && (
                     <LinkPreview
                       url={linkify.match(feed.post_text)[0].url}
                       width="100%"
                     />
-                  ) : (
-                    feed.post_text
                   )}
                 </Typography>
               )}
