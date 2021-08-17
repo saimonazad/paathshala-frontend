@@ -149,6 +149,21 @@ const Info = ({ title, data, updateData }) => {
                 <ListItemText>
                   Lives in: <span>{info.lives_in_char}</span>
                 </ListItemText>
+                {authUser == pname ? (
+                  <>
+                    <ListItemIcon>
+                      <EditIcon
+                        onClick={() => {
+                          handleModalOpen();
+                          setmethod("edit");
+                        }}
+                        className={classes.list_edit__icon}
+                      />
+                    </ListItemIcon>
+                  </>
+                ) : (
+                  ""
+                )}
               </ListItem>
             </List>
           )}

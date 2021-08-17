@@ -9,7 +9,10 @@ import MuiDialogTitle from "@material-ui/core/DialogTitle";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 import Typography from "@material-ui/core/Typography";
+import NativeSelect from "@material-ui/core/NativeSelect";
 import { useForm, Controller } from "react-hook-form";
+import { NotificationLoader } from "../../../../../@jumbo/components/ContentLoader";
+
 import {
   FormControl,
   FormLabel,
@@ -200,45 +203,12 @@ export default function FormDialog({
   updateData,
 }) {
   const classes = useStyles();
-  const [render, setrender] = useState(false);
+  const [error, seterror] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
-
-  const handleFormSubmitBasicInfo = (data) => {
-    httpClient.post("/users/profile/", data);
-  };
-  const basic = (
-    <>
-      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
-        Modal title
-      </DialogTitle>
-      <form onSubmit={handleSubmit(handleFormSubmitBasicInfo)}>
-        <DialogContent>
-          {/* <DialogContentText>{title}</DialogContentText> */}
-          <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Lives In"
-            type="text"
-            fullWidth
-            {...register("lives_in_char")}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleModalClose} color="primary">
-            Cancel
-          </Button>
-          <Button type="submit" color="primary">
-            Save
-          </Button>
-        </DialogActions>
-      </form>
-    </>
-  );
 
   return (
     <div>
@@ -249,7 +219,24 @@ export default function FormDialog({
         onClose={handleModalClose}
         aria-labelledby="form-dialog-title"
       >
-        {title == "Basic Info" && basic}
+        {title == "Basic Info" && method == "add" && (
+          <ProfileAddUpdate
+            handleModalClose={handleModalClose}
+            method={method}
+            InfoData={InfoData}
+            updateData={updateData}
+            seterror={seterror}
+          />
+        )}
+        {title == "Basic Info" && method == "edit" && (
+          <ProfileAddUpdate
+            handleModalClose={handleModalClose}
+            method={method}
+            InfoData={InfoData}
+            updateData={updateData}
+            seterror={seterror}
+          />
+        )}
         {title == "Work Info" && method == "edit" && (
           <WorkAddUpdate
             handleModalClose={handleModalClose}
@@ -257,6 +244,7 @@ export default function FormDialog({
             InfoData={InfoData}
             id={id}
             updateData={updateData}
+            seterror={seterror}
           />
         )}
         {title == "Work Info" && method == "add" && (
@@ -266,9 +254,11 @@ export default function FormDialog({
             InfoData={InfoData}
             id={id}
             updateData={updateData}
+            seterror={seterror}
           />
         )}
       </Dialog>
+      <NotificationLoader error={error} />
     </div>
   );
 }
@@ -292,13 +282,17 @@ const WorkAddUpdate = ({
 
   //update handler func
   const handleFormEditWorkInfo = (data) => {
-    httpClient.put(`/users/workinfo/?workinfo_id=${id}`, data);
+    httpClient
+      .put(`/users/workinfo/?workinfo_id=${id}`, data)
+      .catch((error) => seterror("Something went wrong!"));
     updateData(Math.random());
     resetWork();
   };
   //add handler func
   const handleFormAddWorkInfo = (data) => {
-    httpClient.post(`/users/workinfo/`, data);
+    httpClient
+      .post(`/users/workinfo/`, data)
+      .catch((error) => seterror("Something went wrong!"));
     updateData(Math.random());
     resetWork();
   };
@@ -460,6 +454,161 @@ const WorkAddUpdate = ({
           />
           {errors.address && errors.address.type === "required" && (
             <p className={classes.errorText}>Address is required</p>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    </>
+  );
+};
+
+const ProfileAddUpdate = ({
+  handleModalClose,
+  updateData,
+  InfoData,
+  method,
+  seterror,
+}) => {
+  // let formValues = InfoData?.filter((p) => p.id == id);
+  const {
+    register: registerWork,
+    handleSubmit: handleSubmitWork,
+    formState: { errors },
+    reset: resetWork,
+    control,
+  } = useForm();
+  const classes = useStyles();
+
+  //update handler func
+  const handleFormEditProfileInfo = (data) => {
+    httpClient
+      .put(`/users/profile/`, data)
+      .catch((error) => seterror("Something went wrong!"));
+    updateData(Math.random());
+    resetWork();
+  };
+  //add handler func
+  const handleFormAddProfileInfo = (data) => {
+    httpClient
+      .post(`/users/profile/`, data)
+      .catch((error) => seterror("Something went wrong!"));
+
+    updateData(Math.random());
+    resetWork();
+  };
+
+  return (
+    <>
+      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
+        Basic Info
+      </DialogTitle>
+      <form
+        onSubmit={
+          method == "edit"
+            ? handleSubmitWork(handleFormEditProfileInfo)
+            : handleSubmitWork(handleFormAddProfileInfo)
+        }
+      >
+        <DialogContent>
+          <FormLabel htmlFor="input" className={classes.label}>
+            Lives In
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].position : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.lives_in_char ? true : false}
+            {...registerWork("lives_in_char", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.lives_in_char && errors.lives_in_char.type === "required" && (
+            <p className={classes.errorText}>Location is required</p>
+          )}
+          <FormLabel htmlFor="input" className={classes.label}>
+            Bio
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].dept : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.bio ? true : false}
+            {...registerWork("bio", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.bio && errors.bio.type === "required" && (
+            <p className={classes.errorText}>Bio is required</p>
+          )}
+          <FormLabel htmlFor="input" className={classes.label}>
+            Gender
+          </FormLabel>
+          <FormControl
+            style={{ width: "100%" }}
+            error={errors.gender ? true : false}
+          >
+            <NativeSelect
+              className={classes.selectEmpty}
+              name="gender"
+              {...registerWork("gender", {
+                required: true,
+                maxLength: 30,
+              })}
+            >
+              <option value="">Select Gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </NativeSelect>
+          </FormControl>
+          {errors.gender && errors.gender.type === "required" && (
+            <p className={classes.errorText}>Gender is required</p>
+          )}
+
+          <FormLabel htmlFor="input" className={classes.label}>
+            Phone
+          </FormLabel>
+          <TextField
+            fullWidth
+            id="phoneNo"
+            type="phone"
+            autoComplete="phoneNo"
+            autoFocus
+            margin="dense"
+            error={errors.phoneno ? true : false}
+            {...registerWork("phoneno", {
+              required: "Phone number is required",
+              minLength: {
+                value: 11,
+                message: "Phone number must have 11 digits",
+              },
+              maxLength: {
+                value: 11,
+                message: "Phone number can't exceed 11 digits",
+              },
+              pattern: {
+                value: /[0-9]/,
+                message: "Invalid phone number",
+              },
+            })}
+          />
+          {errors.phoneno && (
+            <p className={classes.errorText}>{errors.phoneno.message}</p>
           )}
         </DialogContent>
         <DialogActions>

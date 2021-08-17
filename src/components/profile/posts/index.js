@@ -50,9 +50,17 @@ const Posts = ({ user }) => {
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={4}>
-        <Info data={basicInfo} title="Basic Info" />
+        <Info
+          data={basicInfo}
+          title="Basic Info"
+          updateData={setShouldRender}
+        />
         <Info data={workInfo} title="Work Info" updateData={setShouldRender} />
-        <Info data={academicInfo} title="Academic Profile" />
+        <Info
+          data={academicInfo}
+          title="Academic Profile"
+          updateData={setShouldRender}
+        />
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>
         {authUser === user.username ? <Following /> : ""}
