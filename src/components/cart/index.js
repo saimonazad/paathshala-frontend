@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme) => ({
 const Cart = () => {
   const classes = useStyles();
   const { items, cartTotal } = useCart();
+
   return (
     <Box className={classes.root}>
       <Typography className={classes.title}>Billing Section</Typography>

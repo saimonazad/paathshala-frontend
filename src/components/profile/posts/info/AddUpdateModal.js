@@ -215,14 +215,26 @@ export default function FormDialog({
     reset: resetWork,
   } = useForm();
 
+  const {
+    register: registerAddWork,
+    handleSubmit: handleSubmitAddWork,
+    formState: { errors: addWork },
+    reset: resetAddWork,
+  } = useForm();
+
   const handleFormSubmitBasicInfo = (data) => {
     httpClient.post("/users/profile/", data);
   };
 
-  const handleFormSubmitWorkInfo = (data) => {
+  const handleFormEditWorkInfo = (data) => {
     httpClient.put(`/users/workinfo/?workinfo_id=${id}`, data);
     updateData(Math.random());
     resetWork();
+  };
+  const handleFormAddWorkInfo = (data) => {
+    httpClient.post(`/users/workinfo/`, data);
+    updateData(Math.random());
+    resetAddWork();
   };
   const basic = (
     <>
@@ -258,13 +270,12 @@ export default function FormDialog({
       <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
         Work Info
       </DialogTitle>
-      <form onSubmit={handleSubmitWork(handleFormSubmitWorkInfo)}>
+      <form onSubmit={handleSubmitWork(handleFormEditWorkInfo)}>
         <DialogContent>
           <FormLabel htmlFor="input" className={classes.label}>
             Position
           </FormLabel>
           <TextField
-            value={InfoData ? InfoData[id]?.position : "a"}
             autoFocus
             margin="dense"
             id="name"
@@ -369,6 +380,121 @@ export default function FormDialog({
       </form>
     </>
   );
+  const workAdd = (
+    <>
+      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
+        Work Info
+      </DialogTitle>
+      <form onSubmit={handleSubmitAddWork(handleFormAddWorkInfo)}>
+        <DialogContent>
+          <FormLabel htmlFor="input" className={classes.label}>
+            Position
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerAddWork("position")}
+          />
+          <FormLabel htmlFor="input" className={classes.label}>
+            Department
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerAddWork("dept")}
+          />
+          <FormLabel htmlFor="input" className={classes.label}>
+            Company
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerAddWork("company")}
+          />
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            className={classes.date}
+          >
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                Start Date
+              </FormLabel>
+              <FormControl
+                variant="filled"
+                className={classes.select}
+                error={addWork.gender ? true : false}
+              >
+                <TextField
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={addWork.starting_date ? true : false}
+                  {...registerAddWork("starting_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+            </Box>
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                End Date
+              </FormLabel>
+              <FormControl
+                variant="filled"
+                className={classes.select}
+                error={addWork.gender ? true : false}
+              >
+                <TextField
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={addWork.ending_date ? true : false}
+                  {...registerAddWork("ending_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+            </Box>
+          </Box>
+          <FormLabel htmlFor="input" className={classes.label}>
+            address
+          </FormLabel>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            {...registerAddWork("address")}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    </>
+  );
   return (
     <div>
       <Dialog
@@ -380,7 +506,7 @@ export default function FormDialog({
       >
         {title == "Basic Info" && basic}
         {title == "Work Info" && method == "edit" && workEdit}
-        {title == "Work Info" && method == "add" && <h1>add</h1>}
+        {title == "Work Info" && method == "add" && workAdd}
       </Dialog>
     </div>
   );
