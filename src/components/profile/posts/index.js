@@ -40,12 +40,20 @@ const Posts = ({ user }) => {
     mounted ? `/users/academic_info/` : null,
     fetcher
   );
-  const [shouldRender, setShouldRender] = useState(0);
+  const [shouldRender, setShouldRender] = useState("");
 
   useEffect(() => {
     setMounted(true);
-    mutate(`/users/workinfo/`);
-    trigger(`/users/workinfo/`);
+    if (shouldRender.charAt(0) == "A") {
+      mutate(`/users/academic_info/`);
+      trigger(`/users/academic_info/`);
+    } else if (shouldRender.charAt(0) == "B") {
+      mutate(`/users/profile/`);
+      trigger(`/users/profile/`);
+    } else if (shouldRender.charAt(0) == "W") {
+      mutate(`/users/workinfo/`);
+      trigger(`/users/workinfo/`);
+    }
   }, [shouldRender]);
   return (
     <Grid container className={classes.root} spacing={2}>
@@ -58,7 +66,7 @@ const Posts = ({ user }) => {
         <Info data={workInfo} title="Work Info" updateData={setShouldRender} />
         <Info
           data={academicInfo}
-          title="Academic Profile"
+          title="Academic Info"
           updateData={setShouldRender}
         />
       </Grid>

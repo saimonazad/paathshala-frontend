@@ -257,11 +257,223 @@ export default function FormDialog({
             seterror={seterror}
           />
         )}
+        {title == "Academic Info" && method == "edit" && (
+          <AcademicAddUpdate
+            handleModalClose={handleModalClose}
+            method={method}
+            InfoData={InfoData}
+            id={id}
+            updateData={updateData}
+            seterror={seterror}
+          />
+        )}
+        {title == "Academic Info" && method == "add" && (
+          <AcademicAddUpdate
+            handleModalClose={handleModalClose}
+            method={method}
+            InfoData={InfoData}
+            id={id}
+            updateData={updateData}
+            seterror={seterror}
+          />
+        )}
       </Dialog>
       <NotificationLoader error={error} />
     </div>
   );
 }
+
+const AcademicAddUpdate = ({
+  handleModalClose,
+  updateData,
+  InfoData,
+  id,
+  method,
+}) => {
+  let formValues = InfoData?.filter((p) => p.id == id);
+  const {
+    register: registerWork,
+    handleSubmit: handleSubmitWork,
+    formState: { errors },
+    reset: resetWork,
+    control,
+  } = useForm();
+  const classes = useStyles();
+
+  //update handler func
+  const handleFormEditAcademicInfo = (data) => {
+    httpClient
+      .put(`/users/academic_info/?academic_info_id=${id}`, data)
+      .catch((error) => seterror("Something went wrong!"));
+    updateData("A" + Math.random());
+    resetWork();
+  };
+  //add handler func
+  const handleFormAddAcademicInfo = (data) => {
+    httpClient
+      .post(`/users/academic_info/`, data)
+      .catch((error) => seterror("Something went wrong!"));
+    updateData("A" + Math.random());
+    resetWork();
+  };
+
+  return (
+    <>
+      <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
+        Academic Info
+      </DialogTitle>
+      <form
+        onSubmit={
+          method == "edit"
+            ? handleSubmitWork(handleFormEditAcademicInfo)
+            : handleSubmitWork(handleFormAddAcademicInfo)
+        }
+      >
+        <DialogContent>
+          <FormLabel htmlFor="input" className={classes.label}>
+            Degree
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].position : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.degree ? true : false}
+            {...registerWork("degree", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.degree && errors.degree.type === "required" && (
+            <p className={classes.errorText}>Degree is required</p>
+          )}
+
+          <FormLabel htmlFor="input" className={classes.label}>
+            Result
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].dept : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.result ? true : false}
+            {...registerWork("result", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.result && errors.result.type === "required" && (
+            <p className={classes.errorText}>Result is required</p>
+          )}
+          <FormLabel htmlFor="input" className={classes.label}>
+            Department
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].company : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.dept ? true : false}
+            {...registerWork("dept", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.dept && errors.dept.type === "required" && (
+            <p className={classes.errorText}>Department is required</p>
+          )}
+
+          <FormLabel htmlFor="input" className={classes.label}>
+            Institution
+          </FormLabel>
+          <TextField
+            // value={formValues ? formValues[0].address : ""}
+            autoFocus
+            margin="dense"
+            id="name"
+            type="text"
+            fullWidth
+            error={errors.institution ? true : false}
+            {...registerWork("institution", {
+              required: true,
+              maxLength: 30,
+            })}
+          />
+          {errors.institution && errors.institution.type === "required" && (
+            <p className={classes.errorText}>Institution is required</p>
+          )}
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            className={classes.date}
+          >
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                Start Date
+              </FormLabel>
+              <FormControl variant="filled" className={classes.select}>
+                <TextField
+                  // value={formValues ? formValues[0].starting_date : ""}
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={errors.starting_date ? true : false}
+                  {...registerWork("starting_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+              {errors.starting_date &&
+                errors.starting_date.type === "required" && (
+                  <p className={classes.errorText}>Starting date is required</p>
+                )}
+            </Box>
+            <Box>
+              <FormLabel htmlFor="input" className={classes.label}>
+                End Date
+              </FormLabel>
+              <FormControl variant="filled" className={classes.select}>
+                <TextField
+                  // value={formValues ? formValues[0].ending_date : ""}
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={errors.ending_date ? true : false}
+                  {...registerWork("ending_date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+              {errors.ending_date && errors.ending_date.type === "required" && (
+                <p className={classes.errorText}>Ending date is required</p>
+              )}
+            </Box>
+          </Box>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleModalClose} color="primary">
+            Cancel
+          </Button>
+          <Button type="submit" color="primary">
+            Save
+          </Button>
+        </DialogActions>
+      </form>
+    </>
+  );
+};
 
 const WorkAddUpdate = ({
   handleModalClose,
@@ -285,7 +497,7 @@ const WorkAddUpdate = ({
     httpClient
       .put(`/users/workinfo/?workinfo_id=${id}`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData(Math.random());
+    updateData("W" + Math.random());
     resetWork();
   };
   //add handler func
@@ -293,7 +505,7 @@ const WorkAddUpdate = ({
     httpClient
       .post(`/users/workinfo/`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData(Math.random());
+    updateData("W" + Math.random());
     resetWork();
   };
 
@@ -491,7 +703,7 @@ const ProfileAddUpdate = ({
     httpClient
       .put(`/users/profile/`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData(Math.random());
+    updateData("B" + Math.random());
     resetWork();
   };
   //add handler func
@@ -500,7 +712,7 @@ const ProfileAddUpdate = ({
       .post(`/users/profile/`, data)
       .catch((error) => seterror("Something went wrong!"));
 
-    updateData(Math.random());
+    updateData("B" + Math.random());
     resetWork();
   };
 

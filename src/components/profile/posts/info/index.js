@@ -27,6 +27,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import useSWR, { mutate, trigger } from "swr";
 import { deletion } from "../../../../services/fetcher";
 import { httpClient } from "../../../../../authentication/auth-methods/jwt-auth/config";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   header: {
     alignItems: "center",
@@ -93,6 +94,12 @@ const Info = ({ title, data, updateData }) => {
     httpClient
       .delete(`/users/workinfo/?workinfo_id=${id}`)
       .then((res) => trigger("/users/workinfo/"))
+      .catch((e) => console.log(e));
+  };
+  const handleDeleteAcademic = (id) => {
+    httpClient
+      .delete(`/users/academic_info/?academic_info_id=${id}`)
+      .then((res) => trigger("/users/academic_info/"))
       .catch((e) => console.log(e));
   };
 
@@ -220,7 +227,8 @@ const Info = ({ title, data, updateData }) => {
           }
         />
       )}
-      {title == "Academic Profile" && (
+
+      {title == "Academic Info" && (
         <CmtList
           data={data}
           renderRow={(info, index) => (
@@ -230,13 +238,41 @@ const Info = ({ title, data, updateData }) => {
               <ListItem className={classes.list}>
                 <ListItemAvatar>
                   <ListItemIcon className={classes.list__icon}>
-                    <SchoolIcon />
+                    <BusinessCenterIcon />
                   </ListItemIcon>
                 </ListItemAvatar>
                 <ListItemText>
-                  <span>{info.degree}</span>|<span>{info.result}</span>|
-                  <span>{info.dept}</span>|<span>{info.institution}</span>
+                  <span>{info.degree}</span>
+                  <p>{info.result}</p>
+                  <p>{info.dept}</p>
+                  <p>{info.institution}</p>
+                  <p>
+                    {moment(info.starting_date).format("MMM YY")} -
+                    {moment(info.ending_date).format("MMM YY")}
+                  </p>
                 </ListItemText>
+                {authUser == pname ? (
+                  <>
+                    <ListItemIcon>
+                      <EditIcon
+                        onClick={() => {
+                          handleModalOpen();
+                          setmethod("edit");
+                          setselectedItem(info.id);
+                        }}
+                        className={classes.list_edit__icon}
+                      />
+                    </ListItemIcon>
+                    <ListItemIcon>
+                      <DeleteIcon
+                        className={classes.list_edit__icon}
+                        onClick={() => handleDeleteAcademic(info.id)}
+                      />
+                    </ListItemIcon>
+                  </>
+                ) : (
+                  ""
+                )}
               </ListItem>
             </List>
           )}
