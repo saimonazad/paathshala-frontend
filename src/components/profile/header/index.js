@@ -213,7 +213,7 @@ const Header = (props) => {
     <div {...rest} className={clsx(classes.root, className)}>
       <div
         className={classes.cover}
-        style={{ backgroundImage: `url(${user.cover})` }}
+        style={{ backgroundImage: `url(${props.user.cover})` }}
       >
         <Button className={classes.changeButton} variant="contained">
           <AddPhotoIcon className={classes.addPhotoIcon} />
@@ -221,7 +221,11 @@ const Header = (props) => {
         </Button>
       </div>
       <div className={classes.container}>
-        <Avatar alt="Person" className={classes.avatar} src={user.avatar} />
+        <Avatar
+          alt="Person"
+          className={classes.avatar}
+          src={props.user.picture}
+        />
         <div className={classes.details}>
           <Typography
             component="h1"
