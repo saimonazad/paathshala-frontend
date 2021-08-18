@@ -60,13 +60,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.spacing(2),
     color: theme.palette.common.black,
   },
-  post__time: {
-    fontSize: theme.spacing(1.75),
-    color: theme.palette.text.gray,
-  },
-  profile__img: {
-    marginRight: theme.spacing(1),
-  },
+  
   btn__like: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
@@ -224,19 +218,11 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 justifyContent="space-between"
               >
                 <Box display="flex" alignItems="center">
-                  <Box>
-                    <Avatar src="" className={classes.profile__img} />
-                  </Box>
-                  <Box>
-                    <UserDetails
-                      courseId={feed.posted_on}
-                      username={feed.user}
-                    />
-
-                    <Typography component="h3" className={classes.post__time}>
-                      {moment(feed.timestamp).fromNow()}
-                    </Typography>
-                  </Box>
+                  <UserDetails
+                    courseId={feed.posted_on}
+                    username={feed.user}
+                    time={feed.timestamp}
+                  />
                 </Box>
                 {authUser == feed.user && (
                   <Box>
