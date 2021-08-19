@@ -184,7 +184,8 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     userLogin({ username, password });
   };
   //password reveal func
@@ -270,7 +271,8 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
               <Grid container justify="center">
                 <Grid item>
                   <Button
-                    onClick={onSubmit}
+                    type="submit"
+                    onClick={(e) => onSubmit(e)}
                     variant="contained"
                     color="secondary"
                     className={classes.submit}
