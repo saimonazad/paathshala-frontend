@@ -15,7 +15,10 @@ import Divider from "@material-ui/core/Divider";
 import { useAuth } from "../../../authentication";
 import { NotificationLoader } from "../../../@jumbo/components/ContentLoader";
 import { CircularProgress } from "@material-ui/core";
-
+import InputAdornment from "@material-ui/core/InputAdornment";
+import { IconButton } from "@material-ui/core";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 //css
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -184,6 +187,10 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
   const onSubmit = () => {
     userLogin({ username, password });
   };
+  //password reveal func
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const handleMouseDownPassword = () => setShowPassword(!showPassword);
 
   return (
     <div className={classes.root}>
@@ -229,10 +236,28 @@ const SignIn = ({ variant = "default", wrapperVariant = "default" }) => {
                     required
                     fullWidth
                     name="password"
-                    type="password"
                     id="password"
                     onChange={(event) => setPassword(event.target.value)}
                     defaultValue={password}
+                    type={showPassword ? "text" : "password"} // <-- This is where the magic happens
+                    InputProps={{
+                      // <-- This is where the toggle button is added.
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                          >
+                            {showPassword ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        </InputAdornment>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12} className={classes.tos}>
