@@ -159,6 +159,7 @@ export default function CreateClass({
     handleSubmit,
     watch,
     formState: { errors },
+    getValues,
   } = useForm();
 
   const classes = useStyles();
@@ -183,6 +184,8 @@ export default function CreateClass({
       handleClose();
     } catch (error) {}
   };
+  //show, hide subject box
+  const [StudyLevel, setStudyLevel] = useState("");
 
   const body = (
     <div>
@@ -228,6 +231,10 @@ export default function CreateClass({
               error={errors.gender ? true : false}
             >
               <NativeSelect
+                onChange={(e) => {
+                  console.log(e.target.value);
+                  setStudyLevel(e.target.value);
+                }}
                 className={classes.selectEmpty}
                 name="study_level"
                 {...register("study_level", {
@@ -235,9 +242,14 @@ export default function CreateClass({
                 })}
               >
                 <option value="">Select Level</option>
-                <option value="SSC">SSC</option>
-                <option value="HSC">HSC</option>
-                <option value="BSC">BSC</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10">10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="Others">Others</option>
               </NativeSelect>
             </FormControl>
             {errors.study_level && errors.study_level.type === "required" && (
@@ -245,7 +257,12 @@ export default function CreateClass({
             )}
           </Grid>
 
-          <Grid item xs={12} className={classes.select}>
+          <Grid
+            item
+            xs={12}
+            className={classes.select}
+            style={StudyLevel == "Others" ? { visibility: "hidden" } : null}
+          >
             <FormLabel htmlFor="input" className={classes.label}>
               Subject
             </FormLabel>
