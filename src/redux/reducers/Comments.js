@@ -19,7 +19,7 @@ export default function Comment(state = INIT_STATE, action) {
     case CREATE_COMMENT: {
       return {
         ...state,
-        comments: [action.payload, ...state.comments],
+        comments: [...state.comments, action.payload],
       };
     }
     case RESET_COMMENTS: {

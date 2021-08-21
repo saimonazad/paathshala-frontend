@@ -106,7 +106,6 @@ const Feed = ({ group, enroll, personal, feed }) => {
 
   const handleCommentBox = (id) => {
     dispatch(getComments(id));
-
     setActivePost(id);
     setCommentActive(true);
   };
@@ -141,7 +140,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
   }
 
   const { comments, isLoading } = useSelector(({ comment }) => comment);
-
+ 
   //post 3 dots open/close
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);

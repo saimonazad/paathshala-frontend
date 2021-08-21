@@ -43,7 +43,7 @@ export const getUserDetail = () => {
 export const getFeedPosts = (username) => {
   return (dispatch) => {
     dispatch(fetchStart());
-    
+
     // const ownPostUrl = `/newsfeed/post/?username=${username}`;
     // const followerPostUrl = "/newsfeed/follower/";
     // const data1 = httpClient.get(ownPostUrl);
@@ -205,8 +205,6 @@ export const getComments = (postId) => {
       });
   };
 };
-
-
 
 //for creating a course post
 export const createCoursePost = (post) => {
