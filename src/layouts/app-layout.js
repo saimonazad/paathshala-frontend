@@ -8,7 +8,7 @@ import PageLoader from "../../@jumbo/components/PageComponents/PageLoader";
 
 const useStyles = makeStyles((theme) => ({
   container__width: {
-    maxWidth: 900,
+    maxWidth: 750,
     marginBottom: 80,
   },
 }));
