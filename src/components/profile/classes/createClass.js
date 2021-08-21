@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Dialog from "@material-ui/core/Dialog";
 import DialogContent from "@material-ui/core/DialogContent";
-
+var _ = require("lodash");
 import {
   Grid,
   FormLabel,
@@ -13,6 +13,7 @@ import {
   Box,
   Typography,
   Divider,
+  Select,
 } from "@material-ui/core";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
@@ -145,6 +146,28 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
   },
   time: {},
+  toggleRecurring: {
+    height: 40,
+
+    border: "2px solid #AF5698!important",
+    borderRadius: "6px!important",
+    background: "white",
+
+    "& * > .MuiToggleButton-label": {
+      textTransform: "none",
+      padding: 15,
+    },
+    "& .MuiToggleButton-root.Mui-selected": {
+      padding: 0,
+      color: "white",
+
+      background: theme.palette.primary.main,
+      "& * > button": {
+        color: "white",
+        padding: theme.spacing(0, 0),
+      },
+    },
+  },
 }));
 
 export default function CreateClass({
@@ -160,6 +183,7 @@ export default function CreateClass({
     watch,
     formState: { errors },
     getValues,
+    reset,
   } = useForm();
 
   const classes = useStyles();
@@ -167,6 +191,7 @@ export default function CreateClass({
 
   const handleDays = (event, newDays) => {
     setDays(newDays);
+    console.log(Days);
   };
 
   const handleOpen = () => {
@@ -177,15 +202,36 @@ export default function CreateClass({
     handleModal(false);
   };
   const onSubmit = (data) => {
-    let classData = { ...data, days: Days.toString() };
-    try {
-      dispatch(createCourse(classData));
-      formSubmissionCheck(true);
-      handleClose();
-    } catch (error) {}
+    let classData = {
+      ...data,
+      days: Days.toString() == "" ? "nodata" : Days.toString(),
+      recurring: isRecurring.toString() == "recurring",
+    };
+    const temp = _.mapValues(classData, (val) =>
+      val === undefined ? (val = "nodata") : val
+    );
+    if (
+      (temp.recurring == true && Days.length != 0) ||
+      (temp.recurring == false && classData.date != "")
+    ) {
+      try {
+        dispatch(createCourse(temp));
+        formSubmissionCheck(true);
+        reset();
+        handleClose();
+      } catch (error) {}
+    }
   };
   //show, hide subject box
   const [StudyLevel, setStudyLevel] = useState("");
+  //recurring class
+  const [isRecurring, setisRecurring] = useState("recurring");
+  const handleRecurring = (event, newValue) => {
+    if (isRecurring !== null) {
+      setisRecurring(newValue);
+      setDays([]);
+    }
+  };
 
   const body = (
     <div>
@@ -229,12 +275,12 @@ export default function CreateClass({
               variant="filled"
               className={classes.formControl}
               error={errors.gender ? true : false}
+              onChange={(e) => {
+                setStudyLevel(e.target.value);
+              }}
             >
-              <NativeSelect
-                onChange={(e) => {
-                  console.log(e.target.value);
-                  setStudyLevel(e.target.value);
-                }}
+              <Select
+                native
                 className={classes.selectEmpty}
                 name="study_level"
                 {...register("study_level", {
@@ -250,18 +296,17 @@ export default function CreateClass({
                 <option value="11">11</option>
                 <option value="12">12</option>
                 <option value="Others">Others</option>
-              </NativeSelect>
+              </Select>
             </FormControl>
             {errors.study_level && errors.study_level.type === "required" && (
               <p className={classes.errorText}>Study level is required</p>
             )}
           </Grid>
-
           <Grid
             item
             xs={12}
             className={classes.select}
-            style={StudyLevel == "Others" ? { visibility: "hidden" } : null}
+            style={StudyLevel == "Others" ? { display: "none" } : null}
           >
             <FormLabel htmlFor="input" className={classes.label}>
               Subject
@@ -275,7 +320,7 @@ export default function CreateClass({
                 className={classes.selectEmpty}
                 name="subject"
                 {...register("subject", {
-                  required: true,
+                  required: false,
                 })}
               >
                 <option value="">Select Subject</option>
@@ -290,7 +335,7 @@ export default function CreateClass({
           </Grid>
           <Grid item xs={12}>
             <FormLabel htmlFor="input" className={classes.label}>
-              Monthly Fees
+              Fee
             </FormLabel>
             <TextField
               type="number"
@@ -311,62 +356,117 @@ export default function CreateClass({
               <p className={classes.errorText}>Monthly fees is required</p>
             )}
           </Grid>
+
           <Grid item xs={12}>
             <ToggleButtonGroup
-              value={Days}
-              onChange={handleDays}
-              aria-label="text formatting"
-              className={classes.toggleContainer}
+              value={isRecurring}
+              exclusive
+              onChange={handleRecurring}
+              aria-label="Recurring / One day class selector"
+              size="small"
+              className={classes.toggleRecurring}
             >
               <ToggleButton
+                value="recurring"
                 className={classes.btnToggle}
-                value="Sun"
-                aria-label="Sun"
+                aria-label="recurring"
               >
-                <Button disableRipple={true} disableFocusRipple={true}>
-                  Sun
-                </Button>
+                Recurring Class
               </ToggleButton>
               <ToggleButton
+                value="oneDay"
                 className={classes.btnToggle}
-                value="Mon"
-                aria-label="Mon"
+                aria-label="oneDay"
               >
-                <Button>Mon</Button>
-              </ToggleButton>
-              <ToggleButton
-                className={classes.btnToggle}
-                value="Tue"
-                aria-label="Tue"
-              >
-                <Button>Tue</Button>
-              </ToggleButton>
-              <ToggleButton
-                className={classes.btnToggle}
-                value="Wed"
-                aria-label="Wed"
-              >
-                <Button>Wed</Button>
-              </ToggleButton>
-              <ToggleButton
-                className={classes.btnToggle}
-                value="Thu"
-                aria-label="Thu"
-              >
-                <Button>Thu</Button>
-              </ToggleButton>
-              <ToggleButton
-                className={classes.btnToggle}
-                value="Fri"
-                aria-label="Fri"
-              >
-                <Button>Fri</Button>
+                One Day Class
               </ToggleButton>
             </ToggleButtonGroup>
-            {Days.length == 0 && (
-              <p className={classes.errorText}>Days is required</p>
+            {isRecurring == "" && (
+              <p className={classes.errorText}>Please select atleast one</p>
             )}
           </Grid>
+          {isRecurring == "recurring" ? (
+            <Grid item xs={12}>
+              <ToggleButtonGroup
+                value={Days}
+                onChange={handleDays}
+                aria-label="text formatting"
+                className={classes.toggleContainer}
+              >
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Sun"
+                  aria-label="Sun"
+                >
+                  <Button disableRipple={true} disableFocusRipple={true}>
+                    Sun
+                  </Button>
+                </ToggleButton>
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Mon"
+                  aria-label="Mon"
+                >
+                  <Button>Mon</Button>
+                </ToggleButton>
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Tue"
+                  aria-label="Tue"
+                >
+                  <Button>Tue</Button>
+                </ToggleButton>
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Wed"
+                  aria-label="Wed"
+                >
+                  <Button>Wed</Button>
+                </ToggleButton>
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Thu"
+                  aria-label="Thu"
+                >
+                  <Button>Thu</Button>
+                </ToggleButton>
+                <ToggleButton
+                  className={classes.btnToggle}
+                  value="Fri"
+                  aria-label="Fri"
+                >
+                  <Button>Fri</Button>
+                </ToggleButton>
+              </ToggleButtonGroup>
+              {Days && Days.length == 0 && (
+                <p className={classes.errorText}>Days is required</p>
+              )}
+            </Grid>
+          ) : (
+            <Grid item xs={12}>
+              <FormLabel htmlFor="input" className={classes.label}>
+                Date
+              </FormLabel>
+              <FormControl variant="filled" className={classes.select}>
+                <TextField
+                  id="date"
+                  type="date"
+                  className={classes.textField}
+                  InputLabelProps={{
+                    shrink: false,
+                  }}
+                  error={errors.date ? true : false}
+                  {...register("date", {
+                    required: true,
+                  })}
+                />
+              </FormControl>
+              {errors.date && errors.date.type === "required" && (
+                <p className={classes.errorText}>Date is required</p>
+              )}
+            </Grid>
+          )}
+
           <Grid item xs={12} sm={6}>
             <FormLabel htmlFor="input" className={classes.label}>
               Start Time
@@ -427,35 +527,7 @@ export default function CreateClass({
               <p className={classes.errorText}>End time is required</p>
             )}
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <FormLabel htmlFor="input" className={classes.label}>
-              Start Date
-            </FormLabel>
-            <FormControl
-              variant="filled"
-              className={classes.select}
-              error={errors.gender ? true : false}
-            >
-              <TextField
-                onChange={(e) => console.log(e.target.value)}
-                id="date"
-                type="date"
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                error={errors.start_date ? true : false}
-                {...register("start_date", {
-                  required: true,
-                  maxLength: 30,
-                })}
-              />
-            </FormControl>
-            {errors.start_date && errors.start_date.type === "required" && (
-              <p className={classes.errorText}>Start date is required</p>
-            )}
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          {/* <Grid item xs={12} sm={6}>
             <FormLabel htmlFor="input" className={classes.label}>
               End Date
             </FormLabel>
@@ -480,7 +552,7 @@ export default function CreateClass({
             {errors.end_date && errors.end_date.type === "required" && (
               <p className={classes.errorText}>End date is required</p>
             )}
-          </Grid>
+          </Grid>*/}
         </Grid>
         <Grid container justify="center">
           <Grid item>

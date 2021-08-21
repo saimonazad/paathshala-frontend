@@ -60,7 +60,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.spacing(2),
     color: theme.palette.common.black,
   },
-  
+
   btn__like: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
@@ -300,7 +300,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 </form>
               ) : (
                 <Typography className={classes.status}>
-                  <Linkify>{feed.post_text}</Linkify>,
+                  <Linkify>{feed.post_text}</Linkify>
                   {linkify.match(feed.post_text) && (
                     <LinkPreview
                       url={linkify.match(feed.post_text)[0].url}
