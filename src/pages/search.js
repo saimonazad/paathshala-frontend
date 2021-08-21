@@ -30,9 +30,7 @@ const Search = () => {
   const router = useRouter();
   const { q } = router.query;
   const { data: results, error } = useSWR(
-    q
-      ? `http://paathshala.staging.baeinnovations.com/users/userinfo?first_name=${q}`
-      : ``,
+    q ? `/users/userinfo?first_name=${q}` : ``,
     fetcher
   );
 
