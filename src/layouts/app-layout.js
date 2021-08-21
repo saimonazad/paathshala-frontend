@@ -5,6 +5,7 @@ import { Container, Hidden, makeStyles } from "@material-ui/core";
 import { useRouter } from "next/router";
 import { useAuth } from "../../authentication";
 import PageLoader from "../../@jumbo/components/PageComponents/PageLoader";
+import { CartProvider } from "react-use-cart";
 
 const useStyles = makeStyles((theme) => ({
   container__width: {
@@ -31,7 +32,7 @@ const Layout1 = ({ children }) => {
     return <>{children}</>;
   }
   return (
-    <div>
+    <CartProvider id={authUser}>
       <Navbar />
       <Container className={classes.container__width}>
         <div className={classes.root}>{children}</div>
@@ -39,7 +40,7 @@ const Layout1 = ({ children }) => {
       <Hidden smUp>
         <BottomNavBar />
       </Hidden>
-    </div>
+    </CartProvider>
   );
 };
 

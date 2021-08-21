@@ -73,7 +73,7 @@ const CartItem = ({ courseId, price }) => {
   );
   let days;
   if (course) {
-    days = course[0]?.days.split(",");
+    days = course[0]?.days?.split(",");
     console.log(days);
   }
   return (
