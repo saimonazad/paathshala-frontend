@@ -123,7 +123,7 @@ const Explore = () => {
               activeTab == "Teachers" ? classes.activeTab : classes.test
             }
           >
-            Teachers
+            Users
           </Button>
           <Button
             value="Classes"
@@ -159,7 +159,7 @@ const Explore = () => {
             alignItems="center"
             justifyContent="space-between"
           >
-            <Typography>5 class found</Typography>
+            <Typography></Typography>
             <Box display="flex" alignItems="center">
               <Filter
                 setstudyFilter={setstudyFilter}
