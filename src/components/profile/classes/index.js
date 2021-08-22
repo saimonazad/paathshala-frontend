@@ -14,6 +14,7 @@ import { getAllPersonalCourses } from "../../../redux/actions/courseActions";
 import CmtList from "../../../../@coremat/CmtList";
 import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
 import { Link } from "@material-ui/icons";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -136,7 +137,8 @@ const Classes = () => {
               <Typography>{course.days}</Typography>
               <Divider orientation="vertical" flexItem />
               <Typography>
-                {course.start_time} - {course.end_time}
+                {moment(course?.start_time, "HH:mm").format("hh:mm A")} -{" "}
+                {moment(course?.end_time, "HH:mm").format("hh:mm A")}
               </Typography>
               <Divider orientation="vertical" flexItem />
               <Button

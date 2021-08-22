@@ -9,7 +9,7 @@ import React from "react";
 import CmtList from "../../../../@coremat/CmtList";
 import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
-
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   class: {
     backgroundColor: theme.palette.secondary.light,
@@ -57,7 +57,8 @@ const Class = ({ course }) => {
             <Typography>{course.days}</Typography>
             <Divider orientation="vertical" flexItem />
             <Typography>
-              {course.start_time} - {course.end_time}
+              {moment(course?.start_time, "HH:mm").format("hh:mm A")} -{" "}
+              {moment(course?.end_time, "HH:mm").format("hh:mm A")}
             </Typography>
             <Divider orientation="vertical" flexItem />
             <Button
