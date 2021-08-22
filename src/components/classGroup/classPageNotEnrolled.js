@@ -242,7 +242,7 @@ const ClassPageNotEnrolled = (props) => {
           >
             {courseInfo[0]?.description}
           </Typography>
-          {inCart(courseInfo[0]?.id) ? (
+          {/* {inCart(courseInfo[0]?.id) ? (
             <Button
               variant="contained"
               color="primary"
@@ -271,7 +271,20 @@ const ClassPageNotEnrolled = (props) => {
             >
               Free enroll for 7 days
             </Button>
-          )}
+          )} */}
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.btn}
+            onClick={() => {
+              try {
+                dispatch(enrollCourse(courseInfo[0]?.id));
+                router.reload(window.location.pathname);
+              } catch (error) {}
+            }}
+          >
+            Enroll temporarily
+          </Button>
         </div>
         <Divider className={classes.divider} />
         <Box display="flex" justifyContent="space-between" alignItems="center">
