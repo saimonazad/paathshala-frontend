@@ -22,7 +22,7 @@ import { useDispatch } from "react-redux";
 import { faWindowClose } from "@fortawesome/fontawesome-free-solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createCourse } from "../../../redux/actions/courseActions";
-
+import ToggleDays from "./ToggleDays";
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "relative",
@@ -189,11 +189,6 @@ export default function CreateClass({
   const classes = useStyles();
   const [Days, setDays] = useState(() => ["Sun", "Mon"]);
 
-  const handleDays = (event, newDays) => {
-    setDays(newDays);
-    console.log(Days);
-  };
-
   const handleOpen = () => {
     handleModal(true);
   };
@@ -357,7 +352,7 @@ export default function CreateClass({
             )}
           </Grid>
 
-          <Grid item xs={12}>
+          <Grid item xs={12} style={{ textAlign: "center" }}>
             <ToggleButtonGroup
               value={isRecurring}
               exclusive
@@ -386,58 +381,8 @@ export default function CreateClass({
             )}
           </Grid>
           {isRecurring == "recurring" ? (
-            <Grid item xs={12}>
-              <ToggleButtonGroup
-                value={Days}
-                onChange={handleDays}
-                aria-label="text formatting"
-                className={classes.toggleContainer}
-              >
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Sun"
-                  aria-label="Sun"
-                >
-                  <Button disableRipple={true} disableFocusRipple={true}>
-                    Sun
-                  </Button>
-                </ToggleButton>
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Mon"
-                  aria-label="Mon"
-                >
-                  <Button>Mon</Button>
-                </ToggleButton>
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Tue"
-                  aria-label="Tue"
-                >
-                  <Button>Tue</Button>
-                </ToggleButton>
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Wed"
-                  aria-label="Wed"
-                >
-                  <Button>Wed</Button>
-                </ToggleButton>
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Thu"
-                  aria-label="Thu"
-                >
-                  <Button>Thu</Button>
-                </ToggleButton>
-                <ToggleButton
-                  className={classes.btnToggle}
-                  value="Fri"
-                  aria-label="Fri"
-                >
-                  <Button>Fri</Button>
-                </ToggleButton>
-              </ToggleButtonGroup>
+            <Grid item xs={12} style={{ textAlign: "center" }}>
+              <ToggleDays days={Days} setDays={setDays} />
               {Days && Days.length == 0 && (
                 <p className={classes.errorText}>Days is required</p>
               )}
