@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
     width: "10%",
   },
   textField: {
-    marginTop: theme.spacing(0.5),
     "& .MuiOutlinedInput-input": {
       padding: theme.spacing(1.5, 1.5),
       backgroundColor: theme.palette.other.bonJour,
@@ -75,6 +74,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("sm")]: {
       fontSize: 16,
     },
+    marginBottom: theme.spacing(0.5),
   },
 
   grid: {
@@ -149,7 +149,7 @@ const useStyles = makeStyles((theme) => ({
   toggleRecurring: {
     height: 40,
 
-    border: "2px solid #AF5698!important",
+    border: `2px solid ${theme.palette.secondary.main}!important`,
     borderRadius: "6px!important",
     background: "white",
 
@@ -161,7 +161,7 @@ const useStyles = makeStyles((theme) => ({
       padding: 0,
       color: "white",
 
-      background: theme.palette.primary.main,
+      background: theme.palette.secondary.main,
       "& * > button": {
         color: "white",
         padding: theme.spacing(0, 0),
@@ -262,7 +262,7 @@ export default function CreateClass({
               <p className={coursename.errorText}>Class name is required</p>
             )}
           </Grid>
-          <Grid item xs={12} className={classes.select}>
+          <Grid item xs={4} className={classes.select}>
             <FormLabel htmlFor="input" className={classes.label}>
               Study Level
             </FormLabel>
@@ -299,7 +299,7 @@ export default function CreateClass({
           </Grid>
           <Grid
             item
-            xs={12}
+            xs={4}
             className={classes.select}
             style={StudyLevel == "Others" ? { display: "none" } : null}
           >
@@ -328,7 +328,7 @@ export default function CreateClass({
               <p className={classes.errorText}>Subject is required</p>
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             <FormLabel htmlFor="input" className={classes.label}>
               Fee
             </FormLabel>

@@ -43,12 +43,12 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
     padding: theme.spacing(0, 1),
     "&:not(:first-child)": {
       border: "1px solid",
-      borderColor: "#692B7C",
+      borderColor: theme.palette.secondary.main,
       borderRadius: "50%",
     },
     "&:first-child": {
       border: "1px solid",
-      borderColor: "#692B7C",
+      borderColor: theme.palette.secondary.main,
       borderRadius: "50%",
     },
   },
@@ -56,25 +56,25 @@ const StyledToggleButtonGroup = withStyles((theme) => ({
 
 const StyledToggle = withStyles((theme) => ({
   root: {
-    color: theme.palette.primary.main,
+    color: theme.palette.other.DoveGray,
     "&$selected": {
       color: "white",
-      background: theme.palette.primary.main,
+      background: theme.palette.secondary.main,
     },
     "&:hover": {
       color: "white",
       borderColor: "white",
-      background: theme.palette.primary.main,
+      background: theme.palette.secondary.main,
     },
     "&:hover$selected": {
-      borderColor: theme.palette.primary.main,
-      background: theme.palette.primary.main,
+      borderColor: theme.palette.secondary.main,
+      background: theme.palette.secondary.main,
     },
     minWidth: 32,
     maxWidth: 32,
     height: 32,
     textTransform: "unset",
-    fontSize: "0.75rem",
+    fontSize: "0.85rem",
   },
   selected: {},
 }))(ToggleButton);
