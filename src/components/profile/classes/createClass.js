@@ -173,6 +173,125 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const subjects = {
+  6: [
+    "Bangla",
+    "English",
+    "Mathematics",
+    "Science",
+    "ICT",
+    "Bangladesh & Global",
+    "Religious Studies",
+    "Other",
+  ],
+  7: [
+    "Bangla",
+    "English",
+    "Mathematics",
+    "Science",
+    "ICT",
+    "Bangladesh & Global",
+    "Religious Studies",
+    "Other",
+  ],
+  8: [
+    "Bangla",
+    "English",
+    "Mathematics",
+    "Science",
+    "ICT",
+    "Bangladesh & Global",
+    "Religious Studies",
+    "Other",
+  ],
+  9: [
+    "Bangla",
+    "English",
+    "General Mathematics",
+    "Higher Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "ICT",
+    "Religious Studies",
+    "Bangladesh & Global",
+    "Accounting",
+    "Finance & Banking",
+    "Business Ent.",
+    "General Science",
+    "Geography",
+    "Economics, Civics & Citizenship",
+    "Bangladesh History & World Civilization",
+    "Business & Marketing",
+    "Other",
+  ],
+  10: [
+    "Bangla",
+    "English",
+    "General Mathematics",
+    "Higher Mathematics",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "ICT",
+    "Religious Studies",
+    "Bangladesh & Global",
+    "Accounting",
+    "Finance & Banking",
+    "Business Ent.",
+    "General Science",
+    "Geography",
+    "Economics, Civics & Citizenship",
+    "Bangladesh History & World Civilization",
+    "Business & Marketing",
+    "Other",
+  ],
+  11: [
+    "Bangla",
+    "English",
+    "ICT",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Higher Mathematics",
+    "Accounting",
+    "Economics (Business Studies)",
+    "Business Organization & Management",
+    "Finance Banking & Insurance",
+    "Statistics",
+    "History",
+    "Economics (Arts)",
+    "Islamic History & Culture",
+    "Geography",
+    "Sociology",
+    "Social Work",
+    "Logic",
+    "Other",
+  ],
+  12: [
+    "Bangla",
+    "English",
+    "ICT",
+    "Physics",
+    "Chemistry",
+    "Biology",
+    "Higher Mathematics",
+    "Accounting",
+    "Economics (Business Studies)",
+    "Business Organization & Management",
+    "Finance Banking & Insurance",
+    "Statistics",
+    "History",
+    "Economics (Arts)",
+    "Islamic History & Culture",
+    "Geography",
+    "Sociology",
+    "Social Work",
+    "Logic",
+    "Other",
+  ],
+  Other: ["Other"],
+};
 export default function CreateClass({
   isOpen,
   handleModal,
@@ -299,7 +418,7 @@ export default function CreateClass({
                 <option value="10">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
-                <option value="Others">Others</option>
+                <option value="Other">Other</option>
               </Select>
             </FormControl>
             {errors.study_level && errors.study_level.type === "required" && (
@@ -310,7 +429,7 @@ export default function CreateClass({
             item
             xs={4}
             className={classes.select}
-            style={StudyLevel == "Others" ? { display: "none" } : null}
+            // style={StudyLevel == "Others" ? { display: "none" } : null}
           >
             <FormLabel htmlFor="input" className={classes.label}>
               Subject
@@ -319,18 +438,19 @@ export default function CreateClass({
               variant="filled"
               className={classes.formControl}
               error={errors.subject ? true : false}
+              disabled={StudyLevel == "" ? true : false}
             >
               <NativeSelect
                 className={classes.selectEmpty}
                 name="subject"
                 {...register("subject", {
-                  required: false,
+                  required: true,
                 })}
               >
                 <option value="">Select Subject</option>
-                <option value="Bangla 1st">Bangla 1st</option>
-                <option value="Bangla 2nd">Bangla 2nd</option>
-                <option value="ICT">ICT</option>
+                {subjects[StudyLevel]?.map((item, index) => (
+                  <option value={item}>{item}</option>
+                ))}
               </NativeSelect>
             </FormControl>
             {errors.subject && errors.subject.type === "required" && (

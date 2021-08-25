@@ -78,7 +78,6 @@ const Following = ({ type, user }) => {
               loader={false}
               title="No Data Found"
               content="Empty result description"
-              actionTitle="Add Content"
             />
           }
         />

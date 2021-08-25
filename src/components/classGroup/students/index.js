@@ -12,6 +12,7 @@ import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
 import { useAuth } from "../../../../authentication";
 import CmtList from "../../../../@coremat/CmtList";
+import GridEmptyResult from "../../../../@coremat/CmtGridView/GridEmptyResult";
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -87,7 +88,7 @@ const Students = ({ data, courseInfo }) => {
         </div>
       </Box>
       <Box className={classes.class__list}>
-        {JSON.stringify(courseInfo)}
+        {/* {JSON.stringify(courseInfo)} */}
         <CmtList
           data={data.students}
           renderRow={(student) => (
@@ -132,6 +133,9 @@ const Students = ({ data, courseInfo }) => {
               </Box>
             </Box>
           )}
+          ListEmptyComponent={
+            <GridEmptyResult loader={false} title="No Student Enrolled" />
+          }
         />
       </Box>
     </Box>
