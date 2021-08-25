@@ -88,59 +88,52 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
     await httpClient.delete(deletefollowUrl).then((res) => res.data);
     trigger(followCheckUrl);
   }
-  
+
   return (
     <Box display="flex" justifyContent="space-between">
-      {authUser == user.username && (
-        <>
-          <Hidden xsDown>
-            <Tabs
-              variant="standard"
-              value={tabvalue}
-              onChange={handleChange}
-              indicatorColor="secondary"
-              aria-label="secondary tabs example"
-              className={classes.tabText}
-            >
-              <Tab className={classes.tabRoot} value="posts" label="Post" />
-              <Tab
-                className={classes.tabRoot}
-                value="classes"
-                label="Classes"
-              />
-              <Tab className={classes.tabRoot} value="about" label="About" />
-              <Tab
-                className={classes.tabRoot}
-                value="followers"
-                label="Followers"
-              />
-              <Tab
-                className={classes.tabRoot}
-                value="following"
-                label="Following"
-              />
-              <Tab
-                className={classes.tabRoot}
-                value="enrolled"
-                label="Enrolled In"
-              />
-            </Tabs>
-          </Hidden>
-          <Hidden smUp>
-            <FormControl className={classes.formControl}>
-              <NativeSelect
-                className={classes.select}
-                value={tabvalue}
-                onChange={handleChangeMobile}
-              >
-                <option value="posts">Posts</option>
-                <option value="followers">Followers</option>
-                <option value="classes">Classes</option>
-              </NativeSelect>
-            </FormControl>
-          </Hidden>
-        </>
-      )}
+      <Hidden xsDown>
+        <Tabs
+          variant="standard"
+          value={tabvalue}
+          onChange={handleChange}
+          indicatorColor="secondary"
+          aria-label="secondary tabs example"
+          className={classes.tabText}
+        >
+          <Tab className={classes.tabRoot} value="posts" label="Post" />
+          <Tab className={classes.tabRoot} value="classes" label="Classes" />
+          <Tab className={classes.tabRoot} value="about" label="About" />
+          <Tab
+            className={classes.tabRoot}
+            value="followers"
+            label="Followers"
+          />
+          <Tab
+            className={classes.tabRoot}
+            value="following"
+            label="Following"
+          />
+          <Tab
+            className={classes.tabRoot}
+            value="enrolled"
+            label="Enrolled In"
+          />
+        </Tabs>
+      </Hidden>
+      <Hidden smUp>
+        <FormControl className={classes.formControl}>
+          <NativeSelect
+            className={classes.select}
+            value={tabvalue}
+            onChange={handleChangeMobile}
+          >
+            <option value="posts">Posts</option>
+            <option value="followers">Followers</option>
+            <option value="classes">Classes</option>
+          </NativeSelect>
+        </FormControl>
+      </Hidden>
+
       {user.username != authUser && (
         <div className={classes.profileLinks__right}>
           <Button color="primary" variant="contained">

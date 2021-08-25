@@ -11,11 +11,25 @@ const theme = createMuiTheme({
         width: 20,
       },
     },
+    MuiButton: {
+      root: {
+        "&:hover": {
+          color: "#5d1049",
+        },
+      },
+    },
+    MuiLink: {
+      underlineHover: {
+        "&:hover": {
+          textDecoration: "none",
+        },
+      },
+    },
   },
   palette: {
     type: "light",
     primary: {
-      main: "#af5698",
+      main: "#5d1049",
     },
     secondary: {
       main: "#5d1049",

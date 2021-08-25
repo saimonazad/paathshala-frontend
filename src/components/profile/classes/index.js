@@ -63,14 +63,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Classes = () => {
+const Classes = ({user}) => {
   const dispatch = useDispatch();
   const [isFormSubmitted, setIsFormSUbmitted] = useState(false);
   function formSubmissionCheck(newValue) {
     setIsFormSUbmitted(newValue);
   }
   useEffect(() => {
-    dispatch(getAllPersonalCourses());
+    dispatch(getAllPersonalCourses(user.username));
   }, [dispatch, isFormSubmitted]);
 
   const { personalCourses } = useSelector(

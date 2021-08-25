@@ -8,11 +8,12 @@ import Followers from "./followers";
 import Enrolled from "./enrolled";
 import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 import { useAuth } from "../../../authentication";
-
+import { useRouter } from "next/router";
 const Profile = (props) => {
   const { authUser } = useAuth();
   const [activeTab, setActiveTab] = useState("posts");
-
+  const router = useRouter();
+  const { pname } = router.query;
   function handleTabChange(newValue) {
     setActiveTab(newValue);
   }
@@ -21,7 +22,9 @@ const Profile = (props) => {
 
   async function fetchFollowersLists() {
     await httpClient
-      .get(`${process.env.BACKEND_URL}/users/follow/?user=${authUser}`)
+      .get(
+        `${process.env.BACKEND_URL}/users/follow/?type=follower&username=${props.userDetails.username}`
+      )
       .then((res) => {
         console.log(res.data);
         setFollowersList(res.data);
@@ -43,17 +46,19 @@ const Profile = (props) => {
         user={props.userDetails}
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
-      {authUser == props.userDetails.username && (
-        <>
-          {activeTab == "classes" && <Classes />}
-          {activeTab == "about" && <About />}
-          {activeTab == "followers" && (
-            <Followers type="Followers" lists={followerslist} />
-          )}
-          {activeTab == "following" && <Following type="Following" />}
-          {activeTab == "enrolled" && <Enrolled />}
-        </>
+      {activeTab == "classes" && <Classes user={props.userDetails} />}
+      {activeTab == "about" && <About />}
+      {activeTab == "followers" && (
+        <Followers
+          type="Followers"
+          lists={followerslist}
+          user={props.userDetails}
+        />
       )}
+      {activeTab == "following" && (
+        <Following type="Following" user={props.userDetails} />
+      )}
+      {activeTab == "enrolled" && <Enrolled user={props.userDetails} />}
     </>
   );
 };

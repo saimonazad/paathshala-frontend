@@ -20,16 +20,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Posts = ({ user }) => {
+  console.log(user);
   const { authUser } = useAuth();
   const classes = useStyles();
   const [mounted, setMounted] = useState(false);
 
   const { data: basicInfo } = useSWR(
-    mounted ? `/users/profile/` : null,
+    mounted ? `/users/profile/?username=${user.username}` : null,
     fetcher
   );
   const { data: workInfo } = useSWR(
-    mounted ? `/users/workinfo/` : null,
+    mounted ? `/users/workinfo/?username=${user.username}` : null,
     fetcher,
     {
       initialData: workInfo,
@@ -37,7 +38,7 @@ const Posts = ({ user }) => {
     }
   );
   const { data: academicInfo } = useSWR(
-    mounted ? `/users/academic_info/` : null,
+    mounted ? `/users/academic_info/?username=${user.username}` : null,
     fetcher
   );
   const [shouldRender, setShouldRender] = useState("");
@@ -45,14 +46,14 @@ const Posts = ({ user }) => {
   useEffect(() => {
     setMounted(true);
     if (shouldRender.charAt(0) == "A") {
-      mutate(`/users/academic_info/`);
-      trigger(`/users/academic_info/`);
+      mutate(`/users/academic_info/?username=${user.username}`);
+      trigger(`/users/academic_info/?username=${user.username}`);
     } else if (shouldRender.charAt(0) == "B") {
-      mutate(`/users/profile/`);
-      trigger(`/users/profile/`);
+      mutate(`/users/profile/?username=${user.username}`);
+      trigger(`/users/profile/?username=${user.username}`);
     } else if (shouldRender.charAt(0) == "W") {
-      mutate(`/users/workinfo/`);
-      trigger(`/users/workinfo/`);
+      mutate(`/users/workinfo/?username=${user.username}`);
+      trigger(`/users/workinfo/?username=${user.username}`);
     }
   }, [shouldRender]);
   return (

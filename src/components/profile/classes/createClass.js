@@ -17,12 +17,15 @@ import {
 } from "@material-ui/core";
 import ToggleButton from "@material-ui/lab/ToggleButton";
 import ToggleButtonGroup from "@material-ui/lab/ToggleButtonGroup";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { faWindowClose } from "@fortawesome/fontawesome-free-solid";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { createCourse } from "../../../redux/actions/courseActions";
 import ToggleDays from "./ToggleDays";
+import { TimePicker } from "antd";
+import "antd/dist/antd.css";
+import moment from "moment";
 const useStyles = makeStyles((theme) => ({
   paper: {
     position: "relative",
@@ -184,6 +187,7 @@ export default function CreateClass({
     formState: { errors },
     getValues,
     reset,
+    control,
   } = useForm();
 
   const classes = useStyles();
@@ -227,6 +231,11 @@ export default function CreateClass({
       setDays([]);
     }
   };
+
+  // function onChange(time, timeString) {
+  //   console.log(moment("2021-08-24T13:04:00+06:00").format());
+  // }
+  const [startTime, setstartTime] = useState("");
 
   const body = (
     <div>
@@ -417,7 +426,7 @@ export default function CreateClass({
               Start Time
             </FormLabel>
             <FormControl variant="filled" className={classes.select}>
-              <TextField
+              {/* <TextField
                 className={classes.time}
                 id="time"
                 type="time"
@@ -434,6 +443,20 @@ export default function CreateClass({
                   required: true,
                   maxLength: 30,
                 })}
+              /> */}
+
+              <Controller
+                control={control}
+                name="start_time"
+                render={({ value, onChange }) => (
+                  <TimePicker
+                    value={value}
+                    use12Hours
+                    format="h:mm a"
+                    onChange={onChange}
+                    getPopupContainer={(node) => node.parentNode}
+                  />
+                )}
               />
             </FormControl>
             {errors.start_time && errors.start_time.type === "required" && (
@@ -444,30 +467,19 @@ export default function CreateClass({
             <FormLabel htmlFor="input" className={classes.label}>
               End Time
             </FormLabel>
-            <FormControl
-              variant="filled"
-              className={classes.select}
-              error={errors.gender ? true : false}
-            >
-              <TextField
-                className={classes.time}
-                id="time"
-                type="time"
-                onChange={(e) => console.log(e.target.value)}
-                className={classes.textField}
-                InputLabelProps={{
-                  shrink: true,
-                }}
-                inputProps={{
-                  step: 300, // 5 min
-                }}
-                error={errors.end_time ? true : false}
-                {...register("end_time", {
-                  required: true,
-                  maxLength: 30,
-                })}
-              />
-            </FormControl>
+            <Controller
+              control={control}
+              name="end_time"
+              value={startTime}
+              render={({ value, onChange }) => (
+                <TimePicker
+                  use12Hours
+                  format="h:mm a"
+                  onChange={(timeString) => setstartTime(timeString)}
+                  getPopupContainer={(node) => node.parentNode}
+                />
+              )}
+            />
             {errors.end_time && errors.end_time.type === "required" && (
               <p className={classes.errorText}>End time is required</p>
             )}

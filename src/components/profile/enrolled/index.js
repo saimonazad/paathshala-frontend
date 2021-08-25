@@ -61,12 +61,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Enrolled = () => {
+const Enrolled = ({ user }) => {
   const classes = useStyles();
   const { authUser } = useAuth();
 
   const { data: enrollInfo, error } = useSWR(
-    `/course/enrollmentCheck/?username=${authUser}&type=all`,
+    `/course/enrollmentCheck/?username=${user.username}&type=all`,
     fetcher
   );
 

@@ -308,7 +308,7 @@ export default function SearchAppBar() {
             href={"/u/" + authUser}
           >
             <Avatar className={classes.avatar} alt="Remy Sharp" src=""></Avatar>
-            <Hidden smDown>
+            {/* <Hidden smDown>
               <Typography
                 style={{ fontWeight: 500, color: theme.palette.common.black }}
               >
@@ -316,7 +316,7 @@ export default function SearchAppBar() {
                   ? JSON.parse(localStorage.getItem("user")).username
                   : ""}
               </Typography>
-            </Hidden>
+            </Hidden> */}
           </Button>
           {authUser && (
             <Menu

@@ -12,7 +12,7 @@ import Typography from "@material-ui/core/Typography";
 import NativeSelect from "@material-ui/core/NativeSelect";
 import { useForm, Controller } from "react-hook-form";
 import { NotificationLoader } from "../../../../../@jumbo/components/ContentLoader";
-
+import { useAuth } from "../../../../../authentication";
 import {
   FormControl,
   FormLabel,
@@ -697,17 +697,32 @@ const ProfileAddUpdate = ({
     control,
   } = useForm();
   const classes = useStyles();
+  const { authUser } = useAuth();
 
   //update handler func
   const handleFormEditProfileInfo = (data) => {
-    httpClient
-      .put(`/users/profile/`, data)
-      .catch((error) => seterror("Something went wrong!"));
-    updateData("B" + Math.random());
-    resetWork();
+    //cleaning data
+    Object.keys(data).forEach((key, value) =>
+      data[key] === undefined || data[value] == "" ? delete data[key] : {}
+    );
+    console.log(data);
+    //api post
+    if (data.length > 0) {
+      httpClient
+        .put(`/users/profile/${authUser}`, data)
+        .catch((error) => seterror("Something went wrong!"));
+      updateData("B" + Math.random());
+      resetWork();
+    }
   };
   //add handler func
   const handleFormAddProfileInfo = (data) => {
+    console.log(data);
+    // , {
+    //     headers: {
+    //       "content-type": "application/x-www-form-urlencoded",
+    //     },
+    //   }
     httpClient
       .post(`/users/profile/`, data)
       .catch((error) => seterror("Something went wrong!"));
@@ -741,7 +756,7 @@ const ProfileAddUpdate = ({
             fullWidth
             error={errors.lives_in_char ? true : false}
             {...registerWork("lives_in_char", {
-              required: true,
+              required: method == "edit" ? false : true,
               maxLength: 30,
             })}
           />
@@ -760,7 +775,7 @@ const ProfileAddUpdate = ({
             fullWidth
             error={errors.bio ? true : false}
             {...registerWork("bio", {
-              required: true,
+              required: method == "edit" ? false : true,
               maxLength: 30,
             })}
           />
@@ -778,14 +793,14 @@ const ProfileAddUpdate = ({
               className={classes.selectEmpty}
               name="gender"
               {...registerWork("gender", {
-                required: true,
+                required: method == "edit" ? false : true,
                 maxLength: 30,
               })}
             >
               <option value="">Select Gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
             </NativeSelect>
           </FormControl>
           {errors.gender && errors.gender.type === "required" && (
@@ -802,9 +817,9 @@ const ProfileAddUpdate = ({
             autoComplete="phoneNo"
             autoFocus
             margin="dense"
-            error={errors.phoneno ? true : false}
-            {...registerWork("phoneno", {
-              required: "Phone number is required",
+            error={errors.phoneNo ? true : false}
+            {...registerWork("phoneNo", {
+              required: method == "edit" ? false : true,
               minLength: {
                 value: 11,
                 message: "Phone number must have 11 digits",
@@ -819,8 +834,8 @@ const ProfileAddUpdate = ({
               },
             })}
           />
-          {errors.phoneno && (
-            <p className={classes.errorText}>{errors.phoneno.message}</p>
+          {errors.phoneNo && (
+            <p className={classes.errorText}>{errors.phoneNo.message}</p>
           )}
         </DialogContent>
         <DialogActions>

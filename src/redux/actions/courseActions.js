@@ -9,11 +9,11 @@ import {
 } from "../../../@jumbo/constants/ActionTypes";
 
 //for getting all personal courses
-export const getAllPersonalCourses = () => {
+export const getAllPersonalCourses = (user) => {
   return (dispatch) => {
     dispatch(fetchStart());
     httpClient
-      .get("/course/info?type=own")
+      .get(`/course/info?type=user&username=${user}`)
       .then((data) => {
         if (data.status === 200) {
           dispatch(fetchSuccess());
