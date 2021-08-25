@@ -7,6 +7,12 @@ import moment from "moment";
 import SchoolIcon from "@material-ui/icons/School";
 import DateRangeIcon from "@material-ui/icons/DateRange";
 import WorkIcon from "@material-ui/icons/Work";
+import useSWR from "swr";
+import { useRouter } from "next/router";
+import {
+  httpClient,
+  fetcher,
+} from "../../../../authentication/auth-methods/jwt-auth/config";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -61,6 +67,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const About = () => {
+  const router = useRouter();
+  const { pname } = router.query;
   const classes = useStyles();
   const [activeBtn, setActiveBtn] = useState("basic");
 
@@ -69,9 +77,18 @@ const About = () => {
     console.log(newValue);
   };
   //redux data
-  const { basicInfo } = useSelector(({ basic }) => basic);
-  const { workInfo } = useSelector(({ work }) => work);
-  const { academicInfo } = useSelector(({ academic }) => academic);
+  const { data: basicInfo } = useSWR(
+    `/users/profile/?username=${pname}`,
+    fetcher
+  );
+  const { data: workInfo } = useSWR(
+    `/users/workinfo/?username=${pname}`,
+    fetcher
+  );
+  const { data: academicInfo } = useSWR(
+    `/users/academic_info/?username=${pname}`,
+    fetcher
+  );
 
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
@@ -241,7 +258,8 @@ const About = () => {
                 </Box>
               </Box>
             )}
-            {activeBtn == "academic" && academicInfo.length>0 &&
+            {activeBtn == "academic" &&
+              academicInfo.length > 0 &&
               academicInfo.map((level) => {
                 return (
                   <Box pl={6} borderColor="secondary.main">
