@@ -98,7 +98,7 @@ const Explore = () => {
   );
 
   //tab handling
-  const [activeTab, setActiveTab] = useState("Teachers");
+  const [activeTab, setActiveTab] = useState("Users");
   function handleTab(newValue) {
     setActiveTab(newValue);
     console.log(activeTab);
@@ -117,10 +117,10 @@ const Explore = () => {
       <Box display="flex" justifyContent="center">
         <ButtonGroup color="primary" aria-label="outlined primary button group">
           <Button
-            value="Teachers"
+            value="Users"
             onClick={(e) => handleTab(e.currentTarget.value)}
             className={
-              activeTab == "Teachers" ? classes.activeTab : classes.test
+              activeTab == "Users" ? classes.activeTab : classes.test
             }
           >
             Users
@@ -149,7 +149,7 @@ const Explore = () => {
         />
       </Box>
 
-      {activeTab == "Teachers" && (
+      {activeTab == "Users" && (
         <Teachers users={users} search={searchTerm} />
       )}
       {activeTab == "Classes" && (
