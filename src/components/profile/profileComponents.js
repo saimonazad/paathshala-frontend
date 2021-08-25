@@ -44,6 +44,7 @@ const Profile = (props) => {
         tabvalue={activeTab}
         changetab={handleTabChange}
         user={props.userDetails}
+        count={followerslist.length}
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
       {activeTab == "classes" && <Classes user={props.userDetails} />}

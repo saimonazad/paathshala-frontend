@@ -116,11 +116,20 @@ const useStyles = makeStyles((theme) => ({
   },
   details__bio: {
     textTransform: "none",
-    fontSize: 12,
+    fontSize: 13,
     lineHeight: 1.2,
+    color: "black",
+    [theme.breakpoints.up("sm")]: {
+      fontSize: 16,
+    },
+  },
+  user__details: {
+    textTransform: "none",
+    fontSize: 12,
+    lineHeight: 1.4,
     color: theme.palette.text.mineShaftLight,
     [theme.breakpoints.up("sm")]: {
-      fontSize: 15,
+      fontSize: 13,
     },
   },
   details__work: {
@@ -129,7 +138,7 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: 1.2,
     color: theme.palette.other.DoveGray,
     [theme.breakpoints.up("sm")]: {
-      fontSize: 15,
+      fontSize: 10,
     },
   },
   actions: {
@@ -178,6 +187,7 @@ const Header = (props) => {
   const [session] = useSession();
   const classes = useStyles();
   const router = useRouter();
+  const { pname } = router.query;
   console.log(`${window.location}}`);
   const user = {
     name: "Ashiqur Rahman",
@@ -243,6 +253,15 @@ const Header = (props) => {
             className={classes.details__bio}
           >
             {props.user.bio}
+          </Typography>
+          <Typography
+            component="h2"
+            gutterBottom
+            variant="overline"
+            className={classes.user__details}
+          >
+            <strong>Username</strong> : {pname} <br />
+            <strong>Followed By</strong> : {props.count} people
           </Typography>
         </div>
         <div className={classes.actions}>
