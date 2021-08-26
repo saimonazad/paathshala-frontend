@@ -41,8 +41,10 @@ const ClassPage = () => {
   if (error) {
     return <DefaultErrorPage statusCode={404} />;
   }
-
-  if (enrollmentInfo.length != 1) {
+  if (enrollmentInfo.length == 0) {
+    return <DefaultErrorPage statusCode={404} />;
+  }
+  if (enrollmentInfo[0]?.course != id && enrollmentInfo[0]?.course != null) {
     return <ClassPageNotEnrolled />;
   }
   return (
