@@ -45,6 +45,7 @@ import Linkify from "react-linkify";
 import UserDetails from "./userDetails";
 var linkify = require("linkify-it")();
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
+import Attachments from "./Attachments";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -140,7 +141,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
   }
 
   const { comments, isLoading } = useSelector(({ comment }) => comment);
- 
+
   //post 3 dots open/close
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
@@ -300,6 +301,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
               ) : (
                 <Typography className={classes.status}>
                   <Linkify>{feed.post_text}</Linkify>
+                  <Attachments id={feed.id} />
                   {linkify.match(feed.post_text) && (
                     <LinkPreview
                       url={linkify.match(feed.post_text)[0].url}
