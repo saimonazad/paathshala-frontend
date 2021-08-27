@@ -6,14 +6,18 @@ import {
   Grid,
   makeStyles,
   Typography,
+  List,
+  ListItem,
 } from "@material-ui/core";
+import { useDropzone } from "react-dropzone";
+
 import StarIcon from "@material-ui/icons/Star";
-import useSWR, { mutate, trigger } from "swr";
+import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
 import { useAuth } from "../../../../authentication";
 import CmtList from "../../../../@coremat/CmtList";
 import GridEmptyResult from "../../../../@coremat/CmtGridView/GridEmptyResult";
-import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -67,21 +71,32 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     textTransform: "none",
   },
+  dropzone: {
+    flex: 1,
+    border: "2px dashed rgba(0, 0, 0, 0.06)",
+    display: "flex",
+    outline: "none",
+    padding: "40px 20px",
+    transition: "border .24s ease-in-out",
+    alignItems: "center",
+    borderRadius: "2px",
+    flexDirection: "column",
+    backgroundColor: "#f4f4f7",
+  },
 }));
 
-const Students = ({ data, courseInfo, mutateStudent }) => {
+const Assignments = () => {
   const classes = useStyles();
-  const { authUser } = useAuth();
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
+  const files = acceptedFiles.map((file) => (
+    <ListItem key={file.path}>
+      {file.path} - {file.size} bytes
+    </ListItem>
+  ));
 
-  const handleStudentDelete = (id) => {
-    httpClient
-      .delete(`/course/controller/${id}/`)
-      .then((res) => {
-        mutateStudent(); // trigger(`/course/controller?course_id=${courseInfo.id}`);
-      })
-      .catch((e) => console.log(e));
-  };
-
+  const submitFileHandler = () => {
+      console.log(files)
+  }
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box
@@ -90,7 +105,7 @@ const Students = ({ data, courseInfo, mutateStudent }) => {
         alignItems="center"
         className={classes.header}
       >
-        <Typography component="h1">Enrolled Student</Typography>
+        <Typography component="h1">Submit Assignment</Typography>
         <div>
           {/* <StarIcon className={classes.startIcon} />
           <Typography component="span">4.5/5</Typography>
@@ -98,57 +113,31 @@ const Students = ({ data, courseInfo, mutateStudent }) => {
         </div>
       </Box>
       <Box className={classes.class__list}>
-        <CmtList
-          data={data.students}
-          renderRow={(student) => (
-            <Box
-              mb={2}
-              borderRadius={4}
-              display="flex"
-              justifyContent="space-between"
-              className={classes.class}
-              alignItems="center"
-            >
-              <Box display="flex">
-                <Typography>{student.id}</Typography>
-                <Divider
-                  orientation="vertical"
-                  flexItem
-                  className={classes.divider}
-                />
-                <Typography>{student.student}</Typography>
-              </Box>
-              <Box display="flex">
-                {courseInfo[0]?.user == authUser ? (
-                  <Button
-                    className={classes.btn}
-                    variant="outlined"
-                    color="secondary"
-                    onClick={() => handleStudentDelete(student.id)}
-                  >
-                    Remove
-                  </Button>
-                ) : (
-                  ""
-                )}
-                <Button
-                  className={classes.btn}
-                  variant="contained"
-                  color="secondary"
-                  href={`/u/${student.student}`}
-                >
-                  View Profile
-                </Button>
-              </Box>
-            </Box>
-          )}
-          ListEmptyComponent={
-            <GridEmptyResult loader={false} title="No Student Enrolled" />
-          }
-        />
+        <Box>
+          <Box {...getRootProps()} className={classes.dropzone}>
+            <input {...getInputProps()} />
+            <Typography>
+              Drag 'n' drop some files here, or click to select files
+            </Typography>
+          </Box>
+          <aside>
+            <Typography component="h4" variant="inherit">
+              Files
+            </Typography>
+            <List>{files}</List>
+          </aside>
+        </Box>
+        <Button
+          variant="contained"
+          color="primary"
+          disabled={acceptedFiles.length == 0}
+          onClick={submitFileHandler}
+        >
+          Submit
+        </Button>
       </Box>
     </Box>
   );
 };
 
-export default Students;
+export default Assignments;

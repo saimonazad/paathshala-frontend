@@ -7,6 +7,8 @@ import { useAuth } from "../../../authentication";
 import useSWR from "swr";
 import { useRouter } from "next/router";
 import { fetcher } from "../../services/fetcher";
+import ClassPageNotEnrolled from "./classPageNotEnrolled";
+import Assignments from "./assignment";
 const ClassComponents = (props) => {
   const { authUser } = useAuth();
   //get course id
@@ -19,8 +21,17 @@ const ClassComponents = (props) => {
   function handleTabChange(newValue) {
     setActiveTab(newValue);
   }
+
+  //payment check
+  const { data: payment, error: paymentError } = useSWR(
+    `payment/check?course_id=12&username=saimonazad`,
+    fetcher
+  );
+  if (paymentError) {
+    return <ClassPageNotEnrolled />;
+  }
   //get course student
-  const { data: students } = useSWR(
+  const { data: students, mutate: mutateStudent } = useSWR(
     `/course/controller?course_id=${id}`,
     fetcher
   );
@@ -42,8 +53,13 @@ const ClassComponents = (props) => {
       />
       {activeTab == "posts" && <Posts user={props.userDetails} />}
       {activeTab == "students" && (
-        <Students data={students} courseInfo={courseInfo} />
+        <Students
+          data={students}
+          courseInfo={courseInfo}
+          mutateStudent={mutateStudent}
+        />
       )}
+      {activeTab == "assignments" && <Assignments />}
     </>
   );
 };

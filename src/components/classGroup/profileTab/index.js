@@ -83,6 +83,11 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
               value="students"
               label="Enrolled Students"
             />
+            <Tab
+              className={classes.tabRoot}
+              value="assignments"
+              label="Submit Assignment"
+            />
             {/* <Tab className={classes.tabRoot} value="classes" label="Classes" />
             <Tab className={classes.tabRoot} value="about" label="About" />
             <Tab
