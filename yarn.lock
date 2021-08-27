@@ -1279,7 +1279,7 @@ clone@^2.1.2:
   resolved "https://registry.npmjs.org/clone/-/clone-2.1.2.tgz"
   integrity sha1-G39Ln1kfHo+DZwQBYANFoCiHQ18=
 
-clsx@^1.0.4:
+clsx@^1.0.4, clsx@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmjs.org/clsx/-/clsx-1.1.1.tgz"
   integrity sha512-6/bPho624p3S2pMyvP5kKBPXnI3ufHLObBFCfgx+LkeR5lg2XYy2hqZqUf45ypD8COn2bhgGJSUE+l5dhNBieA==
@@ -3573,6 +3573,13 @@ react-slick@^0.28.1:
     json2mq "^0.2.0"
     lodash.debounce "^4.0.8"
     resize-observer-polyfill "^1.5.0"
+
+react-toastify@^8.0.1:
+  version "8.0.1"
+  resolved "https://registry.yarnpkg.com/react-toastify/-/react-toastify-8.0.1.tgz#5787e0bc3fc3106c264fcafe101e77650b9448ba"
+  integrity sha512-hHf4sJo9D+SKPcNM5iiri1UDXjZkDvflMGCPNnfm4fjUEC3rH4tRqOQB5IXjroEtArRRf3f26nTsKdficEBBIg==
+  dependencies:
+    clsx "^1.1.1"
 
 react-transition-group@^4.4.0:
   version "4.4.2"

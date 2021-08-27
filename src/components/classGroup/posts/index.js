@@ -6,9 +6,10 @@ import Following from "./following";
 import PostCard from "./postCard";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuth } from "../../../../authentication";
-import Rating from "./rating";
+import RatingClass from "./rating";
 import { useRouter } from "next/router";
-
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 //feed action -redux
 import {
   getBasicInfo,
@@ -29,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Posts = ({ user }) => {
-   const router = useRouter();
+  const router = useRouter();
   const { authUser } = useAuth();
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -44,7 +45,7 @@ const Posts = ({ user }) => {
     <Box container className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <Rating />
+          <RatingClass />
         </Grid>
         <Grid item xs={8}>
           <Following />
@@ -52,6 +53,7 @@ const Posts = ({ user }) => {
       </Grid>
       <PostCard />
       <Feeds />
+      <ToastContainer />
     </Box>
   );
 };
