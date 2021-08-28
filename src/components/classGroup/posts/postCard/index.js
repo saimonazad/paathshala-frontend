@@ -36,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 
 const PostCard = () => {
   const router = useRouter();
+  const urlParam = router.query;
+  let courseId = urlParam.slug[0];
   const dispatch = useDispatch();
 
   const classes = useStyles();
@@ -53,7 +55,7 @@ const PostCard = () => {
     //feed data to post
     const feedData = {
       post_text: postText,
-      posted_on: router.query.id,
+      posted_on: courseId,
       post_type: "testPost",
     };
     dispatch(createCoursePost(feedData));

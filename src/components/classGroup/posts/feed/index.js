@@ -80,9 +80,11 @@ const useStyles = makeStyles((theme) => ({
 const Feed = ({ group, enroll, personal }) => {
   const router = useRouter();
   const dispatch = useDispatch();
-
+  const urlParam = router.query;
+  let courseId = urlParam.slug[0];
+  console.log(courseId);
   useEffect(() => {
-    dispatch(getAllCourseFeeds(router.query.id));
+    dispatch(getAllCourseFeeds(courseId));
   }, [dispatch]);
 
   const [commentActive, setCommentActive] = useState(false);

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { makeStyles, Grid, Box } from "@material-ui/core";
+import { makeStyles, Grid, Box, Typography } from "@material-ui/core";
 import Info from "./info";
 import Feeds from "./feeds";
 import Following from "./following";
@@ -10,6 +10,8 @@ import RatingClass from "./rating";
 import { useRouter } from "next/router";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.min.css";
+import Fab from "@material-ui/core/Fab";
+import AddIcon from "@material-ui/icons/Add";
 //feed action -redux
 import {
   getBasicInfo,
@@ -26,6 +28,14 @@ const useStyles = makeStyles((theme) => ({
   },
   posts: {
     [theme.breakpoints.down("sm")]: { marginTop: theme.spacing(-4) },
+  },
+  fab: {
+    margin: "0px",
+    top: "auto",
+    right: "30%",
+    bottom: "50px",
+    left: "auto",
+    position: "fixed",
   },
 }));
 
@@ -53,6 +63,9 @@ const Posts = ({ user, courseInfo }) => {
       </Grid>
       <PostCard />
       <Feeds />
+      <Typography className={classes.fab} color="primary" aria-label="add">
+        Join Class
+      </Typography>
     </Box>
   );
 };
