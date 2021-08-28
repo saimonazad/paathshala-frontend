@@ -26,7 +26,6 @@ const ClassPage = () => {
       )
       .then((res) => {
         setenrollmentInfo(res.data);
-        console.log({ course: res.data });
       })
       .catch((error) => {
         setError(true);

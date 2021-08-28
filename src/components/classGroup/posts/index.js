@@ -18,6 +18,7 @@ import {
   getWorkInfo,
   getAcademicInfo,
 } from "../../../redux/actions/profileActions";
+import Notice from "./notice";
 //redux store
 
 const useStyles = makeStyles((theme) => ({
@@ -53,6 +54,7 @@ const Posts = ({ user, courseInfo }) => {
 
   return (
     <Box container className={classes.root}>
+      <Notice courseInfo={courseInfo} />
       <Grid container spacing={2}>
         <Grid item xs={4}>
           <RatingClass courseInfo={courseInfo} />
