@@ -46,6 +46,7 @@ import UserDetails from "./userDetails";
 var linkify = require("linkify-it")();
 import { LinkPreview } from "@dhaiwat10/react-link-preview";
 import Attachments from "./Attachments";
+import Like from "./like";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -372,7 +373,7 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 ml={1}
                 mr={1}
               >
-                <Button
+                {/* <Button
                   size="small"
                   color="secondary"
                   classes={{ root: classes.button, label: classes.label }}
@@ -383,7 +384,8 @@ const Feed = ({ group, enroll, personal, feed }) => {
                   }
                 >
                   Like
-                </Button>
+                </Button> */}
+                <Like postId={feed.id} />
                 <Button
                   onClick={() => handleCommentBox(feed.id)}
                   size="small"

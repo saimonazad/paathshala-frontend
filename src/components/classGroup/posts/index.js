@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { makeStyles, Grid, Box, Typography } from "@material-ui/core";
+import { makeStyles, Grid, Box, Button } from "@material-ui/core";
 import Info from "./info";
 import Feeds from "./feeds";
 import Following from "./following";
@@ -32,8 +32,8 @@ const useStyles = makeStyles((theme) => ({
   fab: {
     margin: "0px",
     top: "auto",
-    right: "30%",
-    bottom: "50px",
+    right: "20px",
+    bottom: "20px",
     left: "auto",
     position: "fixed",
   },
@@ -63,9 +63,14 @@ const Posts = ({ user, courseInfo }) => {
       </Grid>
       <PostCard />
       <Feeds />
-      <Typography className={classes.fab} color="primary" aria-label="add">
+      <Button
+        className={classes.fab}
+        color="primary"
+        aria-label="add"
+        variant="outlined"
+      >
         Join Class
-      </Typography>
+      </Button>
     </Box>
   );
 };
