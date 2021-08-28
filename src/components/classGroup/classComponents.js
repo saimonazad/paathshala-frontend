@@ -51,7 +51,9 @@ const ClassComponents = (props) => {
         courseInfo={courseInfo}
         error={error}
       />
-      {activeTab == "posts" && <Posts user={props.userDetails} />}
+      {activeTab == "posts" && (
+        <Posts user={props.userDetails} courseInfo={courseInfo} />
+      )}
       {activeTab == "students" && (
         <Students
           data={students}

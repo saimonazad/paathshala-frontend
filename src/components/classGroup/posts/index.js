@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Posts = ({ user }) => {
+const Posts = ({ user, courseInfo }) => {
   const router = useRouter();
   const { authUser } = useAuth();
   const classes = useStyles();
@@ -45,7 +45,7 @@ const Posts = ({ user }) => {
     <Box container className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={4}>
-          <RatingClass />
+          <RatingClass courseInfo={courseInfo} />
         </Grid>
         <Grid item xs={8}>
           <Following />

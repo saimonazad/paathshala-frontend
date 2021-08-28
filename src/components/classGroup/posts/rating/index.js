@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
     textTransform: "none",
   },
 }));
-const RatingClass = () => {
+const RatingClass = ({ courseInfo }) => {
   const classes = useStyles();
   const router = useRouter();
   let urlParam = router.query;
@@ -63,7 +63,6 @@ const RatingClass = () => {
             draggable: true,
             progress: undefined,
           });
-          handleModalClose();
         }
       })
       .catch((error) => {
@@ -89,6 +88,7 @@ const RatingClass = () => {
           });
         }
       });
+    handleModalClose();
   };
   return (
     <Box
@@ -102,7 +102,10 @@ const RatingClass = () => {
       justifyItems="center"
     >
       <Box>
-        <Typography>4.5/5 36 </Typography>
+        <Typography>
+          {courseInfo && courseInfo[0].rating}/5 (
+          {courseInfo && courseInfo[0].rating_count}){" "}
+        </Typography>
       </Box>
       <Box display="flex" alignItems="center" className={classes.follower}>
         <Button
