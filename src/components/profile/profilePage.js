@@ -5,7 +5,8 @@ import axios from "axios";
 import { Typography } from "@material-ui/core";
 import DefaultErrorPage from "next/error";
 import { useAuth } from "../../../authentication";
-
+import useSWR from "swr";
+import { fetcher } from "../../services/fetcher";
 import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 
 const ProfilePage = () => {
@@ -14,32 +15,24 @@ const ProfilePage = () => {
   const router = useRouter();
   const { pname } = router.query;
   console.log(pname);
-  const [userProfileInfo, setUserProfileInfo] = useState({});
+  // const [userProfileInfo, setUserProfileInfo] = useState({});
 
-  function profileCheck() {
-    httpClient
-      .get(
-        `${process.env.BACKEND_URL}/users/userinfo/?username=${pname}`
-      )
-      .then((res) => {
-        setUserProfileInfo(res.data[0]);
-        console.log(res.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+  const {
+    data: userProfileInfo,
+    error,
+    mutate: mutateProfile,
+  } = useSWR(`/users/userinfo/?username=${pname}`, fetcher);
+  if (error) {
+    return <h2>No profile found</h2>;
   }
-
-  useEffect(() => {
-    profileCheck();
-  }, [pname]);
 
   return (
     <>
-      {userProfileInfo.username ? (
-        <Profile userDetails={userProfileInfo} />
-      ) : (
-        "No profile found"
+      {userProfileInfo && userProfileInfo[0]?.username && (
+        <Profile
+          userDetails={userProfileInfo[0]}
+          mutateProfile={mutateProfile}
+        />
       )}
     </>
   );

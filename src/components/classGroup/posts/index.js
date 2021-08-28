@@ -53,7 +53,6 @@ const Posts = ({ user, courseInfo }) => {
       </Grid>
       <PostCard />
       <Feeds />
-      <ToastContainer />
     </Box>
   );
 };

@@ -24,6 +24,9 @@ import PersonAddIcon from "@material-ui/icons/PersonAdd";
 import ProfileTab from "../profileTab";
 import { useSession } from "next-auth/client";
 import SocialMediaButtons from "../../facebook-share";
+import { useAuth } from "../../../../authentication";
+import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+import { toast } from "react-toastify";
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -69,9 +72,10 @@ const useStyles = makeStyles((theme) => ({
       bottom: "auto",
     },
     "&:hover": {
-      backgroundColor: colors.blueGrey[900],
+      backgroundColor: "white",
     },
   },
+
   addPhotoIcon: {
     marginRight: theme.spacing(1),
   },
@@ -100,6 +104,12 @@ const useStyles = makeStyles((theme) => ({
       height: 175,
       width: 175,
       top: -16.5,
+    },
+    "& img": {
+      height: "100%",
+      width: "100%",
+      objectFit: "cover",
+      borderRadius: "50%",
     },
   },
   details: {
@@ -180,6 +190,32 @@ const useStyles = makeStyles((theme) => ({
   profileLinks: {
     padding: theme.spacing(0, 1),
   },
+  picture: {
+    display: "block",
+    position: "relative",
+    "&:hover": {
+      "& $changeProfilePicButton": {
+        visibility: "visible",
+      },
+    },
+    marginBottom: theme.spacing(10),
+  },
+  changeProfilePicButton: {
+    visibility: "hidden",
+    position: "absolute",
+
+    // bottom: theme.spacing(4),
+    right: "45%",
+    backgroundColor: colors.blueGrey[900],
+    color: theme.palette.white,
+    [theme.breakpoints.down("md")]: {
+      top: theme.spacing(3),
+      bottom: "auto",
+    },
+    "&:hover": {
+      backgroundColor: "white",
+    },
+  },
 }));
 
 const Header = (props) => {
@@ -188,54 +224,140 @@ const Header = (props) => {
   const classes = useStyles();
   const router = useRouter();
   const { pname } = router.query;
-  console.log(`${window.location}}`);
-  const user = {
-    name: "Ashiqur Rahman",
-    bio: "Lecturer | Bangla",
-    work: "Dhaka Commerce College",
-    avatar:
-      "https://img.favpng.com/18/18/18/computer-icons-icon-design-avatar-png-favpng-X29r5WhWMXVYvNsYXkR4iBgwf.jpg",
-    cover:
-      "https://static-cse.canva.com/blob/129490/steve-roe-734236-unsplash.64603fa0.jpg",
-    connectedStatus: "not_connected",
+  const { authUser } = useAuth();
+
+  const [coverFile, setcoverFile] = useState();
+  const handleCoverPic = (e) => {
+    httpClient
+      .get(`/users/profile/`)
+      .then((res) => {
+        const formData = new FormData();
+        formData.append("lives_in_char", res.data[0].lives_in_char);
+        formData.append("bio", res.data[0].bio);
+        formData.append("gender", res.data[0].gender);
+        formData.append("phoneNo", res.data[0].phoneNo);
+        formData.append("referral_code", "");
+        formData.append("cover", e.target.files[0]);
+        httpClient
+          .post(`/users/profile/?cover_picture=yes`, formData)
+          .then((res) => {
+            toast.success("Cover uploaded successfully", {
+              position: "bottom-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            props.mutateProfile();
+          });
+      })
+      .catch((e) =>
+        toast.error("Something went wrong!", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      );
   };
-
-  const [connectedStatus, setConnectedStatus] = useState(user.connectedStatus); // if rejected do not show the button
-  const [openSnackbar, setOpenSnackbar] = useState(false);
-
-  useEffect(() => {
-    if (connectedStatus === "pending") {
-      setOpenSnackbar(true);
-    }
-  }, [connectedStatus]);
-
-  const handleConnectToggle = () => {
-    setConnectedStatus((connectedStatus) =>
-      connectedStatus === "not_connected" ? "pending" : "not_connected"
-    );
+  const handleProfilePic = (e) => {
+    httpClient
+      .get(`/users/profile/`)
+      .then((res) => {
+        const formData = new FormData();
+        formData.append("lives_in_char", res.data[0].lives_in_char);
+        formData.append("bio", res.data[0].bio);
+        formData.append("gender", res.data[0].gender);
+        formData.append("phoneNo", res.data[0].phoneNo);
+        formData.append("referral_code", "");
+        formData.append("picture", e.target.files[0]);
+        httpClient
+          .post(`/users/profile/?profile_picture=yes`, formData)
+          .then((res) => {
+            toast.success("Profile picture uploaded successfully", {
+              position: "bottom-center",
+              autoClose: 3000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+            });
+            props.mutateProfile();
+          });
+      })
+      .catch((e) =>
+        toast.error("Something went wrong!", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      );
   };
-
-  const handleSnackbarClose = () => {
-    setOpenSnackbar(false);
-  };
-
   return (
     <div {...rest} className={clsx(classes.root, className)}>
       <div
         className={classes.cover}
         style={{ backgroundImage: `url(${props.user.cover})` }}
       >
-        <Button className={classes.changeButton} variant="contained">
-          <AddPhotoIcon className={classes.addPhotoIcon} />
-          Change Cover
-        </Button>
+        <input
+          accept="image/*"
+          type="file"
+          name="file"
+          style={{ display: "none" }}
+          id="cover-upload"
+          onChange={(e) => handleCoverPic(e)}
+        />
+
+        {authUser == pname && (
+          <label htmlFor="cover-upload">
+            <Button
+              className={classes.changeButton}
+              variant="contained"
+              component="span"
+            >
+              <AddPhotoIcon className={classes.addPhotoIcon} />
+              Change Cover
+            </Button>
+          </label>
+        )}
       </div>
       <div className={classes.container}>
-        <Avatar
-          alt="Person"
-          className={classes.avatar}
-          src={props.user.picture}
-        />
+        <div className={classes.picture}>
+          <Avatar
+            alt="Person"
+            className={classes.avatar}
+            src={props.user.picture}
+          />
+          <input
+            accept="image/*"
+            type="file"
+            name="file"
+            style={{ display: "none" }}
+            id="pic-upload"
+            onChange={(e) => handleProfilePic(e)}
+          />
+          {authUser == pname && (
+            <label htmlFor="pic-upload">
+              <Button
+                className={classes.changeProfilePicButton}
+                variant="contained"
+                component="span"
+              >
+                <AddPhotoIcon className={classes.addPhotoIcon} />
+              </Button>
+            </label>
+          )}
+        </div>
         <div className={classes.details}>
           <Typography
             component="h1"
@@ -280,21 +402,6 @@ const Header = (props) => {
           user={props.user}
         />
       </div>
-
-      <Snackbar
-        anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
-        }}
-        autoHideDuration={6000}
-        message={
-          <Typography color="inherit" variant="h6">
-            Sent connection request
-          </Typography>
-        }
-        onClose={handleSnackbarClose}
-        open={openSnackbar}
-      />
     </div>
   );
 };

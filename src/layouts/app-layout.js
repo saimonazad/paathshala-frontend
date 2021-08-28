@@ -6,6 +6,8 @@ import { useRouter } from "next/router";
 import { useAuth } from "../../authentication";
 import PageLoader from "../../@jumbo/components/PageComponents/PageLoader";
 import { CartProvider } from "react-use-cart";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.min.css";
 
 const useStyles = makeStyles((theme) => ({
   container__width: {
@@ -40,6 +42,7 @@ const Layout1 = ({ children }) => {
       <Hidden smUp>
         <BottomNavBar />
       </Hidden>
+      <ToastContainer />
     </CartProvider>
   );
 };
