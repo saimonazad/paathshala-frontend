@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   CardHeader,
   Avatar,
@@ -194,6 +194,32 @@ const Feed = ({ group, enroll, personal, feed }) => {
     seteditPost(false);
   };
 
+  //scroll to post
+  const { query } = useRouter();
+
+  const refs = feedPosts?.reduce((acc, value) => {
+    acc[value.id] = React.createRef();
+    return acc;
+  }, {});
+  const mounted = useRef(false);
+
+  const gotoPost = (id) => {
+    refs &&
+      refs[id]?.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    setActivePost(id);
+    setCommentActive(true);
+  };
+
+  useEffect(() => {
+    if (query.post != undefined) {
+      gotoPost(query.post);
+    }
+  }, [feedPosts]);
+  console.log(query.post);
+
   const classes = useStyles();
   return (
     <Box className={classes.root}>
@@ -202,7 +228,8 @@ const Feed = ({ group, enroll, personal, feed }) => {
         renderRow={(feed, index) => (
           <Grow
             mb={2}
-            key={index}
+            key={feed.id}
+            ref={refs[feed.id]}
             in={true}
             style={{ transformOrigin: "0 0 0" }}
             {...(true ? { timeout: 1000 } : {})}

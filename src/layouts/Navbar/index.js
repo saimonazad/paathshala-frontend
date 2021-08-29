@@ -229,7 +229,11 @@ export default function SearchAppBar() {
               Home
             </Button>
             <Button
+              href={"/notifications"}
               size="small"
+              className={
+                asPath === "/notifications" ? classes.active : classes.empty
+              }
               classes={{ root: classes.button, label: classes.label }}
             >
               <NotificationsIcon />
