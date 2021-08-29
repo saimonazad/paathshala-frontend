@@ -57,7 +57,11 @@ export default function BottomNavBar() {
         href={"/explore"}
       />
       <BottomNavigationAction value="nearby" icon={<ChatIcon />} />
-      <BottomNavigationAction value="folder" icon={<NotificationsIcon />} />
+      <BottomNavigationAction
+        value="/notifications"
+        href={"/notifications"}
+        icon={<NotificationsIcon />}
+      />
       <BottomNavigationAction value="menu" icon={<MenuIcon />} />
     </BottomNavigation>
   );
