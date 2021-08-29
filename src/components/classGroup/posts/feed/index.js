@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   CardHeader,
   Avatar,
@@ -11,6 +11,7 @@ import {
   Button,
   label,
   Collapse,
+  TextField,
 } from "@material-ui/core/";
 import ChatBubbleOutlineOutlinedIcon from "@material-ui/icons/ChatBubbleOutlineOutlined";
 import MoreVertIcon from "@material-ui/icons/MoreVert";
@@ -30,7 +31,22 @@ import { useSelector, useDispatch } from "react-redux";
 import Grow from "@material-ui/core/Grow";
 import { useRouter } from "next/router";
 import { getComments, addComment } from "../../../../redux/actions/WallApp";
-import { getAllCourseFeeds } from "../../../../redux/actions/WallApp";
+import Link from "@material-ui/core/Link";
+import { fetcher, deletion } from "../../../../services/fetcher";
+import useSWR, { mutate, trigger } from "swr";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
+import Fade from "@material-ui/core/Fade";
+import PageLoader from "../../../../../@jumbo/components/PageComponents/PageLoader";
+import { httpClient } from "../../../../../authentication/auth-methods/jwt-auth/config";
+import { useAuth } from "../../../../../authentication";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Linkify from "react-linkify";
+import UserDetails from "./userDetails";
+var linkify = require("linkify-it")();
+import { LinkPreview } from "@dhaiwat10/react-link-preview";
+import Attachments from "./Attachments";
+import Like from "./like";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,13 +62,7 @@ const useStyles = makeStyles((theme) => ({
     fontSize: theme.spacing(2),
     color: theme.palette.common.black,
   },
-  post__time: {
-    fontSize: theme.spacing(1.75),
-    color: theme.palette.text.gray,
-  },
-  profile__img: {
-    marginRight: theme.spacing(1),
-  },
+
   btn__like: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
@@ -75,24 +85,32 @@ const useStyles = makeStyles((theme) => ({
     marginRight: theme.spacing(1),
   },
   iconMiddle: { verticalAlign: "top" },
+  postInput: {
+    height: 36,
+    border: `1px solid ${theme.palette.text.mineShaft}`,
+    "&::focus": {
+      border: "none",
+    },
+  },
+  btn: { textTransform: "none", fontWeight: 400 },
+  divider: {
+    margin: theme.spacing(2, 0, 1, 0),
+  },
 }));
 
-const Feed = ({ group, enroll, personal }) => {
-  const router = useRouter();
+const Feed = ({ group, enroll, personal, feed, mutate }) => {
+  const { authUser } = useAuth();
   const dispatch = useDispatch();
-  const urlParam = router.query;
-  let courseId = urlParam.slug[0];
-  console.log(courseId);
-  useEffect(() => {
-    dispatch(getAllCourseFeeds(courseId));
-  }, [dispatch]);
-
+  const [loading, setloading] = useState(null);
   const [commentActive, setCommentActive] = useState(false);
   const [activePost, setActivePost] = useState(0);
+  const [selectedPost, setselectedPost] = useState(0);
+
+  const { query } = useRouter();
+  let courseId = query.slug[0];
 
   const handleCommentBox = (id) => {
     dispatch(getComments(id));
-
     setActivePost(id);
     setCommentActive(true);
   };
@@ -115,18 +133,103 @@ const Feed = ({ group, enroll, personal }) => {
     setPostText("");
   };
 
-  const { courseFeedPosts } = useSelector(({ courseFeeds }) => courseFeeds);
-  console.table({ p: courseFeedPosts });
-  const { comments } = useSelector(({ comment }) => comment);
+  //destructure feed array to render
+  let feedPosts;
+  if (feed) {
+    feedPosts = [].concat(...feed);
+    //sort by time
+    feedPosts.sort(
+      (a, b) =>
+        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+    );
+  }
+
+  const { comments, isLoading } = useSelector(({ comment }) => comment);
+
+  //post 3 dots open/close
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setselectedPost(event.currentTarget.value);
+    setAnchorEl(event.currentTarget);
+  };
+  //post 3 dots menu close
+  const handleClose = (e) => {
+    setAnchorEl(null);
+  };
+
+  //post delete func
+  const postDeleteHandler = () => {
+    setloading(true);
+    console.table(feed);
+    // let updatedFeed = feed?.map((k) => k.filter((e) => e.id !== selectedPost));
+    mutate();
+    httpClient
+      .delete(`/newsfeed/post/?post_id=${selectedPost}`)
+      .then((res) => trigger(`/newsfeed/post/?posted_on=${courseId}`))
+      .catch((e) => console.log(e));
+    setloading(false);
+    setAnchorEl(null);
+  };
+  //edit post
+  const [editPost, seteditPost] = useState(false);
+
+  const postEditHandler = () => {
+    seteditPost(!editPost);
+    setAnchorEl(null);
+  };
+  const submitUpdatedPost = (e) => {
+    e.preventDefault();
+    setloading(true);
+    // var updatedFeed = feed.map((el) =>
+    //   el.map((k) => (k.id == selectedPost ? { ...k, post_text: postText } : k))
+    // );
+    mutate();
+    httpClient
+      .put(`/newsfeed/post/?post_id=${selectedPost}`, {
+        post_text: postText,
+      })
+      .then((res) => trigger(`/newsfeed/post/?posted_on=${courseId}`))
+      .catch((e) => console.log(e));
+    setloading(false);
+
+    seteditPost(false);
+  };
+
+  //scroll to post
+  const refs = feedPosts?.reduce((acc, value) => {
+    acc[value.id] = React.createRef();
+    return acc;
+  }, {});
+  const mounted = useRef(false);
+
+  const gotoPost = (id) => {
+    refs &&
+      refs[id]?.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    setActivePost(id);
+    setCommentActive(true);
+  };
+
+  useEffect(() => {
+    if (query.post != undefined) {
+      gotoPost(query.post);
+    }
+  }, [feedPosts]);
+
   const classes = useStyles();
   return (
     <Box className={classes.root}>
       <CmtList
-        data={courseFeedPosts}
+        data={feedPosts}
         renderRow={(feed, index) => (
           <Grow
             mb={2}
-            key={index}
+            key={feed.id}
+            ref={refs[feed.id]}
             in={true}
             style={{ transformOrigin: "0 0 0" }}
             {...(true ? { timeout: 1000 } : {})}
@@ -143,33 +246,98 @@ const Feed = ({ group, enroll, personal }) => {
                 justifyContent="space-between"
               >
                 <Box display="flex" alignItems="center">
+                  <UserDetails
+                    courseId={feed.posted_on}
+                    username={feed.user}
+                    time={feed.timestamp}
+                  />
+                </Box>
+                {authUser == feed.user && (
                   <Box>
-                    <Avatar src="" className={classes.profile__img} />
-                  </Box>
-                  <Box>
-                    <Typography
-                      component="h2"
-                      className={classes.profile__name}
+                    <IconButton
+                      value={feed.id}
+                      onClick={(e) => handleClick(e)}
+                      color="secondary"
+                      className={classes.appbar_rightIcon}
                     >
-                      {feed.user}
-                    </Typography>
-                    <Typography component="h3" className={classes.post__time}>
-                      {moment(feed.timestamp).fromNow()}
-                    </Typography>
+                      <MoreHorizIcon />
+                    </IconButton>
                   </Box>
-                </Box>
-                <Box>
-                  <IconButton
-                    color="secondary"
-                    className={classes.appbar_rightIcon}
-                  >
-                    <MoreHorizIcon />
-                  </IconButton>
-                </Box>
+                )}
+                <Menu
+                  elevation={1}
+                  id="menu-appbar"
+                  anchorEl={anchorEl}
+                  getContentAnchorEl={null}
+                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                  transformOrigin={{ vertical: "top", horizontal: "center" }}
+                  open={open}
+                  onClose={handleClose}
+
+                  // className={classes.menu}
+                >
+                  <MenuItem onClick={postEditHandler}>Edit/Update</MenuItem>
+                  <MenuItem onClick={postDeleteHandler}>Delete</MenuItem>
+                </Menu>
               </Box>
-              <Typography className={classes.status}>
-                {feed.post_text}
-              </Typography>
+              {editPost && selectedPost == feed.id ? (
+                <form
+                  noValidate
+                  autoComplete="off"
+                  onSubmit={submitUpdatedPost}
+                >
+                  <Box display="flex" mt={1}>
+                    <Box flexGrow={4} pl={1} pr={1}>
+                      <TextField
+                        defaultValue={feed.post_text}
+                        onChange={(e) => setPostText(e.target.value)}
+                        name="post"
+                        variant="outlined"
+                        required
+                        fullWidth
+                        id="post"
+                        InputProps={{
+                          className: classes.postInput,
+                        }}
+                      />
+                    </Box>
+                    <Box flexGrow={1}>
+                      <Button
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.btn}
+                        fullWidth
+                      >
+                        Update
+                      </Button>
+                    </Box>
+                    <Box flexGrow={1} ml={1}>
+                      <Button
+                        onClick={postEditHandler}
+                        type="submit"
+                        variant="contained"
+                        color="primary"
+                        className={classes.btn}
+                        fullWidth
+                      >
+                        Cancel
+                      </Button>
+                    </Box>
+                  </Box>
+                </form>
+              ) : (
+                <Typography className={classes.status}>
+                  <Linkify>{feed.post_text}</Linkify>
+                  <Attachments id={feed.id} />
+                  {linkify.match(feed.post_text) && (
+                    <LinkPreview
+                      url={linkify.match(feed.post_text)[0].url}
+                      width="100%"
+                    />
+                  )}
+                </Typography>
+              )}
 
               <Divider className={classes.divider} />
               {/* <Box
@@ -232,7 +400,7 @@ const Feed = ({ group, enroll, personal }) => {
                 ml={1}
                 mr={1}
               >
-                <Button
+                {/* <Button
                   size="small"
                   color="secondary"
                   classes={{ root: classes.button, label: classes.label }}
@@ -243,7 +411,8 @@ const Feed = ({ group, enroll, personal }) => {
                   }
                 >
                   Like
-                </Button>
+                </Button> */}
+                <Like postId={feed.id} />
                 <Button
                   onClick={() => handleCommentBox(feed.id)}
                   size="small"
@@ -302,6 +471,7 @@ const Feed = ({ group, enroll, personal }) => {
           />
         }
       />
+      {loading && <PageLoader />}
     </Box>
   );
 };

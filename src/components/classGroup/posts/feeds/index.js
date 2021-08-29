@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
 import Feed from "../feed";
-import { useDispatch } from "react-redux";
-
 //redux store
-const Feeds = () => {
+const Feeds = ({ feed, mutate }) => {
   return (
     <>
-      <Feed personal />
+      <Feed personal feed={feed} mutate={mutate} />
       {/* <Feed group />
         <Feed enroll /> */}
     </>
