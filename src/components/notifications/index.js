@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import CorematContext from "../../../@jumbo/components/contextProvider/CorematContext";
 import CmtMediaObject from "../../../@coremat/CmtMediaObject";
 import PerfectScrollbar from "react-perfect-scrollbar";
+import moment from "moment";
 import {
   Box,
   Button,
@@ -117,7 +118,7 @@ const RenderRow = ({ notification, onReadUnread }) => {
                   color="textSecondary"
                   className={classes.textSm}
                 >
-                  {timestamp} ago
+                  {moment(timestamp).fromNow()}
                 </Typography>
               </Box>
             }
