@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
+const ProfileTab = ({ tabvalue, setTabValue, user, follow, courseInfo }) => {
   const { authUser } = useAuth();
   const classes = useStyles();
 
@@ -88,6 +88,14 @@ const ProfileTab = ({ tabvalue, setTabValue, user, follow }) => {
               value="assignments"
               label="Submit Assignment"
             />
+            {courseInfo && courseInfo[0]?.user == authUser && (
+              <Tab
+                className={classes.tabRoot}
+                value="assignmentsFiles"
+                label="Submitted Assignment"
+              />
+            )}
+
             {/* <Tab className={classes.tabRoot} value="classes" label="Classes" />
             <Tab className={classes.tabRoot} value="about" label="About" />
             <Tab

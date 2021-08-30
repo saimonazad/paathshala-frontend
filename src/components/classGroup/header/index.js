@@ -222,6 +222,7 @@ const Header = (props) => {
             setTabValue={props.changetab}
             follow={props.followHandler}
             user={props.user}
+            courseInfo={props.courseInfo}
           />
         </div>
       </div>

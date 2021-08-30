@@ -27,8 +27,9 @@ const UserDetails = ({ username, courseId, time }) => {
     fetcher
   );
   //get course name
+  console.log(typeof(courseId))
   const { data: course } = useSWR(
-    courseId != "dashboard" ? `/course/info?course_id=${courseId}` : null,
+    courseId != "dashboard"  ? `/course/info?course_id=${courseId}` : null,
     fetcher
   );
   return (

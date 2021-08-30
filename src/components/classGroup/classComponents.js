@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { fetcher } from "../../services/fetcher";
 import ClassPageNotEnrolled from "./classPageNotEnrolled";
 import Assignments from "./assignment";
+import AssignmentFiles from "./assignmentFiles";
 const ClassComponents = (props) => {
   const { authUser } = useAuth();
   //get course id
@@ -62,6 +63,9 @@ const ClassComponents = (props) => {
         />
       )}
       {activeTab == "assignments" && <Assignments />}
+      {courseInfo &&
+        courseInfo[0]?.user == authUser &&
+        activeTab == "assignmentsFiles" && <AssignmentFiles />}
     </>
   );
 };

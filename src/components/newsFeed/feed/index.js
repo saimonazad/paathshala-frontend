@@ -225,122 +225,123 @@ const Feed = ({ group, enroll, personal, feed }) => {
     <Box className={classes.root}>
       <CmtList
         data={feedPosts}
-        renderRow={(feed, index) => (
-          <Grow
-            mb={2}
-            key={feed.id}
-            ref={refs[feed.id]}
-            in={true}
-            style={{ transformOrigin: "0 0 0" }}
-            {...(true ? { timeout: 1000 } : {})}
-          >
-            <Box
-              bgcolor="background.box"
-              boxShadow={2}
-              borderRadius={4}
-              className={classes.feed}
+        renderRow={(feed, index) =>
+          feed.posted_on?.split("-").length == 1 && (
+            <Grow
+              mb={2}
+              key={feed.id}
+              ref={refs[feed.id]}
+              in={true}
+              style={{ transformOrigin: "0 0 0" }}
+              {...(true ? { timeout: 1000 } : {})}
             >
               <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
+                bgcolor="background.box"
+                boxShadow={2}
+                borderRadius={4}
+                className={classes.feed}
               >
-                <Box display="flex" alignItems="center">
-                  <UserDetails
-                    courseId={feed.posted_on}
-                    username={feed.user}
-                    time={feed.timestamp}
-                  />
-                </Box>
-                {authUser == feed.user && (
-                  <Box>
-                    <IconButton
-                      value={feed.id}
-                      onClick={(e) => handleClick(e)}
-                      color="secondary"
-                      className={classes.appbar_rightIcon}
-                    >
-                      <MoreHorizIcon />
-                    </IconButton>
-                  </Box>
-                )}
-                <Menu
-                  elevation={1}
-                  id="menu-appbar"
-                  anchorEl={anchorEl}
-                  getContentAnchorEl={null}
-                  anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
-                  transformOrigin={{ vertical: "top", horizontal: "center" }}
-                  open={open}
-                  onClose={handleClose}
-
-                  // className={classes.menu}
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
                 >
-                  <MenuItem onClick={postEditHandler}>Edit/Update</MenuItem>
-                  <MenuItem onClick={postDeleteHandler}>Delete</MenuItem>
-                </Menu>
-              </Box>
-              {editPost && selectedPost == feed.id ? (
-                <form
-                  noValidate
-                  autoComplete="off"
-                  onSubmit={submitUpdatedPost}
-                >
-                  <Box display="flex" mt={1}>
-                    <Box flexGrow={4} pl={1} pr={1}>
-                      <TextField
-                        defaultValue={feed.post_text}
-                        onChange={(e) => setPostText(e.target.value)}
-                        name="post"
-                        variant="outlined"
-                        required
-                        fullWidth
-                        id="post"
-                        InputProps={{
-                          className: classes.postInput,
-                        }}
-                      />
-                    </Box>
-                    <Box flexGrow={1}>
-                      <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className={classes.btn}
-                        fullWidth
-                      >
-                        Update
-                      </Button>
-                    </Box>
-                    <Box flexGrow={1} ml={1}>
-                      <Button
-                        onClick={postEditHandler}
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className={classes.btn}
-                        fullWidth
-                      >
-                        Cancel
-                      </Button>
-                    </Box>
-                  </Box>
-                </form>
-              ) : (
-                <Typography className={classes.status}>
-                  <Linkify>{feed.post_text}</Linkify>
-                  <Attachments id={feed.id} />
-                  {linkify.match(feed.post_text) && (
-                    <LinkPreview
-                      url={linkify.match(feed.post_text)[0].url}
-                      width="100%"
+                  <Box display="flex" alignItems="center">
+                    <UserDetails
+                      courseId={feed.posted_on}
+                      username={feed.user}
+                      time={feed.timestamp}
                     />
+                  </Box>
+                  {authUser == feed.user && (
+                    <Box>
+                      <IconButton
+                        value={feed.id}
+                        onClick={(e) => handleClick(e)}
+                        color="secondary"
+                        className={classes.appbar_rightIcon}
+                      >
+                        <MoreHorizIcon />
+                      </IconButton>
+                    </Box>
                   )}
-                </Typography>
-              )}
+                  <Menu
+                    elevation={1}
+                    id="menu-appbar"
+                    anchorEl={anchorEl}
+                    getContentAnchorEl={null}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                    transformOrigin={{ vertical: "top", horizontal: "center" }}
+                    open={open}
+                    onClose={handleClose}
 
-              <Divider className={classes.divider} />
-              {/* <Box
+                    // className={classes.menu}
+                  >
+                    <MenuItem onClick={postEditHandler}>Edit/Update</MenuItem>
+                    <MenuItem onClick={postDeleteHandler}>Delete</MenuItem>
+                  </Menu>
+                </Box>
+                {editPost && selectedPost == feed.id ? (
+                  <form
+                    noValidate
+                    autoComplete="off"
+                    onSubmit={submitUpdatedPost}
+                  >
+                    <Box display="flex" mt={1}>
+                      <Box flexGrow={4} pl={1} pr={1}>
+                        <TextField
+                          defaultValue={feed.post_text}
+                          onChange={(e) => setPostText(e.target.value)}
+                          name="post"
+                          variant="outlined"
+                          required
+                          fullWidth
+                          id="post"
+                          InputProps={{
+                            className: classes.postInput,
+                          }}
+                        />
+                      </Box>
+                      <Box flexGrow={1}>
+                        <Button
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          className={classes.btn}
+                          fullWidth
+                        >
+                          Update
+                        </Button>
+                      </Box>
+                      <Box flexGrow={1} ml={1}>
+                        <Button
+                          onClick={postEditHandler}
+                          type="submit"
+                          variant="contained"
+                          color="primary"
+                          className={classes.btn}
+                          fullWidth
+                        >
+                          Cancel
+                        </Button>
+                      </Box>
+                    </Box>
+                  </form>
+                ) : (
+                  <Typography className={classes.status}>
+                    <Linkify>{feed.post_text}</Linkify>
+                    <Attachments id={feed.id} />
+                    {linkify.match(feed.post_text) && (
+                      <LinkPreview
+                        url={linkify.match(feed.post_text)[0].url}
+                        width="100%"
+                      />
+                    )}
+                  </Typography>
+                )}
+
+                <Divider className={classes.divider} />
+                {/* <Box
                   display="flex"
                   alignItems="center"
                   justifyContent="space-between"
@@ -393,14 +394,14 @@ const Feed = ({ group, enroll, personal, feed }) => {
                   </Box>
                 </Box>
                 <Divider className={classes.divider} /> */}
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-around"
-                ml={1}
-                mr={1}
-              >
-                {/* <Button
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-around"
+                  ml={1}
+                  mr={1}
+                >
+                  {/* <Button
                   size="small"
                   color="secondary"
                   classes={{ root: classes.button, label: classes.label }}
@@ -412,58 +413,59 @@ const Feed = ({ group, enroll, personal, feed }) => {
                 >
                   Like
                 </Button> */}
-                <Like postId={feed.id} />
-                <Button
-                  onClick={() => handleCommentBox(feed.id)}
-                  size="small"
-                  color="secondary"
-                  classes={{ root: classes.button, label: classes.label }}
-                  startIcon={
-                    <ChatBubbleOutlineOutlinedIcon
-                      style={{ fontSize: "24px" }}
+                  <Like postId={feed.id} />
+                  <Button
+                    onClick={() => handleCommentBox(feed.id)}
+                    size="small"
+                    color="secondary"
+                    classes={{ root: classes.button, label: classes.label }}
+                    startIcon={
+                      <ChatBubbleOutlineOutlinedIcon
+                        style={{ fontSize: "24px" }}
+                      />
+                    }
+                  >
+                    Comment
+                  </Button>
+                  <Button
+                    size="small"
+                    color="secondary"
+                    classes={{ root: classes.button, label: classes.label }}
+                    startIcon={
+                      <FontAwesomeIcon
+                        icon={faShare}
+                        style={{ fontSize: "24px" }}
+                      />
+                    }
+                  >
+                    Share
+                  </Button>
+                </Box>
+
+                {commentActive && activePost == feed.id && (
+                  <Collapse in={true}>
+                    <Divider className={classes.divider} />
+                    <Box p={1}>
+                      <Post
+                        submit={submitHandler}
+                        setText={postTextHandler}
+                        post={postText}
+                      />
+                    </Box>
+                    <Divider className={classes.divider} />
+
+                    <CmtList
+                      data={comments}
+                      renderRow={(comment, index) => (
+                        <Comments key={index} comment={comment} />
+                      )}
                     />
-                  }
-                >
-                  Comment
-                </Button>
-                <Button
-                  size="small"
-                  color="secondary"
-                  classes={{ root: classes.button, label: classes.label }}
-                  startIcon={
-                    <FontAwesomeIcon
-                      icon={faShare}
-                      style={{ fontSize: "24px" }}
-                    />
-                  }
-                >
-                  Share
-                </Button>
+                  </Collapse>
+                )}
               </Box>
-
-              {commentActive && activePost == feed.id && (
-                <Collapse in={true}>
-                  <Divider className={classes.divider} />
-                  <Box p={1}>
-                    <Post
-                      submit={submitHandler}
-                      setText={postTextHandler}
-                      post={postText}
-                    />
-                  </Box>
-                  <Divider className={classes.divider} />
-
-                  <CmtList
-                    data={comments}
-                    renderRow={(comment, index) => (
-                      <Comments key={index} comment={comment} />
-                    )}
-                  />
-                </Collapse>
-              )}
-            </Box>
-          </Grow>
-        )}
+            </Grow>
+          )
+        }
         ListEmptyComponent={
           <ListEmptyResult
             title="No Post Found"
