@@ -10,6 +10,7 @@ import {
   Avatar,
   TextField,
   CircularProgress,
+  Link,
 } from "@material-ui/core";
 import moment from "moment";
 import React, { useEffect, useState } from "react";
@@ -35,6 +36,11 @@ const useStyles = makeStyles((theme) => ({
     color: theme.palette.text.primary,
     marginRight: theme.spacing(1),
     marginBottom: theme.spacing(1),
+    cursor: "pointer",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.main,
+      color: "white",
+    },
   },
   postInput: {
     height: 38,
@@ -49,8 +55,13 @@ const useStyles = makeStyles((theme) => ({
   class__box: {
     padding: theme.spacing(0, 2, 1),
   },
+  class_link: {
+    cursor: "pointer",
+  },
 }));
 let temp = [];
+var daylist = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+var today = new Date();
 
 const Announcement = () => {
   const { authUser } = useAuth();
@@ -71,13 +82,33 @@ const Announcement = () => {
             httpClient
               .get(`/course/info?course_id=${course.course}`)
               .then((res) => {
-                settodaysClass((prevState) => [
-                  ...prevState,
-                  {
-                    coursename: res.data[0].coursename,
-                    start_time: res.data[0].start_time,
-                  },
-                ]);
+                if (res.data[0].recurring == true) {
+                  let day = today.getDay();
+                  let classDays = res.data[0].days.split(",");
+                  let items = res.data.filter((item) =>
+                    item["days"].includes(daylist[day])
+                  );
+                  settodaysClass((prevState) => [
+                    ...prevState,
+                    {
+                      coursename: res.data[0].coursename,
+                      start_time: res.data[0].start_time,
+                      courseID: res.data[0].id,
+                    },
+                  ]);
+                } else if (res.data[0].recurring == false) {
+                  let todayFormatted = new Date().toLocaleDateString("en-CA");
+                  if (res.data[0].date == todayFormatted) {
+                    settodaysClass((prevState) => [
+                      ...prevState,
+                      {
+                        coursename: res.data[0].coursename,
+                        start_time: res.data[0].start_time,
+                        courseID: res.data[0].id,
+                      },
+                    ]);
+                  }
+                }
               })
               .catch((e) => console.log(e));
           }
@@ -125,14 +156,16 @@ const Announcement = () => {
         <CmtList
           data={todaysClass}
           renderRow={(course, index) => (
-            <Chip
-              key={index}
-              className={classes.class__time}
-              label={`${course.coursename} at ${moment(
-                course?.start_time,
-                "HH:mm"
-              ).format("hh:mm A")}`}
-            />
+            <Link href={`/c/${course?.courseID}`}>
+              <Chip
+                key={index}
+                className={classes.class__time}
+                label={`${course.coursename} at ${moment(
+                  course?.start_time,
+                  "HH:mm"
+                ).format("hh:mm A")}`}
+              />
+            </Link>
           )}
         />
       </Box>
