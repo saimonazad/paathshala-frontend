@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -17,6 +17,9 @@ import { fetcher } from "../../../services/fetcher";
 import { useAuth } from "../../../../authentication";
 import CmtList from "../../../../@coremat/CmtList";
 import GridEmptyResult from "../../../../@coremat/CmtGridView/GridEmptyResult";
+import { useRouter } from "next/router";
+import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -86,17 +89,131 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Assignments = () => {
+  const toastId = React.useRef(null);
+
+  const router = useRouter();
+  let urlParam = router.query;
+  let courseId = urlParam.slug[0];
+
   const classes = useStyles();
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone();
-  const files = acceptedFiles.map((file) => (
+  const [attachments, setAttachments] = useState([]);
+
+  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+    multiple: false,
+    onDrop: (acceptedFiles) => {
+      const files = acceptedFiles.map((file) => {
+        return {
+          id: Math.floor(Math.random() * 10000),
+          path: file.path,
+          metaData: { type: file.type, size: file.size },
+          preview: URL.createObjectURL(file),
+          file: file,
+        };
+      });
+      onAddAttachments(files);
+    },
+  });
+
+  const onAddAttachments = (files) => {
+    setAttachments([...attachments, ...files]);
+  };
+  const files = attachments.map((file) => (
     <ListItem key={file.path}>
       {file.path} - {file.size} bytes
     </ListItem>
   ));
 
   const submitFileHandler = () => {
-      console.log(files)
-  }
+    const feedData = {
+      post_text: "assignment",
+      posted_on: `${courseId}-assignment`,
+      post_type: "assignment",
+    };
+    httpClient
+      .post(`/newsfeed/post/`, feedData)
+      .then((res) => {
+        if (attachments.length > 0) {
+          const formData = new FormData();
+          formData.append("post", res.data.id);
+          formData.append("file", attachments[0].file);
+          httpClient
+            .request({
+              method: "post",
+              url: "/newsfeed/media/",
+              data: formData,
+              onUploadProgress: (p) => {
+                const progress = p.loaded / p.total;
+
+                // check if we already displayed a toast
+                if (toastId.current === null) {
+                  toastId.current = toast("Upload in Progress", {
+                    progress: progress,
+                  });
+                } else {
+                  toast.update(toastId.current, {
+                    progress: progress,
+                  });
+                }
+              },
+            })
+            .then((data) => {
+              // Upload is done!
+              // The remaining progress bar will be filled up
+              // The toast will be closed when the transition end
+              toast.done(toastId.current);
+            })
+            .catch((e) =>
+              toast.error("Something went wrong!", {
+                position: "bottom-center",
+                autoClose: 3000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+              })
+            );
+
+          // httpClient
+          //   .post(`/newsfeed/media/`, formData)
+          //   .then((res) =>
+          //     toast.success("Class rated successfully!", {
+          //       position: "bottom-center",
+          //       autoClose: 3000,
+          //       hideProgressBar: false,
+          //       closeOnClick: true,
+          //       pauseOnHover: true,
+          //       draggable: true,
+          //       progress: undefined,
+          //     })
+          //   )
+          // .catch((e) =>
+          //   toast.error("Something went wrong!", {
+          //     position: "bottom-center",
+          //     autoClose: 3000,
+          //     hideProgressBar: false,
+          //     closeOnClick: true,
+          //     pauseOnHover: true,
+          //     draggable: true,
+          //     progress: undefined,
+          //   })
+          // );
+        }
+        // mutate();
+      })
+      .catch((e) =>
+        toast.error("Something went wrong!", {
+          position: "bottom-center",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+      );
+    setAttachments([]);
+  };
   return (
     <Box bgcolor="background.box" borderRadius={4} className={classes.root}>
       <Box
@@ -130,7 +247,7 @@ const Assignments = () => {
         <Button
           variant="contained"
           color="primary"
-          disabled={acceptedFiles.length == 0}
+          disabled={attachments.length == 0}
           onClick={submitFileHandler}
         >
           Submit
