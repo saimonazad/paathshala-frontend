@@ -28,9 +28,7 @@ const ClassComponents = (props) => {
     `payment/check?course_id=12&username=saimonazad`,
     fetcher
   );
-  if (paymentError) {
-    return <ClassPageNotEnrolled />;
-  }
+
   //get course student
   const { data: students, mutate: mutateStudent } = useSWR(
     `/course/controller?course_id=${id}`,
@@ -42,6 +40,9 @@ const ClassComponents = (props) => {
     shouldRetryOnError: false,
     refreshInterval: 0,
   });
+  if (paymentError) {
+    return <ClassPageNotEnrolled />;
+  }
 
   return (
     <>
