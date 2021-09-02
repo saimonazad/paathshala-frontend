@@ -119,9 +119,7 @@ const Explore = () => {
           <Button
             value="Users"
             onClick={(e) => handleTab(e.currentTarget.value)}
-            className={
-              activeTab == "Users" ? classes.activeTab : classes.test
-            }
+            className={activeTab == "Users" ? classes.activeTab : classes.test}
           >
             Users
           </Button>
@@ -149,9 +147,7 @@ const Explore = () => {
         />
       </Box>
 
-      {activeTab == "Users" && (
-        <Teachers users={users} search={searchTerm} />
-      )}
+      {activeTab == "Users" && <Teachers users={users} search={searchTerm} />}
       {activeTab == "Classes" && (
         <>
           <Box

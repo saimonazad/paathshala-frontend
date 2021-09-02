@@ -332,6 +332,9 @@ export default function SearchAppBar() {
               onClose={handleMenuModalClose}
             >
               <MenuItem onClick={onLogoutClick}>Logout</MenuItem>
+              <Link href={`/earnings`}>
+                <MenuItem>Earnings</MenuItem>
+              </Link>
             </Menu>
           )}
         </Box>
