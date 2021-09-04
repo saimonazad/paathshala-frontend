@@ -149,7 +149,8 @@ const Announcement = () => {
         </Typography>
       </Box>
       <Typography variant="body2" className={classes.class__number}>
-        You have {todaysClass ? todaysClass.length : "no"} class today
+        You have {todaysClass ? todaysClass.length : "no"}{" "}
+        {todaysClass && todaysClass.length > 1 ? "classes" : "class"} today
       </Typography>
 
       <Box className={classes.class__box}>
