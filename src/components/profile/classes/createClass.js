@@ -350,6 +350,9 @@ export default function CreateClass({
       setDays([]);
     }
   };
+  //min price set
+  let minPrice =
+    isRecurring == "recurring" ? 500 : isRecurring == "oneDay" ? 300 : 0;
 
   // function onChange(time, timeString) {
   //   console.log(moment("2021-08-24T13:04:00+06:00").format());
@@ -470,6 +473,11 @@ export default function CreateClass({
               variant="outlined"
               fullWidth
               id="monthly_fee"
+              InputProps={{
+                inputProps: {
+                  min: minPrice,
+                },
+              }}
               error={errors.monthly_fee ? true : false}
               {...register("monthly_fee", {
                 required: true,
