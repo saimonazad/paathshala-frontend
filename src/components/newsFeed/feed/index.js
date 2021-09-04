@@ -86,7 +86,7 @@ const useStyles = makeStyles((theme) => ({
   },
   iconMiddle: { verticalAlign: "top" },
   postInput: {
-    height: 36,
+    height: 96,
     border: `1px solid ${theme.palette.text.mineShaft}`,
     "&::focus": {
       border: "none",
@@ -290,6 +290,8 @@ const Feed = ({ group, enroll, personal, feed }) => {
                     <Box display="flex" mt={1}>
                       <Box flexGrow={4} pl={1} pr={1}>
                         <TextField
+                          multiline
+                          rows={4}
                           defaultValue={feed.post_text}
                           onChange={(e) => setPostText(e.target.value)}
                           name="post"
