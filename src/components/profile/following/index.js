@@ -110,7 +110,7 @@ function User({ username, followed, id }) {
         <Box display="flex">
           <Avatar src={user[0].picture} />
           <Box ml={2}>
-            <Link href={`/u/${user[0].followed}`} color="secondary">
+            <Link href={`/u/${user[0].username}`} color="secondary">
               <Typography
                 variant="h4"
                 style={{ fontSize: 20, fontWeight: 500 }}
