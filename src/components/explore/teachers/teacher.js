@@ -95,9 +95,13 @@ const Teacher = ({ user }) => {
             </Typography>
           </Box>
           <div>
-            <StarIcon className={classes.startIcon} />
-            <Typography component="span">{user?.rating}</Typography>
-            <Typography component="span">({user?.rating_count})</Typography>
+            {user?.rating_count > 1 && (
+              <>
+                <StarIcon className={classes.startIcon} />
+                <Typography component="span">{user?.rating}</Typography>
+                <Typography component="span">({user?.rating_count})</Typography>
+              </>
+            )}
           </div>
         </Box>
         {data?.follow == true ? (

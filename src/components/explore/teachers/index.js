@@ -11,10 +11,12 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import CmtList from "../../../../@coremat/CmtList";
 import ListEmptyResult from "../../../../@coremat/CmtList/ListEmptyResult";
+import { useAuth } from "../../../../authentication";
 
 import Teacher from "./teacher";
 
 const Teachers = ({ users, search }) => {
+  const { authUser } = useAuth();
   const [searchData, setsearchData] = useState(true);
   const filteredResult =
     searchData && search != ""
@@ -28,7 +30,11 @@ const Teachers = ({ users, search }) => {
     <>
       <CmtList
         data={filteredResult}
-        renderRow={(user, index) => <Teacher user={user} key={index} />}
+        renderRow={(user, index) =>
+          authUser != user.username ? (
+            <Teacher user={user} key={index} />
+          ) : undefined
+        }
       />
     </>
   );

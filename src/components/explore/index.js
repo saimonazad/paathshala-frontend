@@ -136,15 +136,17 @@ const Explore = () => {
       </Box>
       <Box display="flex" justifyContent="space-between" alignItems="center">
         <Typography className={classes.title}>{activeTab}</Typography>
-        <CmtSearch
-          border={true}
-          onlyIcon={false}
-          iconPosition="right"
-          align="right"
-          placeholder="Search Keywords"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
+        {activeTab == "Users" && (
+          <CmtSearch
+            border={true}
+            onlyIcon={false}
+            iconPosition="right"
+            align="right"
+            placeholder="Search Keywords"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        )}
       </Box>
 
       {activeTab == "Users" && <Teachers users={users} search={searchTerm} />}
