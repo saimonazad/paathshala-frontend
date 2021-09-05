@@ -25,11 +25,11 @@ const Posts = ({ user }) => {
   const classes = useStyles();
   const [mounted, setMounted] = useState(false);
 
-  const { data: basicInfo } = useSWR(
+  const { data: basicInfo, mutate:mutateBasic } = useSWR(
     mounted ? `/users/profile/?username=${user.username}` : null,
     fetcher
   );
-  const { data: workInfo } = useSWR(
+  const { data: workInfo,mutate:mutateWork } = useSWR(
     mounted ? `/users/workinfo/?username=${user.username}` : null,
     fetcher,
     {
@@ -37,7 +37,7 @@ const Posts = ({ user }) => {
       revalidateOnMount: true,
     }
   );
-  const { data: academicInfo } = useSWR(
+  const { data: academicInfo,mutate:mutateAcademic } = useSWR(
     mounted ? `/users/academic_info/?username=${user.username}` : null,
     fetcher
   );
@@ -62,13 +62,13 @@ const Posts = ({ user }) => {
         <Info
           data={basicInfo}
           title="Basic Info"
-          updateData={setShouldRender}
+          updateData={mutateBasic}
         />
-        <Info data={workInfo} title="Work Info" updateData={setShouldRender} />
+        <Info data={workInfo} title="Work Info" updateData={mutateWork} />
         <Info
           data={academicInfo}
           title="Academic Info"
-          updateData={setShouldRender}
+          updateData={mutateAcademic}
         />
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>

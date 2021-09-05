@@ -93,13 +93,13 @@ const Info = ({ title, data, updateData }) => {
   const handleDeleteWork = (id) => {
     httpClient
       .delete(`/users/workinfo/?workinfo_id=${id}`)
-      .then((res) => trigger("/users/workinfo/"))
+      .then((res) => updateData())
       .catch((e) => console.log(e));
   };
   const handleDeleteAcademic = (id) => {
     httpClient
       .delete(`/users/academic_info/?academic_info_id=${id}`)
-      .then((res) => trigger("/users/academic_info/"))
+      .then((res) => updateData())
       .catch((e) => console.log(e));
   };
 

@@ -13,6 +13,10 @@ import NativeSelect from "@material-ui/core/NativeSelect";
 import { useForm, Controller } from "react-hook-form";
 import { NotificationLoader } from "../../../../../@jumbo/components/ContentLoader";
 import { useAuth } from "../../../../../authentication";
+import DatePicker from "@mui/lab/DatePicker";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import moment from "moment";
 import {
   FormControl,
   FormLabel,
@@ -108,8 +112,9 @@ const useStyles = makeStyles((theme) => ({
   },
   select: {
     alignSelf: "center",
-    "& .MuiInputBase-input": {
-      padding: "12px",
+    marginRight: 10,
+    "& .MuiInputBase-root": {
+      padding: "8px",
       border: `1px solid ${theme.palette.secondary.main}`,
       borderRadius: 4,
       color: theme.palette.other.DoveGray,
@@ -290,7 +295,6 @@ const AcademicAddUpdate = ({
   id,
   method,
 }) => {
-  let formValues = InfoData?.filter((p) => p.id == id);
   const {
     register: registerWork,
     handleSubmit: handleSubmitWork,
@@ -305,16 +309,18 @@ const AcademicAddUpdate = ({
     httpClient
       .put(`/users/academic_info/?academic_info_id=${id}`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData("A" + Math.random());
+    updateData();
     resetWork();
+    handleModalClose();
   };
   //add handler func
   const handleFormAddAcademicInfo = (data) => {
     httpClient
       .post(`/users/academic_info/`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData("A" + Math.random());
+    updateData();
     resetWork();
+    handleModalClose();
   };
 
   return (
@@ -492,21 +498,32 @@ const WorkAddUpdate = ({
   } = useForm();
   const classes = useStyles();
 
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
   //update handler func
   const handleFormEditWorkInfo = (data) => {
     httpClient
       .put(`/users/workinfo/?workinfo_id=${id}`, data)
       .catch((error) => seterror("Something went wrong!"));
-    updateData("W" + Math.random());
+    updateData();
     resetWork();
+    handleModalClose();
   };
   //add handler func
   const handleFormAddWorkInfo = (data) => {
+    let formData = {
+      ...data,
+      starting_date: moment(startDate).format("YYYY-MM-DD"),
+      ending_date: moment(endDate).format("YYYY-MM-DD"),
+    };
+    console.log(formData);
     httpClient
-      .post(`/users/workinfo/`, data)
+      .post(`/users/workinfo/`, formData)
       .catch((error) => seterror("Something went wrong!"));
-    updateData("W" + Math.random());
+    updateData();
     resetWork();
+    handleModalClose();
   };
 
   return (
@@ -514,6 +531,7 @@ const WorkAddUpdate = ({
       <DialogTitle id="customized-dialog-title" onClose={handleModalClose}>
         Work Info
       </DialogTitle>
+
       <form
         onSubmit={
           method == "edit"
@@ -577,7 +595,7 @@ const WorkAddUpdate = ({
             <p className={classes.errorText}>Department is required</p>
           )}
           <FormLabel htmlFor="input" className={classes.label}>
-            Company
+            Institute/Company
           </FormLabel>
           <TextField
             // value={formValues ? formValues[0].company : ""}
@@ -605,50 +623,41 @@ const WorkAddUpdate = ({
                 Start Date
               </FormLabel>
               <FormControl variant="filled" className={classes.select}>
-                <TextField
-                  // value={formValues ? formValues[0].starting_date : ""}
-                  id="date"
-                  type="date"
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: false,
-                  }}
-                  error={errors.starting_date ? true : false}
-                  {...registerWork("starting_date", {
-                    required: true,
-                  })}
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    views={["year"]}
+                    value={startDate}
+                    onChange={(newValue) => {
+                      setStartDate(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} helperText={null} />
+                    )}
+                  />
+                </LocalizationProvider>
               </FormControl>
-              {errors.starting_date &&
-                errors.starting_date.type === "required" && (
-                  <p className={classes.errorText}>Starting date is required</p>
-                )}
             </Box>
             <Box>
               <FormLabel htmlFor="input" className={classes.label}>
                 End Date
               </FormLabel>
               <FormControl variant="filled" className={classes.select}>
-                <TextField
-                  // value={formValues ? formValues[0].ending_date : ""}
-                  id="date"
-                  type="date"
-                  className={classes.textField}
-                  InputLabelProps={{
-                    shrink: false,
-                  }}
-                  error={errors.ending_date ? true : false}
-                  {...registerWork("ending_date", {
-                    required: true,
-                  })}
-                />
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                  <DatePicker
+                    views={["year"]}
+                    value={endDate}
+                    onChange={(newValue) => {
+                      setEndDate(newValue);
+                    }}
+                    renderInput={(params) => (
+                      <TextField {...params} helperText={null} />
+                    )}
+                  />
+                </LocalizationProvider>
               </FormControl>
-              {errors.ending_date && errors.ending_date.type === "required" && (
-                <p className={classes.errorText}>Ending date is required</p>
-              )}
             </Box>
           </Box>
-          <FormLabel htmlFor="input" className={classes.label}>
+          {/* <FormLabel htmlFor="input" className={classes.label}>
             address
           </FormLabel>
           <TextField
@@ -666,7 +675,7 @@ const WorkAddUpdate = ({
           />
           {errors.address && errors.address.type === "required" && (
             <p className={classes.errorText}>Address is required</p>
-          )}
+          )} */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleModalClose} color="primary">
@@ -711,8 +720,9 @@ const ProfileAddUpdate = ({
       httpClient
         .put(`/users/profile/${authUser}`, data)
         .catch((error) => seterror("Something went wrong!"));
-      updateData("B" + Math.random());
+      updateData();
       resetWork();
+      handleModalClose();
     }
   };
   //add handler func
@@ -727,8 +737,9 @@ const ProfileAddUpdate = ({
       .post(`/users/profile/`, data)
       .catch((error) => seterror("Something went wrong!"));
 
-    updateData("B" + Math.random());
+    updateData();
     resetWork();
+    handleModalClose();
   };
 
   return (
