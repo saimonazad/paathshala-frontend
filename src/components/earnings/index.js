@@ -1,4 +1,10 @@
-import { Box, Typography, makeStyles } from "@material-ui/core";
+import {
+  Box,
+  Typography,
+  makeStyles,
+  FormControl,
+  Select,
+} from "@material-ui/core";
 import React, { useState, useEffect } from "react";
 import { httpClient } from "../../../authentication/auth-methods/jwt-auth/config";
 import { DataGrid } from "@mui/x-data-grid";
@@ -56,23 +62,46 @@ const useStyles = makeStyles((theme) => ({
     fontSize: 25,
     fontWeight: 500,
   },
-
-  activeTab: {
-    backgroundColor: theme.palette.primary.main,
-    color: theme.palette.common.white,
+  subtitle: {
+    marginRight: 15,
   },
   test: {},
+  formControl: {
+    backgroundColor: theme.palette.other.bonJour,
+  },
+  select: {
+    alignSelf: "center",
+    "& .MuiInputBase-input": {
+      padding: "12px 26px 12px 12px",
+      border: `1px solid ${theme.palette.secondary.main}`,
+      borderRadius: 4,
+      color: theme.palette.other.DoveGray,
+      backgroundColor: theme.palette.other.bonJour,
+    },
+    "& .MuiInput-underline:before": {
+      borderBottom: 0,
+    },
+    "& .MuiInput-underline:after": {
+      borderBottom: 0,
+    },
+    "& .MuiInput-underline:hover": {
+      borderBottom: 0,
+    },
+  },
 }));
 const Earnings = () => {
   const classes = useStyles();
   const [earningData, setearningData] = useState([]);
+  const [month, setmonth] = useState(new Date().getMonth());
 
   function getTransactions() {
     httpClient.get(`/course/info?type=own`).then((res) => {
       if (res.data.length > 0) {
         res.data.map((course) => {
           httpClient
-            .get(`/payment/transaction?course_id=${course.id}`)
+            .get(
+              `/payment/transaction?course_id=${course.id}&type=student&month=${month}`
+            )
             .then((res1) => {
               if (res1.data.length > 0) {
                 setearningData((prevState) => [
@@ -133,7 +162,32 @@ const Earnings = () => {
   return (
     <Box className={classes.root}>
       <Box display="flex" justifyContent="center">
-        <Typography>Earnings</Typography>
+        <Typography className={classes.title}>Earnings</Typography>
+      </Box>
+      <Box display="flex" alignItems="center">
+        <Typography className={classes.subtitle}>Select Month</Typography>
+        <FormControl
+          variant="filled"
+          className={classes.formControl}
+          onChange={(e) => {
+            setmonth(e.target.value);
+          }}
+        >
+          <Select native className={classes.select} value={month}>
+            <option value="1">Jan</option>
+            <option value="2">Feb</option>
+            <option value="3">Mar</option>
+            <option value="4">Apr</option>
+            <option value="5">May</option>
+            <option value="6">Jun</option>
+            <option value="7">Jul</option>
+            <option value="8">Aug</option>
+            <option value="9">Sep</option>
+            <option value="10">Oct</option>
+            <option value="11">Nov</option>
+            <option value="12">Dec</option>
+          </Select>
+        </FormControl>
       </Box>
       <Box style={{ height: 400, width: "100%", backgroundColor: "white" }}>
         <DataGrid
@@ -146,7 +200,7 @@ const Earnings = () => {
       </Box>
       <Box display="flex" flexDirection="column" alignItems="flex-end">
         <Box>Total Collected : {total_collected}</Box>
-        <Box>Operational charges(25%) : {(total_collected * 25) / 100}</Box>
+        <Box>Operational charges : {(total_collected * 25) / 100}</Box>
         <Box>
           Your earnings : {total_collected - (total_collected * 25) / 100}
         </Box>
