@@ -15,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   posts: {
-    [theme.breakpoints.down("sm")]: { marginTop: theme.spacing(-4) },
+    [theme.breakpoints.down("xs")]: { marginTop: theme.spacing(-4) },
   },
 }));
 
@@ -25,11 +25,11 @@ const Posts = ({ user }) => {
   const classes = useStyles();
   const [mounted, setMounted] = useState(false);
 
-  const { data: basicInfo, mutate:mutateBasic } = useSWR(
+  const { data: basicInfo, mutate: mutateBasic } = useSWR(
     mounted ? `/users/profile/?username=${user.username}` : null,
     fetcher
   );
-  const { data: workInfo,mutate:mutateWork } = useSWR(
+  const { data: workInfo, mutate: mutateWork } = useSWR(
     mounted ? `/users/workinfo/?username=${user.username}` : null,
     fetcher,
     {
@@ -37,7 +37,7 @@ const Posts = ({ user }) => {
       revalidateOnMount: true,
     }
   );
-  const { data: academicInfo,mutate:mutateAcademic } = useSWR(
+  const { data: academicInfo, mutate: mutateAcademic } = useSWR(
     mounted ? `/users/academic_info/?username=${user.username}` : null,
     fetcher
   );
@@ -59,11 +59,7 @@ const Posts = ({ user }) => {
   return (
     <Grid container className={classes.root} spacing={2}>
       <Grid item xs={12} sm={4}>
-        <Info
-          data={basicInfo}
-          title="Basic Info"
-          updateData={mutateBasic}
-        />
+        <Info data={basicInfo} title="Basic Info" updateData={mutateBasic} />
         <Info data={workInfo} title="Work Info" updateData={mutateWork} />
         <Info
           data={academicInfo}
@@ -72,7 +68,7 @@ const Posts = ({ user }) => {
         />
       </Grid>
       <Grid item xs={12} sm={8} className={classes.posts}>
-        {authUser === user.username ? <Following /> : ""}
+        {/* {authUser === user.username ? <Following /> : ""} */}
         {authUser === user.username ? <PostCard /> : ""}
         <Feeds />
       </Grid>

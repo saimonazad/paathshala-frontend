@@ -12,6 +12,8 @@ import useSWR, { mutate, trigger } from "swr";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 import React from "react";
 import { fetcher } from "../../../services/fetcher";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 import {
   followHandler,
   followCheckUrl,
@@ -88,6 +90,15 @@ const Teacher = ({ user }) => {
             <Link href={`/u/${user.username}`}>
               <Typography component="h3">
                 {user?.first_name} {user?.last_name}
+                {user && user?.is_verified && (
+                  <CheckCircleRoundedIcon
+                    style={{
+                      verticalAlign: "middle",
+                      fontSize: "18px",
+                      color: "#3578E5",
+                    }}
+                  />
+                )}
               </Typography>
             </Link>
             <Typography component="p" variant="subtitle2">

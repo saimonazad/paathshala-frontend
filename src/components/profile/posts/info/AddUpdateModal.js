@@ -734,7 +734,7 @@ const ProfileAddUpdate = ({
     //     },
     //   }
     httpClient
-      .post(`/users/profile/`, data)
+      .post(`/users/ownprofile/`, data)
       .catch((error) => seterror("Something went wrong!"));
 
     updateData();

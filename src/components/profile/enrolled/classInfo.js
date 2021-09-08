@@ -9,6 +9,8 @@ import {
 import useSWR from "swr";
 import { fetcher } from "../../../services/fetcher";
 import moment from "moment";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 const useStyles = makeStyles((theme) => ({
   class: {
     backgroundColor: theme.palette.secondary.light,
@@ -82,6 +84,15 @@ function User({ username }) {
       {user ? (
         <Typography>
           {user[0]?.first_name} {user[0]?.last_name}
+          {user && user[0]?.is_verified && (
+            <CheckCircleRoundedIcon
+              style={{
+                verticalAlign: "middle",
+                fontSize: "18px",
+                color: "#3578E5",
+              }}
+            />
+          )}
         </Typography>
       ) : (
         <Typography>{user}</Typography>

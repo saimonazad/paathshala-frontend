@@ -21,6 +21,8 @@ import CmtList from "../../../../@coremat/CmtList";
 import CmtGridView from "../../../../@coremat/CmtGridView";
 import GridEmptyResult from "../../../../@coremat/CmtGridView/GridEmptyResult";
 import { useAuth } from "../../../../authentication";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     margin: theme.spacing(2, 0),
@@ -116,6 +118,15 @@ function User({ username, followed, id }) {
                 style={{ fontSize: 20, fontWeight: 500 }}
               >
                 {user[0].first_name} {user[0].last_name}
+                {user && user[0]?.is_verified && (
+                  <CheckCircleRoundedIcon
+                    style={{
+                      verticalAlign: "middle",
+                      fontSize: "18px",
+                      color: "#3578E5",
+                    }}
+                  />
+                )}
               </Typography>
               {workInfo?.length > 0 ? (
                 <>

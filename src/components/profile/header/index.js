@@ -27,6 +27,8 @@ import SocialMediaButtons from "../../facebook-share";
 import { useAuth } from "../../../../authentication";
 import { httpClient } from "../../../../authentication/auth-methods/jwt-auth/config";
 import { toast } from "react-toastify";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: theme.palette.common.white,
@@ -366,7 +368,16 @@ const Header = (props) => {
             gutterBottom
           >
             <span style={{ marginRight: "6px" }}>{props.user.first_name}</span>
-            <span>{props.user.last_name}</span>
+            <span>{props.user.last_name}</span>{" "}
+            {props.user?.is_verified && (
+              <CheckCircleRoundedIcon
+                style={{
+                  verticalAlign: "middle",
+                  fontSize: "18px",
+                  color: "#3578E5",
+                }}
+              />
+            )}
           </Typography>
           <Typography
             component="h2"

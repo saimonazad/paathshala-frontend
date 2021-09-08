@@ -5,6 +5,8 @@ import useSWR from "swr";
 import { fetcher } from "../../../../services/fetcher";
 import Link from "next/dist/client/link";
 import moment from "moment";
+import CheckCircleRoundedIcon from "@material-ui/icons/CheckCircleRounded";
+
 const useStyles = makeStyles((theme) => ({
   profile__name: {
     fontWeight: 600,
@@ -42,6 +44,15 @@ const UserDetails = ({ username, courseId, time }) => {
           <Link href={`/u/${username}`}>
             <Typography component="h2" className={classes.profile__name}>
               {user ? user[0]?.first_name : ""} {user ? user[0]?.last_name : ""}
+              {user && user[0]?.is_verified && (
+                <CheckCircleRoundedIcon
+                  style={{
+                    verticalAlign: "middle",
+                    fontSize: "18px",
+                    color: "#3578E5",
+                  }}
+                />
+              )}
             </Typography>
           </Link>
         </Box>
