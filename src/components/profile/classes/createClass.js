@@ -555,7 +555,7 @@ export default function CreateClass({
               Start Time
             </FormLabel>
             <FormControl variant="filled" className={classes.select}>
-              {/* <TextField
+              <TextField
                 className={classes.time}
                 id="time"
                 type="time"
@@ -572,9 +572,9 @@ export default function CreateClass({
                   required: true,
                   maxLength: 30,
                 })}
-              /> */}
+              />
 
-              <Controller
+              {/* <Controller
                 control={control}
                 name="start_time"
                 render={({ value, onChange }) => (
@@ -586,7 +586,7 @@ export default function CreateClass({
                     getPopupContainer={(node) => node.parentNode}
                   />
                 )}
-              />
+              /> */}
             </FormControl>
             {errors.start_time && errors.start_time.type === "required" && (
               <p className={classes.errorText}>Start time is required</p>
@@ -596,7 +596,7 @@ export default function CreateClass({
             <FormLabel htmlFor="input" className={classes.label}>
               End Time
             </FormLabel>
-            <Controller
+            {/* <Controller
               control={control}
               name="end_time"
               value={startTime}
@@ -608,7 +608,27 @@ export default function CreateClass({
                   getPopupContainer={(node) => node.parentNode}
                 />
               )}
-            />
+            /> */}
+            <FormControl variant="filled" className={classes.select}>
+              <TextField
+                className={classes.time}
+                id="time"
+                type="time"
+                onChange={(e) => console.log(e.target.value)}
+                className={classes.textField}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                inputProps={{
+                  step: 300, // 5 min
+                }}
+                error={errors.end_time ? true : false}
+                {...register("end_time", {
+                  required: true,
+                  maxLength: 30,
+                })}
+              />
+            </FormControl>
             {errors.end_time && errors.end_time.type === "required" && (
               <p className={classes.errorText}>End time is required</p>
             )}
